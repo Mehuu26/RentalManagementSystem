@@ -1,7 +1,6 @@
 package com.controllers;
 
-import com.requests.LogInRequest;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import com.requests.MongoRequests;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,7 +17,7 @@ import java.util.ResourceBundle;
 
 import com.Main;
 
-public class LogInController implements Initializable {
+public class LogInController extends MongoRequests implements Initializable {
 
     public LogInController(){   //
         try{
@@ -46,9 +45,9 @@ public class LogInController implements Initializable {
 
     public void userLogIn(){
         try{
-            if(dataCheck()){
+            if(dataCheck()) {
                 new MainPanelController();
-            }
+            }else wrongLogInLabel.setText("wrong user login or password");
         }
         catch (Exception e){
             e.printStackTrace();
@@ -56,34 +55,18 @@ public class LogInController implements Initializable {
     }
 
     private boolean dataCheck() throws IOException {   //check if the data is ok or wrong
-        LogInRequest logIn = new LogInRequest();
-
         try {
-            logIn.LogInDataCheck(userNameTextField.getText().toString(), passwordField.getText().toString());
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        };
-
-            if (!userNameTextField.getText().isEmpty() && !passwordField.getText().isEmpty()){ //if there is not empty
-                if(userNameTextField.getText().toString().equals("admin") && passwordField.getText().toString().equals("admin")) {
-
-
-                    //połaczenie bazy danych
-
-
-                    return true;
-                }else{
-                    wrongLogInLabel.setText("wrong user login or password");
-                    return false;
-                }
-            }else{
-                wrongLogInLabel.setText("enter user login or password");
+            if (!userNameTextField.getText().isEmpty() && !passwordField.getText().isEmpty()) { //if there is not empty
+                return getEmployee(userNameTextField.getText().toString(), passwordField.getText().toString());
+            } else {
                 return false;
             }
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        return false;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){

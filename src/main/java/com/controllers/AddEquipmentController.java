@@ -2,7 +2,7 @@ package com.controllers;
 
 import com.Main;
 import com.api.GoBack;
-import com.requests.AddEquipmentRequest;
+import com.requests.MongoRequests;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AddEquipmentController implements Initializable, GoBack {
+public class AddEquipmentController extends MongoRequests implements Initializable, GoBack{
     public AddEquipmentController(){
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/scenesFXML/addEquipmentPanel.fxml"));
@@ -47,14 +47,14 @@ public class AddEquipmentController implements Initializable, GoBack {
     private Label noDataProvidedLabel;
 
     public void addEquipment(){ //method usage in fxml file
-        AddEquipmentRequest add = new AddEquipmentRequest();
+        //AddEquipmentRequest add = new AddEquipmentRequest();
         try {
             if(typeTextField.getText().isEmpty() || producerTextField.getText().isEmpty() || modelTextField.getText().isEmpty() || productIDTextField.getText().isEmpty()){
                 noDataProvidedLabel.setText("No data provided");
                 return;
             }
             else{
-                add.equipment(typeTextField.getText(), producerTextField.getText(), modelTextField.getText(), productIDTextField.getText());//adding new equpment
+                addEquipment(typeTextField.getText(), producerTextField.getText(), modelTextField.getText(), productIDTextField.getText());//adding new equpment
                 noDataProvidedLabel.setText("");    //just to "no data provided text disapear
             }
         }
