@@ -23,7 +23,7 @@ public class AddEquipmentRequest extends MongoRequests {
 
     public void equipment(String type, String producer, String model, String productID) throws Exception{
         //addNewEquipment(type, producer);
-        getCollection("items", "ski"); //change it
+        getCollection("items", "ski"); //change it times two
             //testRequest(type, producer, model, productID);
     }
 
