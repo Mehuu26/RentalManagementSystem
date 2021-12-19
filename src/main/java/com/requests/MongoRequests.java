@@ -25,13 +25,14 @@ public class MongoRequests implements DataBaseRequests {
         System.out.println(doc.toJson());
     }
 
-    public static void addEquipment(String type, String producer, String model, String productID){
+    public static void addEquipment(String type, String producer, String model, String size, String productID){
         MongoCollection<Document> collection = database.getCollection("items");
 
         Document doc = new Document();
         doc.append("type", type);
         doc.append("producer", producer);
         doc.append("model", model);
+        doc.append("size", size);
         doc.append("productId", productID);
 
         collection.insertOne(doc);

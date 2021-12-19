@@ -8,9 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,6 +24,10 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         catch (IOException e){
             e.printStackTrace();
         }
+
+
+
+
     }
 
     @FXML
@@ -40,27 +42,41 @@ public class AddEquipmentController extends MongoRequests implements Initializab
     @FXML
     private TextField modelTextField;
     @FXML
-    private Button importPhotoButton;
+    private TextField sizeTextField;
     @FXML
     private TextField productIDTextField;
     @FXML
     private Label noDataProvidedLabel;
+    @FXML
+    private TableView equipmentTableView;
+    @FXML
+    private TableColumn typeTableColumn;
+    @FXML
+    private TableColumn producerTableColumn;
+    @FXML
+    private TableColumn modelTableColumn;
+    @FXML
+    private TableColumn sizeTableColumn;
+    @FXML
+    private TableColumn productIdTableColumn;
+
+
 
     public void addEquipment(){ //method usage in fxml file
         //AddEquipmentRequest add = new AddEquipmentRequest();
         try {
-            if(typeTextField.getText().isEmpty() || producerTextField.getText().isEmpty() || modelTextField.getText().isEmpty() || productIDTextField.getText().isEmpty()){
+            if(typeTextField.getText().isEmpty() || producerTextField.getText().isEmpty() || modelTextField.getText().isEmpty() || sizeTextField.getText().isEmpty() || productIDTextField.getText().isEmpty()){
                 noDataProvidedLabel.setText("No data provided");
                 return;
             }
             else{
-                addEquipment(typeTextField.getText(), producerTextField.getText(), modelTextField.getText(), productIDTextField.getText());//adding new equpment
-                noDataProvidedLabel.setText("");    //just to "no data provided text disapear
+                addEquipment(typeTextField.getText(), producerTextField.getText(), modelTextField.getText(), sizeTextField.getText(), productIDTextField.getText());//adding new equpment
+                noDataProvidedLabel.setText("");    //just to "no data provided" text disapear
             }
         }
         catch (Exception e){
             e.printStackTrace();
-        };
+        }
     }
 
     @Override
@@ -74,4 +90,6 @@ public class AddEquipmentController extends MongoRequests implements Initializab
     public void backToMenu() {
         new MainPanelController();
     }
+
+
 }
