@@ -22,9 +22,63 @@ public class Equipment {
         this.productId = new SimpleStringProperty(productId);
     }
 
+    public String getType() {
+        return type.get();
+    }
 
+    public SimpleStringProperty typeProperty() {
+        return type;
+    }
 
+    public void setType(String type) {
+        this.type.set(type);
+    }
 
+    public String getProducer() {
+        return producer.get();
+    }
 
+    public SimpleStringProperty producerProperty() {
+        return producer;
+    }
 
+    public void setProducer(String producer) {
+        this.producer.set(producer);
+    }
+
+    public String getModel() {
+        return model.get();
+    }
+
+    public SimpleStringProperty modelProperty() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model.set(model);
+    }
+
+    public String getSize() {
+        return size.get();
+    }
+
+    public SimpleStringProperty sizeProperty() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size.set(size);
+    }
+
+    public String getProductId() {
+        return productId.get();
+    }
+
+    public SimpleStringProperty productIdProperty() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId.set(productId);
+    }
 }

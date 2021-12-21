@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 
 public class AddEquipmentController extends MongoRequests implements Initializable, GoBack{
     public AddEquipmentController(){
+
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/scenesFXML/addEquipmentPanel.fxml"));
             loader.setController(this);
@@ -38,6 +39,8 @@ public class AddEquipmentController extends MongoRequests implements Initializab
     @FXML
     private Button addButton;
     @FXML
+    private Button addSimilarButton;
+    @FXML
     private TextField typeTextField;
     @FXML
     private TextField producerTextField;
@@ -46,7 +49,7 @@ public class AddEquipmentController extends MongoRequests implements Initializab
     @FXML
     private TextField sizeTextField;
     @FXML
-    private TextField productIDTextField;
+    private TextField productIdTextField;
     @FXML
     private Label noDataProvidedLabel;
     @FXML
@@ -64,16 +67,22 @@ public class AddEquipmentController extends MongoRequests implements Initializab
 
 
 
-    public void addEquipment(){ //method usage in fxml file
+    public void addNewEquipment(String type, String producer, String model, String size, String productId){ //method usage in fxml file
         //AddEquipmentRequest add = new AddEquipmentRequest();
         try {
-            if(typeTextField.getText().isEmpty() || producerTextField.getText().isEmpty() || modelTextField.getText().isEmpty() || sizeTextField.getText().isEmpty() || productIDTextField.getText().isEmpty()){
+            if(typeTextField.getText().isEmpty() || producerTextField.getText().isEmpty() || modelTextField.getText().isEmpty() || sizeTextField.getText().isEmpty() || productIdTextField.getText().isEmpty()){
                 noDataProvidedLabel.setText("No data provided");
                 return;
             }
             else{
-                addEquipment(typeTextField.getText(), producerTextField.getText(), modelTextField.getText(), sizeTextField.getText(), productIDTextField.getText());//adding new equpment
-                noDataProvidedLabel.setText("");    //just to "no data provided" text disapear
+                if(addEquipment(type, producer, model, size, productId)){    //adding new equpment
+                    noDataProvidedLabel.setText("");    //just to "no data provided" text disapear
+                    fullTableView();
+                }else {
+                    noDataProvidedLabel.setText("Same productId detected");
+                    return;
+                }
+
             }
         }
         catch (Exception e){
@@ -81,16 +90,36 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         }
     }
 
+    // TODO: 21.12.2021 something is not yes with 109 line. Need to check 
+    public void addSimilarEquipment(){
+        System.out.println("jestem w addSimi");
+        Equipment equipment = equipmentTableView.getSelectionModel().getSelectedItem();
+        String tempString;
+
+        //in case there's no value in text fields.
+        if(typeTextField.getText().isEmpty())   typeTextField.setText(equipment.getType());
+        if(producerTextField.getText().isEmpty())   producerTextField.setText(equipment.getProducer());
+        if(modelTextField.getText().isEmpty())   modelTextField.setText(equipment.getModel());
+        if(sizeTextField.getText().isEmpty())   sizeTextField.setText(equipment.getSize());
+        //if(productIdTextField.getText().isEmpty())   productIdTextField.setText(equipment.getProductId());
+
+
+        tempString = productIdTextField.getText().toString();
+        //check if there is new product ID
+        if(tempString.equals("")) {
+            noDataProvidedLabel.setText("Enter new product ID");
+            return;
+        }else {
+            addNewEquipment(equipment.getType(), equipment.getProducer(), equipment.getModel(), equipment.getSize(), productIdTextField.getText());
+        }
+    }
+
+    //add similar button add new if there's no product id value
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
         fullTableView();
-
-
-
-        addButton.setOnAction(event -> addEquipment());
-
+        addSimilarButton.setOnAction(event -> addSimilarEquipment());
+        addButton.setOnAction(event -> addNewEquipment(typeTextField.getText(), producerTextField.getText(), modelTextField.getText(), sizeTextField.getText(), productIdTextField.getText()));
         backButton.setOnAction(event -> backToMenu());
     }
 
@@ -125,9 +154,8 @@ public class AddEquipmentController extends MongoRequests implements Initializab
                 tempEquipmentArrayList.get(i).get("productId").toString()
                 )
         );
-
         }
-
+        //new Equipment("type", "producer", "model", "size", "productId")
 
         typeTableColumn.setCellValueFactory(new PropertyValueFactory<Equipment, String>("type"));
         producerTableColumn.setCellValueFactory(new PropertyValueFactory<Equipment, String>("producer"));
@@ -140,6 +168,7 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         modelTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         sizeTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         productIdTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
 
         equipmentTableView.setItems(observableList);
     }

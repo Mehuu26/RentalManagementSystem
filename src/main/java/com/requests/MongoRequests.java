@@ -34,17 +34,22 @@ public class MongoRequests implements DataBaseRequests {
         System.out.println(doc.toJson());
     }
 
-    public static void addEquipment(String type, String producer, String model, String size, String productID) {
+    public static boolean addEquipment(String type, String producer, String model, String size, String productId) {
         MongoCollection<Document> collection = database.getCollection("items");
 
-        Document doc = new Document();
-        doc.append("type", type);
-        doc.append("producer", producer);
-        doc.append("model", model);
-        doc.append("size", size);
-        doc.append("productId", productID);
+        Document tempDocument = collection.find(eq("productId", productId)).first();
 
-        collection.insertOne(doc);
+        if(tempDocument == null) {
+            Document doc = new Document();
+            doc.append("type", type);
+            doc.append("producer", producer);
+            doc.append("model", model);
+            doc.append("size", size);
+            doc.append("productId", productId);
+
+            collection.insertOne(doc);
+            return true;
+        }else return false;
     }
 
     protected static boolean getEmployee(String login, String password) {
