@@ -9,6 +9,7 @@ import com.mongodb.Cursor;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 
 import javax.json.Json;
@@ -39,6 +40,8 @@ public class MongoRequests implements DataBaseRequests {
 
         Document tempDocument = collection.find(eq("productId", productId)).first();
 
+        //System.out.println(tempDocument); //just to check
+
         if(tempDocument == null) {
             Document doc = new Document();
             doc.append("type", type);
@@ -49,7 +52,9 @@ public class MongoRequests implements DataBaseRequests {
 
             collection.insertOne(doc);
             return true;
-        }else return false;
+        }else {
+            return false;
+        }
     }
 
     protected static boolean getEmployee(String login, String password) {
@@ -91,5 +96,22 @@ public class MongoRequests implements DataBaseRequests {
 
         }
 
+    }
+
+    // TODO: 25.12.2021 need the document to be parse into BSON file to update equipment
+    protected static void updateEquipment(String type, String producer, String model, String size, String productId){
+        MongoCollection<Document> collection = database.getCollection("items");
+        Document tempDocument = collection.find(eq("productId", productId)).first();
+
+        Document updatedDocument = new Document();
+            updatedDocument.append("type", type);
+            updatedDocument.append("producer", producer);
+            updatedDocument.append("model", model);
+            updatedDocument.append("size", size);
+            updatedDocument.append("productId", productId);
+
+
+
+        UpdateResult updateResult = collection.updateOne(tempDocument, updatedDocument);
     }
 }

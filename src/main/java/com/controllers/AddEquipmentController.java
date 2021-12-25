@@ -41,6 +41,8 @@ public class AddEquipmentController extends MongoRequests implements Initializab
     @FXML
     private Button addSimilarButton;
     @FXML
+    private Button updateButton;
+    @FXML
     private TextField typeTextField;
     @FXML
     private TextField producerTextField;
@@ -77,6 +79,7 @@ public class AddEquipmentController extends MongoRequests implements Initializab
             else{
                 if(addEquipment(type, producer, model, size, productId)){    //adding new equpment
                     noDataProvidedLabel.setText("");    //just to "no data provided" text disapear
+                    productIdTextField.clear(); //just to clear the productId text field
                     fullTableView();
                 }else {
                     noDataProvidedLabel.setText("Same productId detected");
@@ -90,11 +93,23 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         }
     }
 
-    // TODO: 21.12.2021 something is not yes with 109 line. Need to check 
     public void addSimilarEquipment(){
-        System.out.println("jestem w addSimi");
+        //System.out.println("jestem w addSimi"); //just to check
+        if(equipmentTableView.getSelectionModel().isEmpty()){
+            noDataProvidedLabel.setText("select row which you want to add similar");
+            return;
+        }else noDataProvidedLabel.setText("");
+
         Equipment equipment = equipmentTableView.getSelectionModel().getSelectedItem();
         String tempString;
+
+        //strings used only for terminal show
+
+        //System.out.println(equipment.getType());
+        //System.out.println(equipment.getProducer());
+        //System.out.println(equipment.getModel());
+        //System.out.println(equipment.getSize());
+        //System.out.println(equipment.getProductId());
 
         //in case there's no value in text fields.
         if(typeTextField.getText().isEmpty())   typeTextField.setText(equipment.getType());
@@ -104,9 +119,10 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         //if(productIdTextField.getText().isEmpty())   productIdTextField.setText(equipment.getProductId());
 
 
-        tempString = productIdTextField.getText().toString();
+        //tempString = productIdTextField.getText().toString();
+
         //check if there is new product ID
-        if(tempString.equals("")) {
+        if(productIdTextField.getText().isEmpty()) {
             noDataProvidedLabel.setText("Enter new product ID");
             return;
         }else {
@@ -119,8 +135,19 @@ public class AddEquipmentController extends MongoRequests implements Initializab
     public void initialize(URL url, ResourceBundle resourceBundle) {
         fullTableView();
         addSimilarButton.setOnAction(event -> addSimilarEquipment());
-        addButton.setOnAction(event -> addNewEquipment(typeTextField.getText(), producerTextField.getText(), modelTextField.getText(), sizeTextField.getText(), productIdTextField.getText()));
+
+        addButton.setOnAction(event -> addNewEquipment(typeTextField.getText().toString(), producerTextField.getText().toString(), modelTextField.getText().toString(), sizeTextField.getText().toString(), productIdTextField.getText().toString()));
         backButton.setOnAction(event -> backToMenu());
+
+        equipmentTableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && (! equipmentTableView.getSelectionModel().isEmpty()) )
+                tableViewDoubleClicked();
+            });
+
+        //equipmentTableView.setOnMouseClicked(event -> clearTextFieldsWhenClicked()); //if we want to clear text fields
+
+        updateButton.setOnAction(event -> updateExistingEquipment());
+
     }
 
     @Override
@@ -142,9 +169,9 @@ public class AddEquipmentController extends MongoRequests implements Initializab
 //                    tempEquipmentArrayList.get(i).get("size").toString(),
 //                    tempEquipmentArrayList.get(i).get("productId").toString()
 //            );
-            System.out.println("im adding list number"+i);
+            //System.out.println("im adding list number"+i);    //just to show in terminal
 
-            System.out.println(tempEquipmentArrayList.get(i).get("type").toString());
+            //System.out.println(tempEquipmentArrayList.get(i).get("type").toString()); //just to show in termianl
 
         observableList.add(new Equipment(
                 tempEquipmentArrayList.get(i).get("type").toString(),
@@ -173,6 +200,40 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         equipmentTableView.setItems(observableList);
     }
 
+    private void updateExistingEquipment(){
+        if(typeTextField.getText().isEmpty() || producerTextField.getText().isEmpty() || modelTextField.getText().isEmpty() || sizeTextField.getText().isEmpty() || productIdTextField.getText().isEmpty()){
+            noDataProvidedLabel.setText("No data provided");
+            return;
+        }else{
+            updateEquipment(typeTextField.getText(), producerTextField.getText(), modelTextField.getText(), sizeTextField.getText(), productIdTextField.getText());
+        }
+
+
+
+
+    }
+
+    private void tableViewDoubleClicked(){
+        Equipment equipment = equipmentTableView.getSelectionModel().getSelectedItem();
+        if(equipmentTableView.getSelectionModel().isEmpty()){
+            return;
+        }else
+        {
+            typeTextField.setText(equipment.getType());
+            producerTextField.setText(equipment.getProducer());
+            modelTextField.setText(equipment.getModel());
+            sizeTextField.setText(equipment.getSize());
+            productIdTextField.setText(equipment.getProductId());
+        }
+    }
+
+    private void clearTextFieldsWhenClicked(){
+        typeTextField.clear();
+        producerTextField.clear();
+        modelTextField.clear();
+        sizeTextField.clear();
+        productIdTextField.clear();
+    }
 
 
 }
