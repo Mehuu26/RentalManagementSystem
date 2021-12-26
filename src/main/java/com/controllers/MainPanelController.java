@@ -26,14 +26,21 @@ public class MainPanelController implements Initializable {
 
     @FXML
     private Button addEquipmentButton;
+    @FXML
+    private Button settingsButton;
 
-    public void addEquipment(){
+    private void addEquipment(){
         new AddEquipmentController();
+    }
+
+    private void settings(){
+        new SettingsController();
     }
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addEquipmentButton.setOnAction(event -> addEquipment());
+        settingsButton.setOnAction(event -> settings());
     }
 }

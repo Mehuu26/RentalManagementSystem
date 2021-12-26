@@ -19,5 +19,10 @@
             <Button fx:id="addEquipmentButton" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" prefHeight="103.0" prefWidth="271.0" text="Equipment" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="16.0" />
          </children>
       </AnchorPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+         <children>
+            <Button fx:id="settingsButton" layoutX="7.0" layoutY="21.0" mnemonicParsing="false" prefHeight="103.0" prefWidth="277.0" text="Settings" />
+         </children>
+      </AnchorPane>
    </children>
 </GridPane>

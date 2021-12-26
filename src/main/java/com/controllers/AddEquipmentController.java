@@ -2,6 +2,7 @@ package com.controllers;
 
 import com.Main;
 import com.api.Equipment;
+import com.api.FullTableView;
 import com.api.GoBack;
 import com.requests.MongoRequests;
 import javafx.collections.FXCollections;
@@ -21,9 +22,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class AddEquipmentController extends MongoRequests implements Initializable, GoBack {
+public class AddEquipmentController extends MongoRequests implements Initializable, GoBack, FullTableView {
     public AddEquipmentController() {
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/scenesFXML/addEquipmentPanel.fxml"));
             loader.setController(this);
@@ -137,7 +137,7 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         addSimilarButton.setOnAction(event -> addSimilarEquipment());
 
         addButton.setOnAction(event -> addNewEquipment(typeTextField.getText().toString(), producerTextField.getText().toString(), modelTextField.getText().toString(), sizeTextField.getText().toString(), productIdTextField.getText().toString()));
-        backButton.setOnAction(event -> backToMenu());
+        backButton.setOnAction(event -> back());
 
         equipmentTableView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2 && (!equipmentTableView.getSelectionModel().isEmpty()))
@@ -155,13 +155,14 @@ public class AddEquipmentController extends MongoRequests implements Initializab
     }
 
     @Override
-    public void backToMenu() {
+    public void back() {
         new MainPanelController();
     }
 
-    private void fullTableView() {
+    @Override
+    public void fullTableView() {
         ArrayList<Document> tempEquipmentArrayList = new ArrayList<>();
-        tempEquipmentArrayList = getEquipment();
+        tempEquipmentArrayList = getCollection("items");
 
         ObservableList<Equipment> observableList = FXCollections.observableArrayList();
 
