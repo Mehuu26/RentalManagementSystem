@@ -16,8 +16,7 @@
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
-            <Label fx:id="equipmentLabel" alignment="CENTER" layoutX="71.0" layoutY="14.0" prefHeight="18.0" prefWidth="158.0" text="EQUIPMENT" textAlignment="JUSTIFY" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="15.0" />
-            <Button fx:id="addEquipmentButton" layoutX="14.0" layoutY="44.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="96.0" text="Add" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="190.0" AnchorPane.topAnchor="45.0" />
+            <Button fx:id="addEquipmentButton" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" prefHeight="103.0" prefWidth="271.0" text="Equipment" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="16.0" />
          </children>
       </AnchorPane>
    </children>

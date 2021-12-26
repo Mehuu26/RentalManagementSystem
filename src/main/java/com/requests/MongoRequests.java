@@ -6,11 +6,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.Cursor;
+import com.mongodb.MongoException;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
+import org.bson.BsonDocument;
 import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.conversions.Bson;
 
 import javax.json.Json;
 import java.io.IOException;
@@ -98,20 +103,36 @@ public class MongoRequests implements DataBaseRequests {
 
     }
 
-    // TODO: 25.12.2021 need the document to be parse into BSON file to update equipment
-    protected static void updateEquipment(String type, String producer, String model, String size, String productId){
+    protected static void updateEquipment(String type, String producer, String model, String size, String oldProductId, String newProductId){
+        MongoCollection<Document> collection = database.getCollection("items");
+        Document tempDocument = collection.find(eq("productId", oldProductId)).first();
+
+        //Bson filter = collection.find(eq("productId", productId)).first();
+
+        System.out.println("test temp document");
+        System.out.println(tempDocument);
+
+        Document updatedDocument = new Document();
+        updatedDocument.append("type", type);
+        updatedDocument.append("producer", producer);
+        updatedDocument.append("model", model);
+        updatedDocument.append("size", size);
+        updatedDocument.append("productId", newProductId);
+
+        System.out.println("test updated Document");
+        System.out.println(updatedDocument);
+
+        UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
+    }
+
+    protected static void deleteEquipment(String productId){
         MongoCollection<Document> collection = database.getCollection("items");
         Document tempDocument = collection.find(eq("productId", productId)).first();
 
-        Document updatedDocument = new Document();
-            updatedDocument.append("type", type);
-            updatedDocument.append("producer", producer);
-            updatedDocument.append("model", model);
-            updatedDocument.append("size", size);
-            updatedDocument.append("productId", productId);
-
-
-
-        UpdateResult updateResult = collection.updateOne(tempDocument, updatedDocument);
+        try{
+            collection.deleteOne(tempDocument);
+        }catch(MongoException e){
+            System.out.println("unable to delete object due to " + e + "error");
+        }
     }
 }
