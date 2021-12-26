@@ -30,7 +30,7 @@ public class MongoRequests{
 
     protected static ArrayList getCollection(String collectionName) {
         MongoCollection<Document> collection = database.getCollection(collectionName);
-        ArrayList<Document> equipmentList = new ArrayList<>();
+        ArrayList<Document> tempList = new ArrayList<>();
         Document tempDocument = new Document();
         String tempString = new String();
 
@@ -40,21 +40,27 @@ public class MongoRequests{
 
         try (MongoCursor<Document> cursor = collection.find().iterator()) {
             while (cursor.hasNext()) {
-                equipmentList.add(cursor.next());
-
-                //case do robicia calego stringa
-                //nastepnie dodanie obiektu klasy Equipment
-                //następnie dodanie go do observable list
-                //a liste dodac do tableView
-
-                //equipmentList.add(cursor.next());
+                tempList.add(cursor.next());
             }
-            return equipmentList;
-
-
+            return tempList;
         }
-
     }
+
+    protected static ArrayList getCollectionFilter(String collectionName, String fieldname, String filter) {
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        ArrayList<Document> tempList = new ArrayList<>();
+
+        MongoCursor<Document> cursor = collection.find(eq(fieldname, filter)).iterator();
+        try {
+            while (cursor.hasNext()) {
+                tempList.add(cursor.next());
+                System.out.println(tempList);
+            }
+        }finally {
+            cursor.close();
+        }
+            return tempList;
+        }
 
     public static boolean addEquipment(String type, String producer, String model, String size, String productId) {
         MongoCollection<Document> collection = database.getCollection("items");
@@ -82,20 +88,12 @@ public class MongoRequests{
         MongoCollection<Document> collection = database.getCollection("items");
         Document tempDocument = collection.find(eq("productId", oldProductId)).first();
 
-        //Bson filter = collection.find(eq("productId", productId)).first();
-
-        System.out.println("test temp document");
-        System.out.println(tempDocument);
-
         Document updatedDocument = new Document();
         updatedDocument.append("type", type);
         updatedDocument.append("producer", producer);
         updatedDocument.append("model", model);
         updatedDocument.append("size", size);
         updatedDocument.append("productId", newProductId);
-
-        System.out.println("test updated Document");
-        System.out.println(updatedDocument);
 
         UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
     }
@@ -127,5 +125,19 @@ public class MongoRequests{
         }else {
             return false;
         }
+    }
+
+    protected static void updatePrices(String type, String hour, String day, String oldType){
+        MongoCollection<Document> collection = database.getCollection("prices");
+        Document tempDocument = collection.find(eq("type", oldType)).first();
+
+        if(type.equals(tempDocument.get("type"))  && hour.equals(tempDocument.get("hour")) && day.equals(tempDocument.get("day")))  return; //if the values are not changed
+
+        Document updatedDocument = new Document();
+        updatedDocument.append("type", type);
+        updatedDocument.append("hour", hour);
+        updatedDocument.append("day", day);
+
+        UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
     }
 }

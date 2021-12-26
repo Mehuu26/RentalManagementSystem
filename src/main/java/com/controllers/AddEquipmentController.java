@@ -217,8 +217,8 @@ public class AddEquipmentController extends MongoRequests implements Initializab
 
 
     }
-
-    private void tableViewDoubleClicked() {
+    @Override
+    public void tableViewDoubleClicked() {
         Equipment equipment = equipmentTableView.getSelectionModel().getSelectedItem();
         if (equipmentTableView.getSelectionModel().isEmpty()) {
             return;
