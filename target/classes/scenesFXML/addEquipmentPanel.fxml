@@ -7,7 +7,6 @@
    <children>
       <Button fx:id="backButton" layoutX="14.0" layoutY="359.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="52.0" text="Back" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" />
       <Button fx:id="addButton" layoutX="534.0" layoutY="358.0" mnemonicParsing="false" text="Add new" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
-      <TextField fx:id="typeTextField" layoutX="473.0" layoutY="33.0" prefHeight="26.0" prefWidth="103.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="55.0" />
       <Label layoutX="473.0" layoutY="14.0" prefHeight="18.0" prefWidth="80.0" text="Type" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="35.0" />
       <Label layoutX="475.0" layoutY="81.0" prefHeight="18.0" prefWidth="80.0" text="Producer" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="100.0" />
       <TextField fx:id="producerTextField" layoutX="473.0" layoutY="93.0" prefHeight="26.0" prefWidth="103.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="120.0" />
@@ -30,5 +29,6 @@
       <Button fx:id="addSimilarButton" layoutX="408.0" layoutY="360.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="80.0" text="Add Similar" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="105.0" />
       <Button fx:id="updateButton" layoutX="340.0" layoutY="361.0" mnemonicParsing="false" text="Update" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="205.0" />
       <Button fx:id="deleteButton" layoutX="263.0" layoutY="360.0" mnemonicParsing="false" text="Delete" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="300.0" />
+      <ComboBox fx:id="typeComboBox" layoutX="470.0" layoutY="73.0" prefHeight="26.0" prefWidth="103.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="55.0" />
    </children>
 </AnchorPane>

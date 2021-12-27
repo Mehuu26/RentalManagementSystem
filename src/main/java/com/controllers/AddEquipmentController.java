@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.StringConverter;
 import org.bson.Document;
 
 import java.io.IOException;
@@ -44,8 +45,6 @@ public class AddEquipmentController extends MongoRequests implements Initializab
     @FXML
     private Button deleteButton;
     @FXML
-    private TextField typeTextField;
-    @FXML
     private TextField producerTextField;
     @FXML
     private TextField modelTextField;
@@ -67,14 +66,15 @@ public class AddEquipmentController extends MongoRequests implements Initializab
     private TableColumn<Equipment, String> sizeTableColumn;
     @FXML
     private TableColumn<Equipment, String> productIdTableColumn;
+    @FXML
+    private ComboBox<String> typeComboBox;
 
     private String productIdDoubleClicked = new String(); //temporary string just to store productId
 
 
     public void addNewEquipment(String type, String producer, String model, String size, String productId) { //method usage in fxml file
-        //AddEquipmentRequest add = new AddEquipmentRequest();
         try {
-            if (typeTextField.getText().isEmpty() || producerTextField.getText().isEmpty() || modelTextField.getText().isEmpty() || sizeTextField.getText().isEmpty() || productIdTextField.getText().isEmpty()) {
+            if (typeComboBox.getSelectionModel().isEmpty() || producerTextField.getText().isEmpty() || modelTextField.getText().isEmpty() || sizeTextField.getText().isEmpty() || productIdTextField.getText().isEmpty()) {
                 noDataProvidedLabel.setText("No data provided");
                 return;
             } else {
@@ -111,8 +111,17 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         //System.out.println(equipment.getSize());
         //System.out.println(equipment.getProductId());
 
+
+        //checking if comboBox is empty, if yes put new value in
+        boolean isMyComboBoxEmpty = typeComboBox.getSelectionModel().isEmpty();
+
+        if(isMyComboBoxEmpty) {
+            typeComboBox.setValue(equipment.getType().toString());
+            System.out.println("get Type = "+ equipment.getType());
+        }
+
         //in case there's no value in text fields.
-        if (typeTextField.getText().isEmpty()) typeTextField.setText(equipment.getType());
+        //if (typeComboBox.getSelectionModel().getSelectedItem().isEmpty()) typeComboBox.setValue(equipment.getType());
         if (producerTextField.getText().isEmpty()) producerTextField.setText(equipment.getProducer());
         if (modelTextField.getText().isEmpty()) modelTextField.setText(equipment.getModel());
         if (sizeTextField.getText().isEmpty()) sizeTextField.setText(equipment.getSize());
@@ -134,9 +143,14 @@ public class AddEquipmentController extends MongoRequests implements Initializab
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         fullTableView();
+        fillTypeComboBox();
         addSimilarButton.setOnAction(event -> addSimilarEquipment());
 
-        addButton.setOnAction(event -> addNewEquipment(typeTextField.getText().toString(), producerTextField.getText().toString(), modelTextField.getText().toString(), sizeTextField.getText().toString(), productIdTextField.getText().toString()));
+        addButton.setOnAction(event -> {
+            if (!typeComboBox.getSelectionModel().isEmpty())    //checking if the combo box with value is empty
+                addNewEquipment(typeComboBox.getSelectionModel().getSelectedItem().toString(), producerTextField.getText().toString(), modelTextField.getText().toString(), sizeTextField.getText().toString(), productIdTextField.getText().toString());
+            else{noDataProvidedLabel.setText("Choose type value");}
+        });
         backButton.setOnAction(event -> back());
 
         equipmentTableView.setOnMouseClicked(event -> {
@@ -208,14 +222,14 @@ public class AddEquipmentController extends MongoRequests implements Initializab
     }
 
     private void updateExistingEquipment() {
-        if (typeTextField.getText().isEmpty() || producerTextField.getText().isEmpty() || modelTextField.getText().isEmpty() || sizeTextField.getText().isEmpty() || productIdTextField.getText().isEmpty()) {
+        if (typeComboBox.getSelectionModel().isEmpty() || producerTextField.getText().isEmpty() || modelTextField.getText().isEmpty() || sizeTextField.getText().isEmpty() || productIdTextField.getText().isEmpty()) {
             noDataProvidedLabel.setText("No data provided");
             return;
         } else if(productIdDoubleClicked.equals(productIdTextField)){ //check if theres no change in product Id.
-            updateEquipment(typeTextField.getText(), producerTextField.getText(), modelTextField.getText(), sizeTextField.getText(), productIdDoubleClicked, productIdTextField.getText()); //2 product id's becouse one is old and second one is new
+            updateEquipment(typeComboBox.getSelectionModel().getSelectedItem().toString(), producerTextField.getText(), modelTextField.getText(), sizeTextField.getText(), productIdDoubleClicked, productIdTextField.getText()); //2 product id's becouse one is old and second one is new
             noDataProvidedLabel.setText("");
         }else if(checkObjectFilter("items", "productId", productIdTextField.getText(), productIdDoubleClicked)){    //check if there is product with same product Id
-            updateEquipment(typeTextField.getText(), producerTextField.getText(), modelTextField.getText(), sizeTextField.getText(), productIdDoubleClicked, productIdTextField.getText());
+            updateEquipment(typeComboBox.getSelectionModel().getSelectedItem().toString(), producerTextField.getText(), modelTextField.getText(), sizeTextField.getText(), productIdDoubleClicked, productIdTextField.getText());
             noDataProvidedLabel.setText("");
         }else{
             noDataProvidedLabel.setText("Same productId found");
@@ -226,13 +240,14 @@ public class AddEquipmentController extends MongoRequests implements Initializab
 
         setDisableTrue();
     }
+
     @Override
     public void tableViewDoubleClicked() {
         Equipment equipment = equipmentTableView.getSelectionModel().getSelectedItem();
         if (equipmentTableView.getSelectionModel().isEmpty()) {
             return;
         } else {
-            typeTextField.setText(equipment.getType());
+            typeComboBox.setValue(equipment.getType());
             producerTextField.setText(equipment.getProducer());
             modelTextField.setText(equipment.getModel());
             sizeTextField.setText(equipment.getSize());
@@ -246,7 +261,7 @@ public class AddEquipmentController extends MongoRequests implements Initializab
 
     @Override
     public void clearTextFields() {
-        typeTextField.clear();
+        typeComboBox.valueProperty().set(null);
         producerTextField.clear();
         modelTextField.clear();
         sizeTextField.clear();
@@ -278,6 +293,18 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         fullTableView();    //to refresh table view
         clearTextFields();
         setDisableTrue();
+    }
+
+    private void fillTypeComboBox(){
+        ArrayList<Document> typeArrayList= new ArrayList<>();
+        typeArrayList = getCollection("prices");
+
+        ObservableList<String> typeObservableList = FXCollections.observableArrayList();
+
+        for(int i = 0; i<typeArrayList.size(); i++){
+            typeObservableList.add(typeArrayList.get(i).get("type").toString());
+        }
+        typeComboBox.setItems(typeObservableList);
     }
 }
 
