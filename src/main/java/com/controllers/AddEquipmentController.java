@@ -152,6 +152,8 @@ public class AddEquipmentController extends MongoRequests implements Initializab
 
         deleteButton.setOnAction(event -> deleteExistingEquipment());
 
+        setDisableTrue();
+
     }
 
     @Override
@@ -209,13 +211,20 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         if (typeTextField.getText().isEmpty() || producerTextField.getText().isEmpty() || modelTextField.getText().isEmpty() || sizeTextField.getText().isEmpty() || productIdTextField.getText().isEmpty()) {
             noDataProvidedLabel.setText("No data provided");
             return;
-        } else {
+        } else if(productIdDoubleClicked.equals(productIdTextField)){ //check if theres no change in product Id.
             updateEquipment(typeTextField.getText(), producerTextField.getText(), modelTextField.getText(), sizeTextField.getText(), productIdDoubleClicked, productIdTextField.getText()); //2 product id's becouse one is old and second one is new
+            noDataProvidedLabel.setText("");
+        }else if(checkObjectFilter("items", "productId", productIdTextField.getText(), productIdDoubleClicked)){    //check if there is product with same product Id
+            updateEquipment(typeTextField.getText(), producerTextField.getText(), modelTextField.getText(), sizeTextField.getText(), productIdDoubleClicked, productIdTextField.getText());
+            noDataProvidedLabel.setText("");
+        }else{
+            noDataProvidedLabel.setText("Same productId found");
         }
 
         fullTableView();
+        clearTextFields();
 
-
+        setDisableTrue();
     }
     @Override
     public void tableViewDoubleClicked() {
@@ -230,15 +239,30 @@ public class AddEquipmentController extends MongoRequests implements Initializab
             productIdTextField.setText(equipment.getProductId());
 
             productIdDoubleClicked = productIdTextField.getText();
+
+            setDisableFalse();
         }
     }
 
-    private void clearTextFieldsWhenClicked() {
+    @Override
+    public void clearTextFields() {
         typeTextField.clear();
         producerTextField.clear();
         modelTextField.clear();
         sizeTextField.clear();
         productIdTextField.clear();
+    }
+
+    @Override
+    public void setDisableTrue() {
+        updateButton.setDisable(true);
+        deleteButton.setDisable(true);
+    }
+
+    @Override
+    public void setDisableFalse() {
+        deleteButton.setDisable(false);
+        updateButton.setDisable(false);
     }
 
     private void deleteExistingEquipment() {
@@ -252,7 +276,8 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         deleteEquipment(equipment.getProductId());
 
         fullTableView();    //to refresh table view
-
+        clearTextFields();
+        setDisableTrue();
     }
 }
 

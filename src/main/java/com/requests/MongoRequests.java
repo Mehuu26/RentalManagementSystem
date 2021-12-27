@@ -16,16 +16,20 @@ public class MongoRequests{
     static MongoClient mongoClient = MongoClients.create(uri);
     static MongoDatabase database = mongoClient.getDatabase("rental-data");
 
-    protected static boolean getEmployee(String login, String password) {
-        MongoCollection<Document> collection = database.getCollection("employee");
+    protected static boolean checkObjectFilter(String collectionName, String fieldname, String filter, String oldFilter){   //check if there is
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        Document filterDocument = collection.find(eq(fieldname, filter)).first();
+        Document oldFilterDocument = collection.find(eq(fieldname, oldFilter)).first();
 
-        Document test = collection.find(and(eq("user", login), eq("password", password))).first();
-
-        if (test != null) {
-            return true;
-        } else {
-            return false;
+        try{
+            if(filterDocument == null) return true;    //when theres no new object with id
+            else if(filterDocument.get("_id").equals(oldFilterDocument.get("_id"))) return true; //when the found product is same we are editing
+            else if(filterDocument.get(fieldname).equals(filter)) return false; //when we found other document then ours and filter is the same
+            else return true;
+        }catch (NullPointerException e){
+            System.out.println("Exception " + e);
         }
+        return false;
     }
 
     protected static ArrayList getCollection(String collectionName) {
@@ -61,6 +65,18 @@ public class MongoRequests{
         }
             return tempList;
         }
+
+    protected static boolean getEmployee(String login, String password) {
+        MongoCollection<Document> collection = database.getCollection("employee");
+
+        Document test = collection.find(and(eq("user", login), eq("password", password))).first();
+
+        if (test != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public static boolean addEquipment(String type, String producer, String model, String size, String productId) {
         MongoCollection<Document> collection = database.getCollection("items");
@@ -129,9 +145,13 @@ public class MongoRequests{
 
     protected static void updatePrices(String type, String hour, String day, String oldType){
         MongoCollection<Document> collection = database.getCollection("prices");
-        Document tempDocument = collection.find(eq("type", oldType)).first();
+        Document tempDocument = collection.find(eq("type", oldType)).first();   //it tooks first product with value type. Not searching for another just to be quicker. There is no possiblity to be another same type.
 
-        if(type.equals(tempDocument.get("type"))  && hour.equals(tempDocument.get("hour")) && day.equals(tempDocument.get("day")))  return; //if the values are not changed
+        Document filterDocument = collection.find(eq("type", type)).first();
+
+        //if(type.equals(tempDocument.get("type"))  && hour.equals(tempDocument.get("hour")) && day.equals(tempDocument.get("day")))  return false; //if the values are not changed
+        //else if(type.equals(filterDocument.get("type"))) return false; //if there is the same type already in collection
+        //else{
 
         Document updatedDocument = new Document();
         updatedDocument.append("type", type);
@@ -139,5 +159,18 @@ public class MongoRequests{
         updatedDocument.append("day", day);
 
         UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
+        return;
+        }
+
+    protected static void deletePrices(String type){
+        MongoCollection<Document> collection = database.getCollection("prices");
+        Document tempDocument = collection.find(eq("type", type)).first();
+
+        try{
+            collection.deleteOne(tempDocument);
+        }catch(MongoException e){
+            System.out.println("unable to delete object due to " + e + "error");
+        }
     }
-}
+    }
+

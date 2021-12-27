@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class SettingsAddTypeAndPriceListController extends MongoRequests implements Initializable, GoBack, FullTableView {
@@ -38,6 +39,8 @@ public class SettingsAddTypeAndPriceListController extends MongoRequests impleme
     private Button backButton;
     @FXML
     private Button addButton;
+    @FXML
+    private Button deleteButton;
     @FXML
     private Button updateButton;
     @FXML
@@ -78,6 +81,8 @@ public class SettingsAddTypeAndPriceListController extends MongoRequests impleme
         updateButton.setOnAction(event -> updateType());
 
         questionMarkLabel.setTooltip(new Tooltip("double click on type in table you want to edit"));
+
+        deleteButton.setOnAction(event -> deleteType());
 
     }
 
@@ -134,6 +139,7 @@ public class SettingsAddTypeAndPriceListController extends MongoRequests impleme
                 return;
             }
         }
+        clearTextFields();
     }
 
     private void updateType(){
@@ -152,18 +158,23 @@ public class SettingsAddTypeAndPriceListController extends MongoRequests impleme
             noDataProvidedLabel.setText("No data provided");
             return;
         } else {
-            updatePrices(typeTextField.getText(), hourTextField.getText(), dayTextField.getText(), typeDoubleClicked); //2 product id's becouse one is old and second one is new
-            if(!(typeDoubleClicked.equals(typeTextField.getText()))) {   //condition if there is no type value edited
-                equipmentList = getCollectionFilter("items", "type", typeDoubleClicked);    //looking for equipment where type = old type (double clicked) to change vales from old type to new type.
-                for (int i = 0; i < equipmentList.size(); i++) {
-                    updateEquipment(typeTextField.getText(), equipmentList.get(i).get("producer").toString(), equipmentList.get(i).get("model").toString(), equipmentList.get(i).get("size").toString(), equipmentList.get(i).get("productId").toString(), equipmentList.get(i).get("productId").toString());
+            if(checkObjectFilter("prices", "type", typeTextField.getText(), typeDoubleClicked)) { //2 product id's becouse one is old and second one is new. If condition check if the type value already exist
+                updatePrices(typeTextField.getText(), hourTextField.getText(), dayTextField.getText(), typeDoubleClicked);
+                noDataProvidedLabel.setText("");
+                if (!(typeDoubleClicked.equals(typeTextField.getText()))) {   //condition if there is no type value edited
+                    equipmentList = getCollectionFilter("items", "type", typeDoubleClicked);    //looking for equipment where type = old type (double clicked) to change vales from old type to new type.
+                    for (int i = 0; i < equipmentList.size(); i++) {
+                        updateEquipment(typeTextField.getText(), equipmentList.get(i).get("producer").toString(), equipmentList.get(i).get("model").toString(), equipmentList.get(i).get("size").toString(), equipmentList.get(i).get("productId").toString(), equipmentList.get(i).get("productId").toString());
+                    }
                 }
+            }else{
+                noDataProvidedLabel.setText("Same type of product detected");
             }
         }
 
         fullTableView();
-
-        updateButton.setDisable(true); //to hide button after updating
+        clearTextFields();
+        setDisableTrue();
     }
 
     @Override
@@ -179,7 +190,27 @@ public class SettingsAddTypeAndPriceListController extends MongoRequests impleme
             typeDoubleClicked = typeTextField.getText();
 
             updateButton.setDisable(false);
+            deleteButton.setDisable(false);
         }
+    }
+
+    @Override
+    public void clearTextFields() {
+        typeTextField.clear();
+        hourTextField.clear();
+        dayTextField.clear();
+    }
+
+    @Override
+    public void setDisableTrue() {
+        updateButton.setDisable(true);
+        deleteButton.setDisable(true);
+    }
+
+    @Override
+    public void setDisableFalse() {
+        updateButton.setDisable(false);
+        deleteButton.setDisable(false);
     }
 
     private boolean isDouble(TextField f) {
@@ -192,5 +223,28 @@ public class SettingsAddTypeAndPriceListController extends MongoRequests impleme
         {
             return false;
         }
+    }
+
+    private void deleteType(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm delete operation");
+        alert.setHeaderText(null);
+        alert.setContentText("When deleting type and price list you will delete every deleting type value equipment");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        ArrayList<Document> equipmentList = new ArrayList<>();
+        if (result.get() == ButtonType.OK){ //if user press ok
+            deletePrices(typeDoubleClicked);
+            equipmentList = getCollectionFilter("items", "type", typeDoubleClicked);
+            for (int i = 0; i<equipmentList.size(); i++){
+                deleteEquipment(equipmentList.get(i).get("productId").toString());
+            }
+
+
+        } else {
+        }
+        fullTableView();
+        clearTextFields();
+        setDisableTrue();
     }
 }
