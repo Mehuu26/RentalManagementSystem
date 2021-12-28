@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="scenesFXML.Clients"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="backButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" text="Back" />
+      <TableView fx:id="clientsTableView" layoutX="34.0" layoutY="30.0" prefHeight="308.0" prefWidth="372.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="30.0">
+        <columns>
+          <TableColumn fx:id="nameTableColumn" prefWidth="107.19997787475586" text="Name" />
+          <TableColumn fx:id="surnameTableColumn" prefWidth="117.20002746582031" text="Surname" />
+            <TableColumn fx:id="phoneTableColumn" prefWidth="70.0" text="Phone" />
+            <TableColumn fx:id="idCardTableColumn" prefWidth="81.199951171875" text="ID Card" />
+        </columns>
+      </TableView>
+   </children>
 </AnchorPane>

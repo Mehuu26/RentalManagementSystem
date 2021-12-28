@@ -28,6 +28,8 @@ public class MainPanelController implements Initializable {
     private Button addEquipmentButton;
     @FXML
     private Button settingsButton;
+    @FXML
+    private Button clientsButton;
 
     private void addEquipment(){
         new AddEquipmentController();
@@ -37,10 +39,15 @@ public class MainPanelController implements Initializable {
         new SettingsController();
     }
 
+    private void clients(){
+        new ClientsController();
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addEquipmentButton.setOnAction(event -> addEquipment());
         settingsButton.setOnAction(event -> settings());
+        clientsButton.setOnAction(event -> clients());
     }
 }
