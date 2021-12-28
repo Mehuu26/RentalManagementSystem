@@ -3,9 +3,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="backButton" layoutX="14.0" layoutY="360.0" mnemonicParsing="false" text="Back" />
+      <TableView fx:id="reservationTableView" layoutX="21.0" layoutY="22.0" prefHeight="325.0" prefWidth="452.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="123.0" AnchorPane.topAnchor="25.0">
+        <columns>
+          <TableColumn fx:id="nameTableColumn" prefWidth="52.200016021728516" text="Name" />
+          <TableColumn fx:id="surnameTableColumn" prefWidth="67.4000244140625" text="Surname" />
+            <TableColumn fx:id="productTableColumn" prefWidth="70.4000244140625" text="Product" />
+            <TableColumn fx:id="productIdTableColumn" prefWidth="69.39997863769531" text="Product ID" />
+            <TableColumn fx:id="startTableColumn" prefWidth="53.000030517578125" text="Start" />
+            <TableColumn fx:id="endTableColumn" prefWidth="58.199951171875" text="End" />
+            <TableColumn fx:id="statusTableColumn" prefWidth="81.800048828125" text="Status" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

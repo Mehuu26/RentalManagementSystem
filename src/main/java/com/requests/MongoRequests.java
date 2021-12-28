@@ -66,6 +66,13 @@ public class MongoRequests{
             return tempList;
         }
 
+    protected static Document getObjectFilter(String collectionName, String fieldName, String filter){
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        Document tempDocument = collection.find(eq(fieldName, filter)).first();
+
+        return tempDocument;
+    }
+
     protected static boolean getEmployee(String login, String password) {
         MongoCollection<Document> collection = database.getCollection("employee");
 
