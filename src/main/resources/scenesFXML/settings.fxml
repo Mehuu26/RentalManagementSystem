@@ -22,12 +22,22 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <Button fx:id="addTypeButton" layoutX="14.0" layoutY="27.0" mnemonicParsing="false" text="Add type and price list" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="30.0" />
+            <Button fx:id="addTypeButton" layoutX="82.0" layoutY="34.0" mnemonicParsing="false" text="Add type and price list" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="35.0" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
          <children>
             <Button fx:id="backButton" layoutX="14.0" layoutY="95.0" mnemonicParsing="false" text="Back" />
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+         <children>
+            <Label layoutX="136.0" layoutY="6.0" text="Workers" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="5.0">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Button fx:id="addNewWorkerButton" layoutX="84.0" layoutY="27.0" mnemonicParsing="false" text="Add new worker" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="35.0" />
          </children>
       </AnchorPane>
    </children>

@@ -29,5 +29,20 @@
             <Button fx:id="clientsButton" layoutX="124.0" layoutY="54.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="270.0" text="Clients" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
          </children>
       </AnchorPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+            <Button fx:id="reservationButton" layoutX="15.0" layoutY="15.0" mnemonicParsing="false" prefHeight="104.0" prefWidth="270.0" text="Reservation" />
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+         <children>
+            <Button fx:id="rentReservatedButton" layoutX="15.0" layoutY="15.0" mnemonicParsing="false" prefHeight="104.0" prefWidth="270.0" text="Rent reservated" />
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <children>
+            <Button fx:id="rentButton" layoutX="15.0" layoutY="15.0" mnemonicParsing="false" prefHeight="104.0" prefWidth="270.0" text="Rent" />
+         </children>
+      </AnchorPane>
    </children>
 </GridPane>

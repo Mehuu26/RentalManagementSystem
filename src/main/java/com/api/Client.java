@@ -1,18 +1,38 @@
 package com.api;
 
 import javafx.beans.property.SimpleStringProperty;
+import org.cryptonode.jncryptor.AES256JNCryptor;
+import org.cryptonode.jncryptor.CryptorException;
+import org.cryptonode.jncryptor.JNCryptor;
+
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 
 public class Client {
     private SimpleStringProperty name;
     private SimpleStringProperty surname;
     private SimpleStringProperty phone;
     private SimpleStringProperty idCard;
+    private SimpleStringProperty _id;
 
-    public Client(String name, String surname, String phone, String idCard){
+    public Client(String name, String surname, String phone, String idCard, String _id){
         this.name = new SimpleStringProperty(name);
         this.surname = new SimpleStringProperty(surname);
         this.phone = new SimpleStringProperty(phone);
         this.idCard = new SimpleStringProperty(idCard);
+        this._id = new SimpleStringProperty(_id);
+    }
+
+    public String get_id() {
+        return _id.get();
+    }
+
+    public SimpleStringProperty _idProperty() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id.set(_id);
     }
 
     public String getName() {

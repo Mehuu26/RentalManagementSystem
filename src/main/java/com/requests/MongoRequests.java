@@ -1,10 +1,10 @@
 package com.requests;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoException;
 import com.mongodb.client.*;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 
@@ -16,7 +16,7 @@ public class MongoRequests{
     static MongoClient mongoClient = MongoClients.create(uri);
     static MongoDatabase database = mongoClient.getDatabase("rental-data");
 
-    protected static boolean checkObjectFilter(String collectionName, String fieldname, String filter, String oldFilter){   //check if there is
+    protected static boolean checkObjectFilter(String collectionName, String fieldname, String filter, String oldFilter){   //true if there is no similar object
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Document filterDocument = collection.find(eq(fieldname, filter)).first();
         Document oldFilterDocument = collection.find(eq(fieldname, oldFilter)).first();
@@ -38,7 +38,7 @@ public class MongoRequests{
         Document tempDocument = new Document();
         String tempString = new String();
 
-        ObjectMapper mapper = new ObjectMapper();
+        //ObjectMapper mapper = new ObjectMapper();
         //Equipment equipment = mapper.readValue(cur)
 
 
@@ -165,6 +165,84 @@ public class MongoRequests{
     protected static void deletePrices(String type){
         MongoCollection<Document> collection = database.getCollection("prices");
         Document tempDocument = collection.find(eq("type", type)).first();
+
+        try{
+            collection.deleteOne(tempDocument);
+        }catch(MongoException e){
+            System.out.println("unable to delete object due to " + e + "error");
+        }
+    }
+
+    // TODO: 28.12.2021 check update client
+    protected static void updateClient(String name, String surname, String phone, String idCard, String _id){
+        MongoCollection<Document> collection = database.getCollection("users");
+
+        Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
+
+
+        if(!phone.isEmpty()) {
+            Document checkDocumentPhone = collection.find(eq("phone", phone)).first();
+            if (!(checkDocumentPhone == null)) return;
+        }
+        if(!idCard.isEmpty()) {
+            Document checkDocumentIdCard = collection.find(eq("idCard", idCard)).first();
+            if (!(checkDocumentIdCard == null)) return;
+        }
+
+        System.out.println(tempDocument);
+        if(tempDocument == null) {
+            System.out.println("there's no id value object");
+            return;
+        }
+
+        Document updatedDocument = new Document();
+        updatedDocument.append("name", name);
+        updatedDocument.append("surname", surname);
+
+        //System.out.println(tempDocument.getBoolean("email"));
+
+        if(tempDocument.get("email").equals("")) updatedDocument.append("email", "");
+        else updatedDocument.append("email", tempDocument.get("email"));
+
+        if(tempDocument.get("googleId").equals("")) updatedDocument.append("googleId", "");
+        else updatedDocument.append("googleId", tempDocument.get("googleId"));
+
+        updatedDocument.append("phone", phone);
+
+        if(tempDocument.get("password").equals("")) updatedDocument.append("password", "");
+        else updatedDocument.append("password", tempDocument.get("password"));
+
+        updatedDocument.append("idCard", idCard);
+
+        UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
+    }
+
+    protected static void addClient(String name, String surname, String phone, String idCard){
+        MongoCollection<Document> collection = database.getCollection("users");
+
+        Document tempDocument = collection.find(eq("idCard", idCard)).first();  //check if there's no same type
+
+        if(tempDocument==null) {
+            Document doc = new Document();
+            doc.append("name", name);
+            doc.append("surname", surname);
+            doc.append("email", "");
+            doc.append("googleId", "");
+            doc.append("phone", phone);
+            doc.append("password", "");
+            doc.append("idCard", idCard);
+            collection.insertOne(doc);
+        }
+
+    }
+
+    protected static void deleteClient(String _id){
+        MongoCollection<Document> collection = database.getCollection("users");
+        Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
+
+        if(tempDocument==null){
+            return;
+        }
 
         try{
             collection.deleteOne(tempDocument);

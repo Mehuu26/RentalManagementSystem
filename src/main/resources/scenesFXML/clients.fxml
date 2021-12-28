@@ -8,11 +8,24 @@
       <Button fx:id="backButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" text="Back" />
       <TableView fx:id="clientsTableView" layoutX="34.0" layoutY="30.0" prefHeight="308.0" prefWidth="372.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="30.0">
         <columns>
-          <TableColumn fx:id="nameTableColumn" prefWidth="107.19997787475586" text="Name" />
-          <TableColumn fx:id="surnameTableColumn" prefWidth="117.20002746582031" text="Surname" />
-            <TableColumn fx:id="phoneTableColumn" prefWidth="70.0" text="Phone" />
-            <TableColumn fx:id="idCardTableColumn" prefWidth="81.199951171875" text="ID Card" />
+          <TableColumn fx:id="nameTableColumn" prefWidth="87.19997978210449" text="Name" />
+          <TableColumn fx:id="surnameTableColumn" prefWidth="96.4000015258789" text="Surname" />
+            <TableColumn fx:id="phoneTableColumn" prefWidth="35.79998779296875" text="Phone" />
+            <TableColumn fx:id="idCardTableColumn" prefWidth="76.20001220703125" text="ID Card" />
+            <TableColumn fx:id="_idTableColumn" prefWidth="76.20001220703125" text="ID" />
         </columns>
       </TableView>
+      <TextField fx:id="nameTextField" layoutX="423.0" layoutY="60.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.rightAnchor="35.0" />
+      <TextField fx:id="surnameTextField" layoutX="416.0" layoutY="124.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.rightAnchor="35.0" />
+      <TextField fx:id="phoneTextField" layoutX="416.0" layoutY="187.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.rightAnchor="35.0" />
+      <TextField fx:id="idCardTextField" layoutX="416.0" layoutY="246.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.rightAnchor="35.0" />
+      <Label layoutX="445.0" layoutY="43.0" text="Name" />
+      <Label layoutX="445.0" layoutY="107.0" text="Surname" />
+      <Label layoutX="447.0" layoutY="168.0" text="Phone" />
+      <Label layoutX="445.0" layoutY="229.0" text="ID Card" />
+      <Button fx:id="updateButton" disable="true" layoutX="453.0" layoutY="348.0" mnemonicParsing="false" text="Update" AnchorPane.bottomAnchor="26.399999999999977" AnchorPane.rightAnchor="91.80000000000001" />
+      <Button fx:id="addButton" layoutX="524.0" layoutY="348.0" mnemonicParsing="false" text="Add" />
+      <Label fx:id="noDataProvidedLabel" layoutX="417.0" layoutY="22.0" prefHeight="18.0" prefWidth="166.0" textFill="RED" />
+      <Button fx:id="deleteButton" disable="true" layoutX="374.0" layoutY="348.0" mnemonicParsing="false" text="Delete" />
    </children>
 </AnchorPane>

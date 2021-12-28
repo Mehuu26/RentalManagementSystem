@@ -51,6 +51,14 @@
             <artifactId>commons-codec</artifactId>
             <version>1.10</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.cryptonode.jncryptor/jncryptor -->
+        <dependency>
+            <groupId>org.cryptonode.jncryptor</groupId>
+            <artifactId>jncryptor</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

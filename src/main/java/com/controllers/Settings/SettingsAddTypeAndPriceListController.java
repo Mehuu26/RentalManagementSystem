@@ -1,10 +1,10 @@
-package com.controllers;
+package com.controllers.Settings;
 
 import com.Main;
-import com.api.Equipment;
 import com.api.FullTableView;
 import com.api.GoBack;
 import com.api.TypeAndPriceList;
+import com.controllers.Settings.SettingsController;
 import com.requests.MongoRequests;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,7 +19,6 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import org.bson.Document;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -35,6 +34,7 @@ public class SettingsAddTypeAndPriceListController extends MongoRequests impleme
             e.printStackTrace();
         }
     }
+
     @FXML
     private Button backButton;
     @FXML
