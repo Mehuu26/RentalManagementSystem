@@ -103,6 +103,32 @@ public class MongoRequests{
 
     }
 
+    protected static void updateEmployee(String user, String password, String name, String surname, String oldUser){
+        MongoCollection<Document> collection = database.getCollection("employee");
+        Document tempDocument = collection.find(eq("user", oldUser)).first();
+
+        Document updatedDocument = new Document();
+        updatedDocument.append("user", user);
+        updatedDocument.append("password", password);
+        updatedDocument.append("name", name);
+        updatedDocument.append("surname", surname);
+
+        UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
+        return;
+    }
+
+    protected static void deleteEmployee(String user){
+        MongoCollection<Document> collection = database.getCollection("employee");
+        Document tempDocument = collection.find(eq("user", user)).first();
+
+        try{
+            collection.deleteOne(tempDocument);
+        }catch(MongoException e){
+            System.out.println("unable to delete object due to " + e + "error");
+        }
+
+    }
+
     public static boolean addEquipment(String type, String producer, String model, String size, String productId) {
         MongoCollection<Document> collection = database.getCollection("items");
 

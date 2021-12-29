@@ -25,5 +25,7 @@
       <Label fx:id="noDataProvidedLabel" layoutX="450.0" layoutY="20.0" prefHeight="18.0" prefWidth="130.0" textFill="RED" />
       <PasswordField fx:id="confirmPasswordPasswordField" layoutX="449.0" layoutY="307.0" prefHeight="26.0" prefWidth="130.0" />
       <Label layoutX="451.0" layoutY="290.0" text="Confirm Password" />
+      <Button fx:id="updateButton" disable="true" layoutX="470.0" layoutY="360.0" mnemonicParsing="false" text="Update" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="75.0" />
+      <Button fx:id="deleteButton" layoutX="397.0" layoutY="360.0" mnemonicParsing="false" text="Delete" />
    </children>
 </AnchorPane>
