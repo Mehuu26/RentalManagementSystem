@@ -5,6 +5,7 @@ import com.api.Client;
 import com.api.Equipment;
 import com.api.FullTableView;
 import com.api.GoBack;
+import com.mongodb.Mongo;
 import com.requests.MongoRequests;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -83,13 +84,11 @@ public class ClientsController extends MongoRequests implements Initializable, G
         ArrayList<Document> clientsList = new ArrayList<>();
         clientsList = getCollection("users");
 
-        System.out.println(clientsList.get(1).get("_id").toString());
+        //System.out.println(clientsList.get(1).get("_id").toString()); //string to show in terminal
 
         ObservableList<Client> observableList = FXCollections.observableArrayList();
 
         for (int i = 0; i < clientsList.size(); i++) {
-
-
             observableList.add(new Client(
                     clientsList.get(i).get("name").toString(),
                     clientsList.get(i).get("surname").toString(),
@@ -260,7 +259,8 @@ public class ClientsController extends MongoRequests implements Initializable, G
 
         Client client = clientsTableView.getSelectionModel().getSelectedItem();
 
-        deleteClient(client.get_id());
+        MongoRequests.deleteClient(client.get_id());
+        MongoRequests.deleteReservations("userId", client.get_id());  //deleting all clients reservation
 
         fullTableView();    //to refresh table view
         clearTextFields();

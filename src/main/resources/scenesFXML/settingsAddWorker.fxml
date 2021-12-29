@@ -6,7 +6,7 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="backButton" layoutX="14.0" layoutY="360.0" mnemonicParsing="false" text="Back" />
-      <TableView fx:id="workersTableView" layoutX="27.0" layoutY="28.0" prefHeight="306.0" prefWidth="405.0">
+      <TableView fx:id="workersTableView" layoutX="27.0" layoutY="28.0" prefHeight="306.0" prefWidth="405.0" AnchorPane.bottomAnchor="65.60000000000002" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="28.0">
         <columns>
           <TableColumn fx:id="userTableColumn" prefWidth="124.80000305175781" text="User" />
             <TableColumn fx:id="nameTableColumn" prefWidth="118.39999389648438" text="Name" />

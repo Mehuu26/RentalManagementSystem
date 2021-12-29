@@ -4,6 +4,7 @@ import com.mongodb.MongoException;
 import com.mongodb.client.*;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -11,22 +12,24 @@ import java.util.ArrayList;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
-public class MongoRequests{
+public class MongoRequests {
     static String uri = "mongodb+srv://tester:test@rental-system.yjcmg.mongodb.net/rental-system?retryWrites=true&w=majority";
     static MongoClient mongoClient = MongoClients.create(uri);
     static MongoDatabase database = mongoClient.getDatabase("rental-data");
 
-    protected static boolean checkObjectFilter(String collectionName, String fieldname, String filter, String oldFilter){   //true if there is no similar object
+    protected static boolean checkObjectFilter(String collectionName, String fieldname, String filter, String oldFilter) {   //true if there is no similar object
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Document filterDocument = collection.find(eq(fieldname, filter)).first();
         Document oldFilterDocument = collection.find(eq(fieldname, oldFilter)).first();
 
-        try{
-            if(filterDocument == null) return true;    //when theres no new object with id
-            else if(filterDocument.get("_id").equals(oldFilterDocument.get("_id"))) return true; //when the found product is same we are editing
-            else if(filterDocument.get(fieldname).equals(filter)) return false; //when we found other document then ours and filter is the same
+        try {
+            if (filterDocument == null) return true;    //when theres no new object with id
+            else if (filterDocument.get("_id").equals(oldFilterDocument.get("_id")))
+                return true; //when the found product is same we are editing
+            else if (filterDocument.get(fieldname).equals(filter))
+                return false; //when we found other document then ours and filter is the same
             else return true;
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println("Exception " + e);
         }
         return false;
@@ -60,13 +63,13 @@ public class MongoRequests{
                 tempList.add(cursor.next());
                 System.out.println(tempList);
             }
-        }finally {
+        } finally {
             cursor.close();
         }
-            return tempList;
-        }
+        return tempList;
+    }
 
-    protected static Document getObjectFilter(String collectionName, String fieldName, String filter){
+    protected static Document getObjectFilter(String collectionName, String fieldName, String filter) {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Document tempDocument = collection.find(eq(fieldName, filter)).first();
 
@@ -85,12 +88,12 @@ public class MongoRequests{
         }
     }
 
-    protected static boolean addEmployee(String user, String password, String name, String surname){
+    protected static boolean addEmployee(String user, String password, String name, String surname) {
         MongoCollection<Document> collection = database.getCollection("employee");
         Document test = collection.find(and(eq("user", user))).first();
         Document insertEmployee = new Document();
 
-        if(test==null){
+        if (test == null) {
             insertEmployee.append("user", user);
             insertEmployee.append("password", password);
             insertEmployee.append("name", name);
@@ -98,12 +101,12 @@ public class MongoRequests{
 
             collection.insertOne(insertEmployee);
             return true;
-        }else
+        } else
             return false;
 
     }
 
-    protected static void updateEmployee(String user, String password, String name, String surname, String oldUser){
+    protected static void updateEmployee(String user, String password, String name, String surname, String oldUser) {
         MongoCollection<Document> collection = database.getCollection("employee");
         Document tempDocument = collection.find(eq("user", oldUser)).first();
 
@@ -117,13 +120,13 @@ public class MongoRequests{
         return;
     }
 
-    protected static void deleteEmployee(String user){
+    protected static void deleteEmployee(String user) {
         MongoCollection<Document> collection = database.getCollection("employee");
         Document tempDocument = collection.find(eq("user", user)).first();
 
-        try{
+        try {
             collection.deleteOne(tempDocument);
-        }catch(MongoException e){
+        } catch (MongoException e) {
             System.out.println("unable to delete object due to " + e + "error");
         }
 
@@ -136,7 +139,7 @@ public class MongoRequests{
 
         //System.out.println(tempDocument); //just to check
 
-        if(tempDocument == null) {
+        if (tempDocument == null) {
             Document doc = new Document();
             doc.append("type", type);
             doc.append("producer", producer);
@@ -146,12 +149,12 @@ public class MongoRequests{
 
             collection.insertOne(doc);
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
-    protected static void updateEquipment(String type, String producer, String model, String size, String oldProductId, String newProductId){
+    protected static void updateEquipment(String type, String producer, String model, String size, String oldProductId, String newProductId) {
         MongoCollection<Document> collection = database.getCollection("items");
         Document tempDocument = collection.find(eq("productId", oldProductId)).first();
 
@@ -165,23 +168,23 @@ public class MongoRequests{
         UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
     }
 
-    protected static void deleteEquipment(String productId){
+    protected static void deleteEquipment(String productId) {
         MongoCollection<Document> collection = database.getCollection("items");
         Document tempDocument = collection.find(eq("productId", productId)).first();
 
-        try{
+        try {
             collection.deleteOne(tempDocument);
-        }catch(MongoException e){
+        } catch (MongoException e) {
             System.out.println("unable to delete object due to " + e + "error");
         }
     }
 
-    protected static boolean addPrices(String type, String hour, String day){
+    protected static boolean addPrices(String type, String hour, String day) {
         MongoCollection<Document> collection = database.getCollection("prices");
 
         Document tempDocument = collection.find(eq("type", type)).first();  //check if there's no same type
 
-        if(tempDocument == null) {
+        if (tempDocument == null) {
             Document doc = new Document();
             doc.append("type", type);
             doc.append("hour", hour);
@@ -189,12 +192,12 @@ public class MongoRequests{
 
             collection.insertOne(doc);
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
-    protected static void updatePrices(String type, String hour, String day, String oldType){
+    protected static void updatePrices(String type, String hour, String day, String oldType) {
         MongoCollection<Document> collection = database.getCollection("prices");
         Document tempDocument = collection.find(eq("type", oldType)).first();   //it tooks first product with value type. Not searching for another just to be quicker. There is no possiblity to be another same type.
 
@@ -211,37 +214,37 @@ public class MongoRequests{
 
         UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
         return;
-        }
+    }
 
-    protected static void deletePrices(String type){
+    protected static void deletePrices(String type) {
         MongoCollection<Document> collection = database.getCollection("prices");
         Document tempDocument = collection.find(eq("type", type)).first();
 
-        try{
+        try {
             collection.deleteOne(tempDocument);
-        }catch(MongoException e){
+        } catch (MongoException e) {
             System.out.println("unable to delete object due to " + e + "error");
         }
     }
 
     // TODO: 28.12.2021 check update client
-    protected static void updateClient(String name, String surname, String phone, String idCard, String _id){
+    protected static void updateClient(String name, String surname, String phone, String idCard, String _id) {
         MongoCollection<Document> collection = database.getCollection("users");
 
         Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
 
 
-        if(!phone.isEmpty()) {
+        if (!phone.isEmpty()) {
             Document checkDocumentPhone = collection.find(eq("phone", phone)).first();
             if (!(checkDocumentPhone == null)) return;
         }
-        if(!idCard.isEmpty()) {
+        if (!idCard.isEmpty()) {
             Document checkDocumentIdCard = collection.find(eq("idCard", idCard)).first();
             if (!(checkDocumentIdCard == null)) return;
         }
 
         System.out.println(tempDocument);
-        if(tempDocument == null) {
+        if (tempDocument == null) {
             System.out.println("there's no id value object");
             return;
         }
@@ -252,15 +255,15 @@ public class MongoRequests{
 
         //System.out.println(tempDocument.getBoolean("email"));
 
-        if(tempDocument.get("email").equals("")) updatedDocument.append("email", "");
+        if (tempDocument.get("email").equals("")) updatedDocument.append("email", "");
         else updatedDocument.append("email", tempDocument.get("email"));
 
-        if(tempDocument.get("googleId").equals("")) updatedDocument.append("googleId", "");
+        if (tempDocument.get("googleId").equals("")) updatedDocument.append("googleId", "");
         else updatedDocument.append("googleId", tempDocument.get("googleId"));
 
         updatedDocument.append("phone", phone);
 
-        if(tempDocument.get("password").equals("")) updatedDocument.append("password", "");
+        if (tempDocument.get("password").equals("")) updatedDocument.append("password", "");
         else updatedDocument.append("password", tempDocument.get("password"));
 
         updatedDocument.append("idCard", idCard);
@@ -268,12 +271,12 @@ public class MongoRequests{
         UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
     }
 
-    protected static void addClient(String name, String surname, String phone, String idCard){
+    protected static void addClient(String name, String surname, String phone, String idCard) {
         MongoCollection<Document> collection = database.getCollection("users");
 
         Document tempDocument = collection.find(eq("idCard", idCard)).first();  //check if there's no same type
 
-        if(tempDocument==null) {
+        if (tempDocument == null) {
             Document doc = new Document();
             doc.append("name", name);
             doc.append("surname", surname);
@@ -287,19 +290,46 @@ public class MongoRequests{
 
     }
 
-    protected static void deleteClient(String _id){
+    protected static void deleteClient(String _id) {
         MongoCollection<Document> collection = database.getCollection("users");
         Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
 
-        if(tempDocument==null){
+        if (tempDocument == null) {
             return;
         }
 
-        try{
+        try {
             collection.deleteOne(tempDocument);
-        }catch(MongoException e){
+        } catch (MongoException e) {
             System.out.println("unable to delete object due to " + e + "error");
         }
     }
+
+    protected static void updateReservations(String productId, String userId, String startDate, String finishDate, String price, String status, String oldProductId) {
+        MongoCollection<Document> collection = database.getCollection("reservations");
+        Document tempDocument = collection.find(eq("productId", oldProductId)).first();   //it tooks first product with same oldproduct Id which we override with new product id
+        Document updatedDocument = new Document();
+        updatedDocument.append("productId", productId); //new product id
+        updatedDocument.append("userId", userId);
+        updatedDocument.append("startDate", startDate);
+        updatedDocument.append("finishDate", finishDate);
+        updatedDocument.append("price", price);
+        updatedDocument.append("status", status);
+
+        UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
+        return;
     }
+
+    protected static void deleteReservations(String fieldName, String filter){
+        MongoCollection<Document> collection = database.getCollection("reservations");
+
+        Bson tempDocument = eq(fieldName, filter);
+
+        try {
+            collection.deleteMany(tempDocument);
+        } catch (MongoException e) {
+            System.out.println("unable to delete object due to " + e + "error");
+        }
+    }
+}
 

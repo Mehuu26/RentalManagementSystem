@@ -2,10 +2,24 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
+<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="backButton" layoutX="14.0" layoutY="360.0" mnemonicParsing="false" text="Back" />
+      <Button fx:id="backButton" layoutX="14.0" layoutY="360.0" mnemonicParsing="false" text="Back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" />
+      <Label layoutX="20.0" layoutY="26.0" prefHeight="18.0" prefWidth="135.0" text="Choose client" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
+         <font>
+            <Font size="13.0" />
+         </font></Label>
+      <TextField fx:id="chooseClientTextField" layoutX="25.0" layoutY="43.0" prefHeight="26.0" prefWidth="510.0" promptText="Client name, surname ..." AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="45.0" />
+      <TableView fx:id="chooseClientTableView" layoutX="25.0" layoutY="83.0" prefHeight="192.0" prefWidth="510.0" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="80.0">
+        <columns>
+          <TableColumn fx:id="nameTableColumn" prefWidth="98.20001602172852" text="Name" />
+          <TableColumn fx:id="surnameTableColumn" prefWidth="90.5999755859375" text="Surname" />
+            <TableColumn fx:id="phoneTableColumn" prefWidth="97.79997253417969" text="Phone" />
+            <TableColumn fx:id="idCardTableColumn" prefWidth="99.800048828125" text="ID Card" />
+            <TableColumn fx:id="_idTableColumn" prefWidth="124.0" text="ID" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

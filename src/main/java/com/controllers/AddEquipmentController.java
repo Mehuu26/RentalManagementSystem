@@ -4,6 +4,7 @@ import com.Main;
 import com.api.Equipment;
 import com.api.FullTableView;
 import com.api.GoBack;
+import com.mongodb.Mongo;
 import com.requests.MongoRequests;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -230,6 +231,7 @@ public class AddEquipmentController extends MongoRequests implements Initializab
             noDataProvidedLabel.setText("");
         }else if(checkObjectFilter("items", "productId", productIdTextField.getText(), productIdDoubleClicked)){    //check if there is product with same product Id
             updateEquipment(typeComboBox.getSelectionModel().getSelectedItem().toString(), producerTextField.getText(), modelTextField.getText(), sizeTextField.getText(), productIdDoubleClicked, productIdTextField.getText());
+            updateIdProductInReservation(productIdTextField.getText()); //updating product id in reservation collection
             noDataProvidedLabel.setText("");
         }else{
             noDataProvidedLabel.setText("Same productId found");
@@ -280,6 +282,7 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         updateButton.setDisable(false);
     }
 
+    // TODO: 29.12.2021 check if the equipment isn't already rented 
     private void deleteExistingEquipment() {
         if (equipmentTableView.getSelectionModel().isEmpty()) {
             noDataProvidedLabel.setText("select row which you want to delete");
@@ -288,7 +291,8 @@ public class AddEquipmentController extends MongoRequests implements Initializab
 
         Equipment equipment = equipmentTableView.getSelectionModel().getSelectedItem();
 
-        deleteEquipment(equipment.getProductId());
+        MongoRequests.deleteEquipment(equipment.getProductId());
+        MongoRequests.deleteReservations("productId", equipment.getProductId());
 
         fullTableView();    //to refresh table view
         clearTextFields();
@@ -306,6 +310,24 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         }
         typeComboBox.setItems(typeObservableList);
     }
-}
+
+    private void updateIdProductInReservation(String productId){
+        ArrayList<Document> reservationsArrayList= new ArrayList<>();
+        reservationsArrayList = getCollectionFilter("reservations", "productId", productIdDoubleClicked);
+
+        for(int i = 0; i<reservationsArrayList.size(); i++){
+                updateReservations(
+                        productId,  //new product id
+                        reservationsArrayList.get(i).get("userId").toString(),
+                        reservationsArrayList.get(i).get("startDate").toString(),
+                        reservationsArrayList.get(i).get("finishDate").toString(),
+                        reservationsArrayList.get(i).get("price").toString(),
+                        reservationsArrayList.get(i).get("status").toString(),
+                        productIdDoubleClicked
+                        );
+            }
+        }
+    }
+
 
 
