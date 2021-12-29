@@ -5,8 +5,8 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="backButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" text="Back" />
-      <TableView fx:id="typeAndPriceListTableView" layoutX="34.0" layoutY="32.0" prefHeight="236.0" prefWidth="325.0">
+      <Button fx:id="backButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" text="Back" AnchorPane.bottomAnchor="13.399999999999999" AnchorPane.leftAnchor="14.0" />
+      <TableView fx:id="typeAndPriceListTableView" layoutX="34.0" layoutY="32.0" prefHeight="236.0" prefWidth="325.0" AnchorPane.bottomAnchor="132.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="240.39999999999998" AnchorPane.topAnchor="32.0">
         <columns>
           <TableColumn fx:id="typeTableColumn" prefWidth="113.0" text="type" />
           <TableColumn fx:id="hourTableColumn" prefWidth="93.0" text="hour" />
@@ -14,10 +14,10 @@
         </columns>
       </TableView>
       <TextField fx:id="typeTextField" layoutX="401.0" layoutY="125.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="100.0" />
-      <Label layoutX="401.0" layoutY="108.0" prefHeight="18.0" prefWidth="27.0" text="Type" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="80.0" />
-      <Label layoutX="403.0" layoutY="183.0" text="Hour" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="150.0" />
+      <Label layoutX="401.0" layoutY="108.0" prefHeight="18.0" prefWidth="70.0" text="Type" AnchorPane.rightAnchor="127.0" AnchorPane.topAnchor="80.0" />
+      <Label layoutX="403.0" layoutY="183.0" prefHeight="18.0" prefWidth="82.0" text="Hour" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="150.0" />
       <TextField fx:id="hourTextField" layoutX="401.0" layoutY="198.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="170.0" />
-      <Label layoutX="402.0" layoutY="239.0" prefHeight="18.0" prefWidth="27.0" text="Day" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="220.0" />
+      <Label layoutX="402.0" layoutY="239.0" prefHeight="18.0" prefWidth="82.0" text="Day" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="220.0" />
       <TextField fx:id="dayTextField" layoutX="401.0" layoutY="256.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="240.0" />
       <Label fx:id="noDataProvidedLabel" layoutX="402.0" layoutY="32.0" textFill="RED" />
       <Button fx:id="addButton" layoutX="498.0" layoutY="298.0" mnemonicParsing="false" text="Add" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="300.0" />

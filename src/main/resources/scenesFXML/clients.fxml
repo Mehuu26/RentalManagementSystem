@@ -15,17 +15,17 @@
             <TableColumn fx:id="_idTableColumn" prefWidth="76.20001220703125" text="ID" />
         </columns>
       </TableView>
-      <TextField fx:id="nameTextField" layoutX="423.0" layoutY="60.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.bottomAnchor="315.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="60.0" />
-      <TextField fx:id="surnameTextField" layoutX="416.0" layoutY="124.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.bottomAnchor="250.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="125.0" />
-      <TextField fx:id="phoneTextField" layoutX="416.0" layoutY="187.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.bottomAnchor="185.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="190.0" />
-      <TextField fx:id="idCardTextField" layoutX="416.0" layoutY="246.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.bottomAnchor="125.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="250.0" />
-      <Label layoutX="445.0" layoutY="43.0" text="Name" AnchorPane.bottomAnchor="340.0" AnchorPane.rightAnchor="125.0" AnchorPane.topAnchor="45.0" />
-      <Label layoutX="445.0" layoutY="107.0" text="Surname" AnchorPane.bottomAnchor="275.0" AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="110.0" />
-      <Label layoutX="447.0" layoutY="168.0" text="Phone" AnchorPane.bottomAnchor="215.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="170.0" />
-      <Label layoutX="445.0" layoutY="229.0" text="ID Card" AnchorPane.bottomAnchor="150.0" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="230.0" />
-      <Button fx:id="updateButton" disable="true" layoutX="453.0" layoutY="348.0" mnemonicParsing="false" text="Update" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="455.0" AnchorPane.rightAnchor="90.0" />
-      <Button fx:id="addButton" layoutX="524.0" layoutY="348.0" mnemonicParsing="false" text="Add" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="525.0" AnchorPane.rightAnchor="35.0" />
+      <TextField fx:id="nameTextField" layoutX="423.0" layoutY="60.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="60.0" />
+      <TextField fx:id="surnameTextField" layoutX="416.0" layoutY="124.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="125.0" />
+      <TextField fx:id="phoneTextField" layoutX="416.0" layoutY="187.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="190.0" />
+      <TextField fx:id="idCardTextField" layoutX="416.0" layoutY="246.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="250.0" />
+      <Label layoutX="447.0" layoutY="40.0" text="Name" AnchorPane.rightAnchor="121.0" AnchorPane.topAnchor="40.0" />
+      <Label layoutX="447.0" layoutY="107.0" text="Surname" AnchorPane.rightAnchor="105.80000000000001" AnchorPane.topAnchor="107.0" />
+      <Label layoutX="446.0" layoutY="172.0" text="Phone" AnchorPane.rightAnchor="119.60000000000002" AnchorPane.topAnchor="172.0" />
+      <Label layoutX="451.0" layoutY="232.0" prefHeight="18.0" prefWidth="47.0" text="ID Card" AnchorPane.rightAnchor="109.0" AnchorPane.topAnchor="232.0" />
+      <Button fx:id="updateButton" disable="true" layoutX="452.0" layoutY="361.0" mnemonicParsing="false" text="Update" AnchorPane.bottomAnchor="15.399999999999977" AnchorPane.rightAnchor="92.80000000000001" />
+      <Button fx:id="addButton" layoutX="526.0" layoutY="361.0" mnemonicParsing="false" text="Add" AnchorPane.bottomAnchor="15.399999999999977" AnchorPane.rightAnchor="35.60000000000002" />
       <Label fx:id="noDataProvidedLabel" layoutX="417.0" layoutY="22.0" prefHeight="18.0" prefWidth="166.0" textFill="RED" AnchorPane.bottomAnchor="360.0" AnchorPane.leftAnchor="420.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
-      <Button fx:id="deleteButton" disable="true" layoutX="374.0" layoutY="348.0" mnemonicParsing="false" text="Delete" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="375.0" AnchorPane.rightAnchor="175.0" />
+      <Button fx:id="deleteButton" disable="true" layoutX="375.0" layoutY="361.0" mnemonicParsing="false" text="Delete" AnchorPane.bottomAnchor="15.399999999999977" AnchorPane.rightAnchor="174.60000000000002" />
    </children>
 </AnchorPane>
