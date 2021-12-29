@@ -85,6 +85,24 @@ public class MongoRequests{
         }
     }
 
+    protected static boolean addEmployee(String user, String password, String name, String surname){
+        MongoCollection<Document> collection = database.getCollection("employee");
+        Document test = collection.find(and(eq("user", user))).first();
+        Document insertEmployee = new Document();
+
+        if(test==null){
+            insertEmployee.append("user", user);
+            insertEmployee.append("password", password);
+            insertEmployee.append("name", name);
+            insertEmployee.append("surname", surname);
+
+            collection.insertOne(insertEmployee);
+            return true;
+        }else
+            return false;
+
+    }
+
     public static boolean addEquipment(String type, String producer, String model, String size, String productId) {
         MongoCollection<Document> collection = database.getCollection("items");
 
