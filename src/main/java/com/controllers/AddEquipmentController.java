@@ -148,7 +148,7 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         addSimilarButton.setOnAction(event -> addSimilarEquipment());
 
         addButton.setOnAction(event -> {
-            if (!typeComboBox.getSelectionModel().isEmpty())    //checking if the combo box with value is empty
+                if (!typeComboBox.getSelectionModel().isEmpty())    //checking if the combo box with value is empty
                 addNewEquipment(typeComboBox.getSelectionModel().getSelectedItem().toString(), producerTextField.getText().toString(), modelTextField.getText().toString(), sizeTextField.getText().toString(), productIdTextField.getText().toString());
             else{noDataProvidedLabel.setText("Choose type value");}
         });

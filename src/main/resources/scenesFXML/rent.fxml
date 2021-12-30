@@ -21,5 +21,8 @@
             <TableColumn fx:id="_idTableColumn" prefWidth="124.0" text="ID" />
         </columns>
       </TableView>
+      <Button fx:id="addNewClientButton" layoutX="345.0" layoutY="360.0" mnemonicParsing="false" text="Add new client" AnchorPane.bottomAnchor="14.399999999999977" AnchorPane.rightAnchor="159.8" />
+      <Button fx:id="nextButton" disable="true" layoutX="502.0" layoutY="360.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="85.0" text="Next" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+      <Label fx:id="noDataProvidedLabel" layoutX="79.0" layoutY="363.0" prefHeight="18.0" prefWidth="242.0" textFill="RED" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="275.0" />
    </children>
 </AnchorPane>

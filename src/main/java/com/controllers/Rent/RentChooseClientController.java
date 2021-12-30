@@ -1,10 +1,11 @@
-package com.controllers;
+package com.controllers.Rent;
 
 import com.Main;
 import com.api.Client;
 import com.api.Equipment;
 import com.api.FullTableView;
 import com.api.GoBack;
+import com.controllers.MainPanelController;
 import com.mongodb.Mongo;
 import com.requests.MongoRequests;
 import javafx.collections.FXCollections;
@@ -17,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -31,8 +33,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class RentController extends MongoRequests implements Initializable, GoBack, FullTableView {
-    public RentController(){
+public class RentChooseClientController extends MongoRequests implements Initializable, GoBack, FullTableView {
+    public RentChooseClientController(){
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/scenesFXML/rent.fxml"));
             loader.setController(this);
@@ -44,6 +46,10 @@ public class RentController extends MongoRequests implements Initializable, GoBa
     }
     @FXML
     private Button backButton;
+    @FXML
+    private Button addNewClientButton;
+    @FXML
+    private Button nextButton;
     @FXML
     private TextField chooseClientTextField;
     @FXML
@@ -58,6 +64,8 @@ public class RentController extends MongoRequests implements Initializable, GoBa
     private TableColumn<Client, String> idCardTableColumn;
     @FXML
     private TableColumn<Client, String> _idTableColumn;
+    @FXML
+    private Label noDataProvidedLabel;
 
     @Override
     public void fullTableView() {
@@ -127,7 +135,16 @@ public class RentController extends MongoRequests implements Initializable, GoBa
 
     @Override
     public void tableViewDoubleClicked() {
-
+        Client client = chooseClientTableView.getSelectionModel().getSelectedItem();
+        if (chooseClientTableView.getSelectionModel().isEmpty()) {
+            return;
+        } else {
+            if(client.getName().isEmpty() || client.getSurname().isEmpty() || client.getIdCard().isEmpty()){
+                new RentEditClientController(client);
+            }else{
+                new RentEquipmentController(client);
+            }
+        }
     }
 
     @Override
@@ -137,12 +154,12 @@ public class RentController extends MongoRequests implements Initializable, GoBa
 
     @Override
     public void setDisableTrue() {
-
+        nextButton.setDisable(true);
     }
 
     @Override
     public void setDisableFalse() {
-
+        nextButton.setDisable(false);
     }
 
     @Override
@@ -154,6 +171,11 @@ public class RentController extends MongoRequests implements Initializable, GoBa
     public void initialize(URL url, ResourceBundle resourceBundle) {
         fullTableView();
         backButton.setOnAction(event -> back());
+
+        chooseClientTableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && (!chooseClientTableView.getSelectionModel().isEmpty()))
+                tableViewDoubleClicked();
+        });
 
     }
 }

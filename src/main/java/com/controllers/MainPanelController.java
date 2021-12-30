@@ -1,7 +1,7 @@
 package com.controllers;
 
 import com.Main;
-import com.controllers.Settings.SettingsAddWorkerController;
+import com.controllers.Rent.RentChooseClientController;
 import com.controllers.Settings.SettingsController;
 import com.requests.MongoRequests;
 import javafx.application.Platform;
@@ -67,7 +67,7 @@ public class MainPanelController extends MongoRequests implements Initializable 
     }
 
     private void rent(){
-        new RentController();
+        new RentChooseClientController();
     }
 
 
