@@ -216,6 +216,7 @@ public class ClientsController extends MongoRequests implements Initializable, G
     private void addNewClient() {
         if (nameTextField.getText().isEmpty() || surnameTextField.getText().isEmpty() || phoneTextField.getText().isEmpty() || idCardTextField.getText().isEmpty()) {
             noDataProvidedLabel.setText("No data provided");
+            return;
         }else
             addClient(nameTextField.getText(), surnameTextField.getText(), phoneTextField.getText(), idCardTextField.getText());
             noDataProvidedLabel.setText("");

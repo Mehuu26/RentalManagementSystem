@@ -139,7 +139,7 @@ public class RentChooseClientController extends MongoRequests implements Initial
         if (chooseClientTableView.getSelectionModel().isEmpty()) {
             return;
         } else {
-            if(client.getName().isEmpty() || client.getSurname().isEmpty() || client.getIdCard().isEmpty()){
+            if(client.getName().isEmpty() || client.getSurname().isEmpty() || client.getPhone().isEmpty() || client.getIdCard().isEmpty()){
                 new RentEditClientController(client);
             }else{
                 new RentEquipmentController(client);

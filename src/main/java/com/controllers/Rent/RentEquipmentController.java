@@ -5,10 +5,12 @@ import com.api.Client;
 import com.api.FullTableView;
 import com.api.GoBack;
 import com.requests.MongoRequests;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,6 +26,8 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
             e.printStackTrace();
         }
     }
+    @FXML
+    private Button backButton;
 
 
     @Override
@@ -53,11 +57,11 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
 
     @Override
     public void back() {
-
+        new RentChooseClientController();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        backButton.setOnAction(event -> back());
     }
 }

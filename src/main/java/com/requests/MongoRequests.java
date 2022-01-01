@@ -227,20 +227,36 @@ public class MongoRequests {
         }
     }
 
-    // TODO: 28.12.2021 check update client
     protected static void updateClient(String name, String surname, String phone, String idCard, String _id) {
         MongoCollection<Document> collection = database.getCollection("users");
 
-        Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
+        Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first(); //looking for client with object id
+        System.out.println("I found client");
 
-
-        if (!phone.isEmpty()) {
+        if (!phone.isEmpty()) { //when phone value is not null, then looking for object with same phone number if there is no with same number going next
             Document checkDocumentPhone = collection.find(eq("phone", phone)).first();
-            if (!(checkDocumentPhone == null)) return;
+            System.out.println("test check phone" + checkDocumentPhone);
+            if(checkDocumentPhone == null){
+                System.out.println("check document phone is null");
+            }else if (checkDocumentPhone.get("_id").equals(new ObjectId(_id))){//check if found phone number is the same object we are updating
+                System.out.println("same id detected");
+            }else{//if checkDocumentPhone is not empty, return. Phone number need to be uniqe
+                System.out.println("phone number exists");
+                return;
+            }
         }
         if (!idCard.isEmpty()) {
             Document checkDocumentIdCard = collection.find(eq("idCard", idCard)).first();
-            if (!(checkDocumentIdCard == null)) return;
+            System.out.println("test check id card" + checkDocumentIdCard);
+            //System.out.println("test object id " + checkDocumentIdCard.get("_id").equals(new ObjectId(_id)) + "id object= " + _id + " found object id= " + checkDocumentIdCard.get("_id"));
+            if(checkDocumentIdCard == null) {
+                System.out.println("check document ID Card is null");
+            }else if (checkDocumentIdCard.get("_id").equals(new ObjectId(_id))){//check if found phone number is the same object we are updating
+                System.out.println("same id detected");
+            } else{
+                System.out.println("id Card number exists");
+                return;
+            }
         }
 
         System.out.println(tempDocument);
