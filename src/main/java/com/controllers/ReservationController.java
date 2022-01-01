@@ -74,21 +74,21 @@ public class ReservationController extends MongoRequests implements Initializabl
 
         try {
             for (int i = 0; i < reservationArrayList.size(); i++) {
-                //System.out.println("jestem w loopie reservation");
+//                System.out.println("jestem w loopie reservation");
                 for (int h = 0; h < equipmentArrayList.size(); h++) {
-                    //System.out.println("jestem w loopie equipment");
+//                    System.out.println("jestem w loopie equipment");
                     if (equipmentArrayList.get(h).get("productId").equals(reservationArrayList.get(i).get("productId"))) {
-                        //System.out.println("znalazlem equipment");
+//                        System.out.println("znalazlem equipment");
                         tempEquipment = equipmentArrayList.get(h);
                         break;
                     }
                 }
                 for (int k = 0; k < clientArrayList.size(); k++) {
-                    //System.out.println("jestem w loopie client");
-                    //System.out.println("id klienta badanego: " + clientArrayList.get(k).get("_id"));
-                    //System.out.println("id klienta z rezerwacji: " + reservationArrayList.get(i).get("userId"));
+//                    System.out.println("jestem w loopie client");
+//                    System.out.println("id klienta badanego: " + clientArrayList.get(k).get("_id"));
+//                    System.out.println("id klienta z rezerwacji: " + reservationArrayList.get(i).get("userId"));
                     if (clientArrayList.get(k).get("_id").toString().equals(reservationArrayList.get(i).get("userId").toString())) {
-                        //System.out.println("znalazlem klienta");
+//                        System.out.println("znalazlem klienta");
                         tempClient = clientArrayList.get(k);
                         break;
                     }

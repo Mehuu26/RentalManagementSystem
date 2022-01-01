@@ -18,6 +18,32 @@ public class MongoRequests {
     static MongoClient mongoClient = MongoClients.create(uri);
     static MongoDatabase database = mongoClient.getDatabase("rental-data");
 
+    protected static void deleteEveryObject(String collectionName){
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        //Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
+
+        if (collection == null) {
+            return;
+        }
+
+        try (MongoCursor<Document> cursor = collection.find().iterator()) {
+            while (cursor.hasNext()) {
+                collection.deleteOne(cursor.next());
+            }
+        }catch (MongoException e) {
+            System.out.println("unable to delete object due to " + e + "error");
+        }
+    }
+
+    protected static boolean checkObjectFileterExists(String collectionName, String fieldname, String filter){
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        Document filterDocument = collection.find(eq(fieldname, filter)).first();
+
+        if(filterDocument == null){
+            return false;
+        }else return true;
+    }
+
     protected static boolean checkObjectFilter(String collectionName, String fieldname, String filter, String oldFilter) {   //true if there is no similar object
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Document filterDocument = collection.find(eq(fieldname, filter)).first();

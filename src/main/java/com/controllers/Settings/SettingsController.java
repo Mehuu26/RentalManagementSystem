@@ -3,6 +3,7 @@ package com.controllers.Settings;
 import com.Main;
 import com.api.GoBack;
 import com.controllers.MainPanelController;
+import com.mongodb.Mongo;
 import com.requests.MongoRequests;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -39,6 +40,10 @@ public class SettingsController extends MongoRequests implements Initializable, 
     private Button addTypeButton;
     @FXML
     private Button addNewWorkerButton;
+    @FXML
+    private Button deleteUsersButton;
+    @FXML
+    private Button deleteEquipmentButton;
 
     @Override
     public void back() {
@@ -50,6 +55,8 @@ public class SettingsController extends MongoRequests implements Initializable, 
         backButton.setOnAction(event -> back());
         addTypeButton.setOnAction(event -> addType());
         addNewWorkerButton.setOnAction(event -> addWorker());
+        deleteUsersButton.setOnAction(event -> deleteUsers());
+        deleteEquipmentButton.setOnAction(event -> deleteEquipment());
     }
 
     private void addType() {
@@ -60,5 +67,30 @@ public class SettingsController extends MongoRequests implements Initializable, 
         new SettingsAddWorkerController();
     }
 
+    private void deleteUsers(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm edit operation");
+        alert.setHeaderText(null);
+        alert.setContentText("By clicking 'OK' you will delete every user and reservation in database");
 
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) { //if user press ok
+            MongoRequests.deleteEveryObject("users");
+            MongoRequests.deleteEveryObject("reservations");
+        }
+    }
+
+    private void deleteEquipment(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm edit operation");
+        alert.setHeaderText(null);
+        alert.setContentText("By clicking 'OK' you will delete every equipment and reservation in database");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) { //if user press ok
+            MongoRequests.deleteEveryObject("items");
+            MongoRequests.deleteEveryObject("reservations");
+        }
+    }
 }
+

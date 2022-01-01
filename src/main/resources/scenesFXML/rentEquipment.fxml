@@ -2,10 +2,33 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
+<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="backButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" text="Back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" />
+      <Label layoutX="118.0" layoutY="24.0" text="Current client:" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="25.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="clientLabel" layoutX="217.0" layoutY="22.0" prefHeight="18.0" prefWidth="343.0" AnchorPane.leftAnchor="217.0" AnchorPane.topAnchor="22.0">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="120.0" layoutY="77.0" text="Product ID" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="77.0" />
+      <TextField fx:id="productIdTextField" layoutX="207.0" layoutY="72.0" prefHeight="26.0" prefWidth="223.0" AnchorPane.leftAnchor="207.0" AnchorPane.topAnchor="72.0" />
+      <Button fx:id="rentButton" layoutX="474.0" layoutY="73.0" mnemonicParsing="false" text="Rent" AnchorPane.leftAnchor="474.0" AnchorPane.topAnchor="73.0" />
+      <TableView fx:id="rentalTableView" layoutX="20.0" layoutY="112.0" prefHeight="230.0" prefWidth="554.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="110.0">
+        <columns>
+          <TableColumn fx:id="typeTableColumn" prefWidth="75.0" text="Type" />
+          <TableColumn fx:id="modelTableColumn" prefWidth="143.20001220703125" text="Model" />
+            <TableColumn fx:id="sizeTableColumn" prefWidth="88.80000305175781" text="Size" />
+            <TableColumn fx:id="productIdTableColumn" prefWidth="109.39996337890625" text="Product ID" />
+            <TableColumn fx:id="startDateTableColumn" prefWidth="134.20001220703125" text="Start date" />
+        </columns>
+      </TableView>
+      <Label fx:id="noDataProvidedLabel" layoutX="207.0" layoutY="55.0" prefHeight="18.0" prefWidth="223.0" textFill="RED" AnchorPane.leftAnchor="207.0" AnchorPane.topAnchor="55.0" />
    </children>
 </AnchorPane>
