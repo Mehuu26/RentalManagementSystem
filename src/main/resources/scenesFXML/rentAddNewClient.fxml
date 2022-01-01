@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="backButton" layoutX="14.0" layoutY="360.0" mnemonicParsing="false" text="Back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" />
+      <TextField fx:id="nameTextField" layoutX="36.0" layoutY="63.0" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="60.0" />
+      <TextField fx:id="surnameTextField" layoutX="35.0" layoutY="124.0" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="120.0" />
+      <TextField fx:id="phoneTextField" layoutX="35.0" layoutY="175.0" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="180.0" />
+      <TextField fx:id="idCardTextField" layoutX="35.0" layoutY="239.0" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="240.0" />
+      <Label layoutX="35.0" layoutY="43.0" text="Name" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="43.0" />
+      <Label layoutX="35.0" layoutY="103.0" text="Surname" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="103.0" />
+      <Label layoutX="35.0" layoutY="163.0" text="Phone" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="163.0" />
+      <Label layoutX="35.0" layoutY="222.0" text="ID Card" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="222.0" />
+      <Button fx:id="nextButton" layoutX="534.0" layoutY="360.0" mnemonicParsing="false" text="Next" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+      <Label fx:id="noDataProvidedLabel" layoutX="35.0" layoutY="14.0" prefHeight="18.0" prefWidth="254.0" textFill="RED" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="15.0" />
+   </children>
+</AnchorPane>

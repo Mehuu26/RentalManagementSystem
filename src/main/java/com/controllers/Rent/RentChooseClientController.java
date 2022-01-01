@@ -167,6 +167,10 @@ public class RentChooseClientController extends MongoRequests implements Initial
         new MainPanelController();
     }
 
+    private void addNewClient(){
+        new RentAddNewClientController();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         fullTableView();
@@ -176,6 +180,8 @@ public class RentChooseClientController extends MongoRequests implements Initial
             if (event.getClickCount() == 2 && (!chooseClientTableView.getSelectionModel().isEmpty()))
                 tableViewDoubleClicked();
         });
+
+        addNewClientButton.setOnAction(event -> addNewClient());
 
     }
 }

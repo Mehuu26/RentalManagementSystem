@@ -1,10 +1,8 @@
 package com.controllers.Rent;
 
-
 import com.Main;
 import com.api.Client;
 import com.api.GoBack;
-import com.mongodb.Mongo;
 import com.requests.MongoRequests;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,25 +17,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class RentEditClientController extends MongoRequests implements Initializable, GoBack {
-    public RentEditClientController(Client client){
+public class RentAddNewClientController extends MongoRequests implements Initializable, GoBack {
+    public RentAddNewClientController(){
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/scenesFXML/rentEditClient.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/scenesFXML/rentAddNewClient.fxml"));
             loader.setController(this);
             Main.STAGE.setScene(new Scene(loader.<Parent>load()));
         }
         catch (IOException e){
             e.printStackTrace();
         }
-        this.client=client;
-
-        nameTextField.setText(client.getName());
-        surnameTextField.setText(client.getSurname());
-        phoneTextField.setText(client.getPhone());
-        idCardTextField.setText(client.getIdCard());
-
     }
-    private Client client;
 
     @FXML
     private Button backButton;
@@ -54,14 +44,12 @@ public class RentEditClientController extends MongoRequests implements Initializ
     @FXML
     private Label noDataProvidedLabel;
 
-
-
     @Override
     public void back() {
         new RentChooseClientController();
     }
 
-    private void next(Client client){
+    private void next(){
         if (nameTextField.getText().isEmpty()){
             noDataProvidedLabel.setText("enter name");
             return;
@@ -74,26 +62,19 @@ public class RentEditClientController extends MongoRequests implements Initializ
         }else if(idCardTextField.getText().isEmpty()){
             noDataProvidedLabel.setText("enter ID Card");
             return;
-        }else{
-            if(!MongoRequests.updateClient(     //if the value is false (same id card detected)
-                    nameTextField.getText(),
-                    surnameTextField.getText(),
-                    phoneTextField.getText(),
-                    idCardTextField.getText(),
-                    client.get_id())){
-                noDataProvidedLabel.setText("same id Card detected");
+        }else{//add new client not checking if the id card value is unique
+            if(!MongoRequests.addClient(nameTextField.getText(), surnameTextField.getText(), phoneTextField.getText(), idCardTextField.getText())){
+                noDataProvidedLabel.setText("same ID Card detected");
                 return;
             }
+            Client client = MongoRequests.getClient(idCardTextField.getText());
             new RentEquipmentController(client);
         }
-
-
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         backButton.setOnAction(event -> back());
-        nextButton.setOnAction(event -> next(client));
-
+        nextButton.setOnAction(event -> next());
     }
 }

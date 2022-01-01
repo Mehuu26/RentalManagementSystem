@@ -1,5 +1,6 @@
 package com.requests;
 
+import com.api.Client;
 import com.mongodb.MongoException;
 import com.mongodb.client.*;
 import com.mongodb.client.result.UpdateResult;
@@ -227,24 +228,25 @@ public class MongoRequests {
         }
     }
 
-    protected static void updateClient(String name, String surname, String phone, String idCard, String _id) {
+    protected static boolean updateClient(String name, String surname, String phone, String idCard, String _id) {
         MongoCollection<Document> collection = database.getCollection("users");
 
         Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first(); //looking for client with object id
         System.out.println("I found client");
 
-        if (!phone.isEmpty()) { //when phone value is not null, then looking for object with same phone number if there is no with same number going next
-            Document checkDocumentPhone = collection.find(eq("phone", phone)).first();
-            System.out.println("test check phone" + checkDocumentPhone);
-            if(checkDocumentPhone == null){
-                System.out.println("check document phone is null");
-            }else if (checkDocumentPhone.get("_id").equals(new ObjectId(_id))){//check if found phone number is the same object we are updating
-                System.out.println("same id detected");
-            }else{//if checkDocumentPhone is not empty, return. Phone number need to be uniqe
-                System.out.println("phone number exists");
-                return;
-            }
-        }
+//        if (!phone.isEmpty()) { //when phone value is not null, then looking for object with same phone number if there is no with same number going next
+//            Document checkDocumentPhone = collection.find(eq("phone", phone)).first();
+//            System.out.println("test check phone" + checkDocumentPhone);
+//            if(checkDocumentPhone == null){
+//                System.out.println("check document phone is null");
+//            }else if (checkDocumentPhone.get("_id").equals(new ObjectId(_id))){//check if found phone number is the same object we are updating
+//                System.out.println("same id detected");
+//            }else{//if checkDocumentPhone is not empty, return. Phone number need to be uniqe
+//                System.out.println("phone number exists");
+//                return;
+//            }
+//        }
+
         if (!idCard.isEmpty()) {
             Document checkDocumentIdCard = collection.find(eq("idCard", idCard)).first();
             System.out.println("test check id card" + checkDocumentIdCard);
@@ -255,14 +257,14 @@ public class MongoRequests {
                 System.out.println("same id detected");
             } else{
                 System.out.println("id Card number exists");
-                return;
+                return false;
             }
         }
 
         System.out.println(tempDocument);
         if (tempDocument == null) {
             System.out.println("there's no id value object");
-            return;
+            return false;
         }
 
         Document updatedDocument = new Document();
@@ -285,9 +287,11 @@ public class MongoRequests {
         updatedDocument.append("idCard", idCard);
 
         UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
+
+        return true;
     }
 
-    protected static void addClient(String name, String surname, String phone, String idCard) {
+    protected static boolean addClient(String name, String surname, String phone, String idCard) {
         MongoCollection<Document> collection = database.getCollection("users");
 
         Document tempDocument = collection.find(eq("idCard", idCard)).first();  //check if there's no same type
@@ -302,8 +306,9 @@ public class MongoRequests {
             doc.append("password", "");
             doc.append("idCard", idCard);
             collection.insertOne(doc);
+            return true;
         }
-
+        return false;
     }
 
     protected static void deleteClient(String _id) {
@@ -319,6 +324,24 @@ public class MongoRequests {
         } catch (MongoException e) {
             System.out.println("unable to delete object due to " + e + "error");
         }
+    }
+
+    protected static Client getClient(String idCard){
+        MongoCollection<Document> collection = database.getCollection("users");
+        Document tempDocument = collection.find(eq("idCard", idCard)).first();
+
+        if (tempDocument != null) {
+            Client client = new Client(tempDocument.get("name").toString(),
+                    tempDocument.get("surname").toString(),
+                    tempDocument.get("phone").toString(),
+                    tempDocument.get("idCard").toString(),
+                    tempDocument.get("_id").toString()
+            );
+        } else {
+            return null;
+        }
+
+        return null;
     }
 
     protected static void updateReservations(String productId, String userId, String startDate, String finishDate, String price, String status, String oldProductId) {

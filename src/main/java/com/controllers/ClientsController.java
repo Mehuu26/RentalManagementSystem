@@ -218,7 +218,10 @@ public class ClientsController extends MongoRequests implements Initializable, G
             noDataProvidedLabel.setText("No data provided");
             return;
         }else
-            addClient(nameTextField.getText(), surnameTextField.getText(), phoneTextField.getText(), idCardTextField.getText());
+            if(!addClient(nameTextField.getText(), surnameTextField.getText(), phoneTextField.getText(), idCardTextField.getText())){
+                noDataProvidedLabel.setText("Same ID Card detected");
+                return;
+            }
             noDataProvidedLabel.setText("");
             fullTableView();
             clearTextFields();
@@ -234,7 +237,9 @@ public class ClientsController extends MongoRequests implements Initializable, G
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) { //if user press ok
-                updateClient(nameTextField.getText(), surnameTextField.getText(), phoneTextField.getText(), idCardTextField.getText(), _idDoubleClicked);
+                if(!updateClient(nameTextField.getText(), surnameTextField.getText(), phoneTextField.getText(), idCardTextField.getText(), _idDoubleClicked)){
+                    noDataProvidedLabel.setText("same ID Card detected");
+                }
             }
             fullTableView();
             clearTextFields();
@@ -243,7 +248,10 @@ public class ClientsController extends MongoRequests implements Initializable, G
 
 
         }else {
-            updateClient(nameTextField.getText(), surnameTextField.getText(), phoneTextField.getText(), idCardTextField.getText(), _idDoubleClicked);
+            if(!updateClient(nameTextField.getText(), surnameTextField.getText(), phoneTextField.getText(), idCardTextField.getText(), _idDoubleClicked)){
+                noDataProvidedLabel.setText("same ID Card detected");
+                return;
+            }
             fullTableView();
             clearTextFields();
             setDisableTrue();
