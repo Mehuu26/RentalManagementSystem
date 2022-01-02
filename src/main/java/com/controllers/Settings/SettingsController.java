@@ -74,12 +74,13 @@ public class SettingsController extends MongoRequests implements Initializable, 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm edit operation");
         alert.setHeaderText(null);
-        alert.setContentText("By clicking 'OK' you will delete every user and reservation in database");
+        alert.setContentText("By clicking 'OK' you will delete every user, reservation and rentals in database");
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) { //if user press ok
             MongoRequests.deleteEveryObject("users");
             MongoRequests.deleteEveryObject("reservations");
+            MongoRequests.deleteEveryObject("rentals");
         }
     }
 
@@ -87,12 +88,13 @@ public class SettingsController extends MongoRequests implements Initializable, 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm edit operation");
         alert.setHeaderText(null);
-        alert.setContentText("By clicking 'OK' you will delete every equipment and reservation in database");
+        alert.setContentText("By clicking 'OK' you will delete every equipment, reservation and rentals in database");
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) { //if user press ok
             MongoRequests.deleteEveryObject("items");
             MongoRequests.deleteEveryObject("reservations");
+            MongoRequests.deleteEveryObject("rentals");
         }
     }
 

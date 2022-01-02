@@ -35,7 +35,7 @@ public class MongoRequests {
         }
     }
 
-    protected static boolean checkObjectFileterExists(String collectionName, String fieldname, String filter){
+    protected static boolean checkObjectFileterExists(String collectionName, String fieldname, String filter){  //true if object exists
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Document filterDocument = collection.find(eq(fieldname, filter)).first();
 
@@ -96,10 +96,14 @@ public class MongoRequests {
         return tempList;
     }
 
-    protected static Document getObjectFilter(String collectionName, String fieldName, String filter) {
+    protected static Document getObjectFilter(String collectionName, String fieldName, String filter) { //put "" value in fieldname and filter to get first document in collection
         MongoCollection<Document> collection = database.getCollection(collectionName);
-        Document tempDocument = collection.find(eq(fieldName, filter)).first();
-
+        Document tempDocument = new Document();
+        if(fieldName.isEmpty() && filter.isEmpty()){
+            tempDocument = collection.find().first();
+        }else {
+            tempDocument = collection.find(eq(fieldName, filter)).first();
+        }
         return tempDocument;
     }
 
@@ -396,5 +400,35 @@ public class MongoRequests {
             System.out.println("unable to delete object due to " + e + "error");
         }
     }
+
+    protected static void updateCompanyInfo(String _id, String phone, String email, String title, String close, String open, String address){
+        MongoCollection<Document> collection = database.getCollection("company");
+
+        Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
+
+        Document updatedDocument = new Document();
+        updatedDocument.append("phone", phone);
+        updatedDocument.append("email", email);
+        updatedDocument.append("title", title);
+        updatedDocument.append("close", close);
+        updatedDocument.append("open", open);
+        updatedDocument.append("address", address);
+
+        UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
+    }
+
+    protected static void addRental(String productId, String userId, String startDate, String status){
+        MongoCollection<Document> collection = database.getCollection("rentals");
+
+            Document doc = new Document();
+            doc.append("productId", productId);
+            doc.append("userId", userId);
+            doc.append("startDate", startDate);
+            doc.append("finishDate", "");
+            doc.append("status", status);
+            collection.insertOne(doc);
+            return;
+    };
+
 }
 

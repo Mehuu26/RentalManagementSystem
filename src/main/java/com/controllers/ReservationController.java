@@ -23,7 +23,10 @@ import org.bson.Document;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 
 public class ReservationController extends MongoRequests implements Initializable, GoBack, FullTableView {
@@ -72,6 +75,16 @@ public class ReservationController extends MongoRequests implements Initializabl
 
         ObservableList<Reservation> observableList = FXCollections.observableArrayList();
 
+        Long startMilliSeconds;
+        Calendar startCalendar = Calendar.getInstance();
+        String startStringDate;
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+        Long finishMilliSeconds;
+        Calendar finishCalendar = Calendar.getInstance();
+        String finishStringDate;
+
+
         try {
             for (int i = 0; i < reservationArrayList.size(); i++) {
 //                System.out.println("jestem w loopie reservation");
@@ -94,13 +107,23 @@ public class ReservationController extends MongoRequests implements Initializabl
                     }
                 }
 
+                //parsing start and finish milliseconds into date format
+                startMilliSeconds = Long.parseLong(reservationArrayList.get(i).get("startDate").toString());
+                startCalendar.setTimeInMillis(startMilliSeconds);
+                startStringDate = formatter.format(startCalendar.getTime());
+
+                finishMilliSeconds = Long.parseLong(reservationArrayList.get(i).get("finishDate").toString());
+                finishCalendar.setTimeInMillis(finishMilliSeconds);
+                finishStringDate = formatter.format(finishCalendar.getTime());
+
+                //adding new reservation object
                 observableList.add(new Reservation(
                         tempClient.get("name").toString(),
                         tempClient.get("surname").toString(),
                         tempEquipment.get("type").toString(),
                         tempEquipment.get("productId").toString(),
-                        reservationArrayList.get(i).get("startDate").toString(),
-                        reservationArrayList.get(i).get("finishDate").toString(),
+                        startStringDate,
+                        finishStringDate,
                         reservationArrayList.get(i).get("status").toString()
                 ));
             }

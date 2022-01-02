@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="backButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" text="Back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" />
+      <Label layoutX="20.0" layoutY="18.0" text="Return by Product ID" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="18.0" />
+      <TextField fx:id="productIdTextField" layoutX="149.0" layoutY="13.0" prefHeight="26.0" prefWidth="178.0" promptText="product ID" AnchorPane.leftAnchor="149.0" AnchorPane.topAnchor="13.0" />
+      <Label layoutX="20.0" layoutY="61.0" text="Choose client" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="61.0" />
+      <TextField fx:id="chooseClientTextField" layoutX="111.0" layoutY="56.0" prefHeight="26.0" prefWidth="403.0" promptText="name, surname ..." AnchorPane.leftAnchor="111.0" AnchorPane.topAnchor="56.0" />
+      <Button fx:id="returnButton" layoutX="348.0" layoutY="13.0" mnemonicParsing="false" text="Return" AnchorPane.leftAnchor="348.0" AnchorPane.topAnchor="13.0" />
+      <Label fx:id="noDataProvidedLabel" layoutX="408.0" layoutY="32.0" prefHeight="18.0" prefWidth="178.0" textFill="RED" AnchorPane.leftAnchor="408.0" AnchorPane.topAnchor="32.0" />
+   </children>
+</AnchorPane>

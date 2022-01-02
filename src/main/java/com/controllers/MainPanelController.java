@@ -63,7 +63,7 @@ public class MainPanelController extends MongoRequests implements Initializable 
     }
 
     private void rentReservated(){
-        new RentReservatedController();
+        new ReturnController();
     }
 
     private void rent(){
