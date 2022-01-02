@@ -1,10 +1,10 @@
-package com.controllers;
+package com.controllers.Reservation;
 
 import com.Main;
-import com.api.Equipment;
-import com.api.FullTableView;
-import com.api.GoBack;
-import com.api.Reservation;
+import com.api.*;
+import com.controllers.MainPanelController;
+import com.controllers.Rent.RentEditClientController;
+import com.controllers.Rent.RentEquipmentController;
 import com.mongodb.Mongo;
 import com.requests.MongoRequests;
 import javafx.collections.FXCollections;
@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -44,6 +45,8 @@ public class ReservationController extends MongoRequests implements Initializabl
     @FXML
     private Button backButton;
     @FXML
+    private Button rentReservatedButton;
+    @FXML
     private TableView<Reservation> reservationTableView;
     @FXML
     private TableColumn<Reservation, String> nameTableColumn;
@@ -59,6 +62,8 @@ public class ReservationController extends MongoRequests implements Initializabl
     private TableColumn<Reservation, String> endTableColumn;
     @FXML
     private TableColumn<Reservation, String> statusTableColumn;
+    @FXML
+    private Label noDataProvidedLabel;
 
     @Override
     public void fullTableView() {
@@ -149,9 +154,19 @@ public class ReservationController extends MongoRequests implements Initializabl
         reservationTableView.setItems(observableList);
     }
 
+    // TODO: 02.01.2022 searching for client and equipment and sending it as a constructor to another class
+    private void rentReservated(){
+        if (reservationTableView.getSelectionModel().isEmpty()){
+            noDataProvidedLabel.setText("select reservation or double click on it");
+        }else{
+            Reservation reservation = reservationTableView.getSelectionModel().getSelectedItem();
+        }
+    }
+    
+    // TODO: 02.01.2022 searching for client and equipment and sending it as a constructor to another class
     @Override
     public void tableViewDoubleClicked() {
-
+        Reservation reservation = reservationTableView.getSelectionModel().getSelectedItem();
     }
 
     @Override
@@ -174,6 +189,8 @@ public class ReservationController extends MongoRequests implements Initializabl
         new MainPanelController();
     }
 
+
+    // TODO: 02.01.2022 add disable true and false for the rent button while tableView row is not clicked 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         fullTableView();
