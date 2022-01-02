@@ -125,6 +125,7 @@ public class ReservationController extends MongoRequests implements Initializabl
                 observableList.add(new Reservation(
                         tempClient.get("name").toString(),
                         tempClient.get("surname").toString(),
+                        tempClient.get("_id").toString(),
                         tempEquipment.get("type").toString(),
                         tempEquipment.get("productId").toString(),
                         startStringDate,
@@ -161,6 +162,7 @@ public class ReservationController extends MongoRequests implements Initializabl
         }else{
             Reservation reservation = reservationTableView.getSelectionModel().getSelectedItem();
         }
+
     }
     
     // TODO: 02.01.2022 searching for client and equipment and sending it as a constructor to another class

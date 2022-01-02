@@ -10,7 +10,7 @@ public class Reservation {
     private SimpleStringProperty start;
     private SimpleStringProperty end;
 
-    public Reservation(String name, String surname, String product, String productId, String start, String end, String status) {
+    public Reservation(String name, String surname, String userId, String product, String productId, String start, String end, String status) {
         this.name = new SimpleStringProperty(name);
         this.surname = new SimpleStringProperty(surname);
         this.product = new SimpleStringProperty(product);

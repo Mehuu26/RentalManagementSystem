@@ -425,6 +425,7 @@ public class MongoRequests {
             doc.append("userId", userId);
             doc.append("startDate", startDate);
             doc.append("finishDate", "");
+            doc.append("price", "");
             doc.append("status", status);
             collection.insertOne(doc);
             return;
