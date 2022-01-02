@@ -44,6 +44,8 @@ public class SettingsController extends MongoRequests implements Initializable, 
     private Button deleteUsersButton;
     @FXML
     private Button deleteEquipmentButton;
+    @FXML
+    private Button changeCompanyInfoButton;
 
     @Override
     public void back() {
@@ -57,6 +59,7 @@ public class SettingsController extends MongoRequests implements Initializable, 
         addNewWorkerButton.setOnAction(event -> addWorker());
         deleteUsersButton.setOnAction(event -> deleteUsers());
         deleteEquipmentButton.setOnAction(event -> deleteEquipment());
+        changeCompanyInfoButton.setOnAction(event -> changeCompanyInfo());
     }
 
     private void addType() {
@@ -91,6 +94,10 @@ public class SettingsController extends MongoRequests implements Initializable, 
             MongoRequests.deleteEveryObject("items");
             MongoRequests.deleteEveryObject("reservations");
         }
+    }
+
+    private void changeCompanyInfo(){
+        new SettingsChangeCompanyInfoController();
     }
 }
 

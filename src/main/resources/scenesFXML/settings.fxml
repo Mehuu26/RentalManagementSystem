@@ -53,11 +53,12 @@
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-            <Label layoutX="90.0" layoutY="3.0" prefHeight="22.0" prefWidth="120.0" text="Company info" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="3.0">
+            <Label layoutX="90.0" layoutY="3.0" prefHeight="22.0" prefWidth="95.0" text="Company info" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="3.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
+            <Button fx:id="changeCompanyInfoButton" layoutX="124.0" layoutY="25.0" mnemonicParsing="false" text="Change company info" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="25.0" />
          </children>
       </AnchorPane>
    </children>
