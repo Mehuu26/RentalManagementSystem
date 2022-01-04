@@ -86,6 +86,9 @@ public class SettingsChangeCompanyInfoController extends MongoRequests implement
         }else if(!isNumeric(phoneTextField.getText())) {  //check if the percentage is numeric
             noDataProvidedLabel.setText("phone value need to be numeric");
             return;
+        }else if(!(Double.valueOf(percentageTextField.getText()) >= 0 && Double.valueOf(percentageTextField.getText()) <= 100)) {  //check if the percentage is numeric
+            noDataProvidedLabel.setText("percentage need to be set between 0 and 100");
+            return;
         } else if(Double.valueOf(openTimeTextField.getText()) > Double.valueOf(closeTimeTextField.getText())) {  //check if the percentage is numeric
             noDataProvidedLabel.setText("open time can't be set after close time value need to be numeric");
             return;
