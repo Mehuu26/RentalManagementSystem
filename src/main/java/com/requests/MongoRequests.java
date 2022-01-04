@@ -3,6 +3,8 @@ package com.requests;
 import com.api.Client;
 import com.mongodb.MongoException;
 import com.mongodb.client.*;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -88,7 +90,7 @@ public class MongoRequests {
         try {
             while (cursor.hasNext()) {
                 tempList.add(cursor.next());
-                System.out.println(tempList);
+                //System.out.println(tempList);
             }
         } finally {
             cursor.close();
@@ -103,6 +105,22 @@ public class MongoRequests {
             tempDocument = collection.find().first();
         }else {
             tempDocument = collection.find(eq(fieldName, filter)).first();
+        }
+        return tempDocument;
+    }
+
+    protected static Document getObjectFilterById(String collectionName, String fieldName, String filter){
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        Document tempDocument = new Document();
+
+        try {
+            if (fieldName.isEmpty() && filter.isEmpty()) {    //put
+                return null;
+            } else {
+                tempDocument = collection.find(eq(fieldName, new ObjectId(filter))).first();
+            }
+        }catch(NullPointerException e){
+            System.out.println(e);
         }
         return tempDocument;
     }
@@ -389,6 +407,28 @@ public class MongoRequests {
         return;
     }
 
+    protected static void updateReservationById(String _id, String fieldname, String updatedValue){
+        MongoCollection<Document> collection = database.getCollection("reservations");
+
+        if(_id.isEmpty() || fieldname.isEmpty() || updatedValue.isEmpty()){
+            return;
+        }else {
+            Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
+
+            Bson updates = Updates.combine(
+                    Updates.set(fieldname, updatedValue)
+            );
+
+            UpdateOptions options = new UpdateOptions().upsert(true);
+
+            try {
+                UpdateResult result = collection.updateOne(tempDocument, updates, options);
+            } catch (MongoException me) {
+                System.err.println("Unable to update due to an error: " + me);
+            }
+        }
+    }
+
     protected static void deleteReservations(String fieldName, String filter){
         MongoCollection<Document> collection = database.getCollection("reservations");
 
@@ -401,7 +441,7 @@ public class MongoRequests {
         }
     }
 
-    protected static void updateCompanyInfo(String _id, String phone, String email, String title, String close, String open, String address){
+    protected static void updateCompanyInfo(String _id, String phone, String email, String title, String close, String open, String address, String percentage){
         MongoCollection<Document> collection = database.getCollection("company");
 
         Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
@@ -413,6 +453,7 @@ public class MongoRequests {
         updatedDocument.append("close", close);
         updatedDocument.append("open", open);
         updatedDocument.append("address", address);
+        updatedDocument.append("percentage", percentage);
 
         UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
     }

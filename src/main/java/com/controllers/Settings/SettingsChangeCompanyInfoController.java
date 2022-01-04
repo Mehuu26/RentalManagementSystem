@@ -45,6 +45,8 @@ public class SettingsChangeCompanyInfoController extends MongoRequests implement
     @FXML
     private TextField addressTextField;
     @FXML
+    private TextField percentageTextField;
+    @FXML
     private Label noDataProvidedLabel;
 
     private String _id = new String();
@@ -54,9 +56,38 @@ public class SettingsChangeCompanyInfoController extends MongoRequests implement
         new SettingsController();
     }
 
+    private boolean isNumeric(String string) {
+        int tempInt;
+
+        try {
+            tempInt = Integer.parseInt(string);
+            return true;
+        } catch (NumberFormatException e) {
+            System.out.println("string can't be parsed to integer");
+        }
+        return false;
+    }
+
     private void update(){
-        if(phoneTextField.getText().isEmpty() || emailTextField.getText().isEmpty() || titleTextField.getText().isEmpty() || closeTimeTextField.getText().isEmpty() || openTimeTextField.getText().isEmpty() || addressTextField.getText().isEmpty()){
+        if(phoneTextField.getText().isEmpty() || emailTextField.getText().isEmpty() || titleTextField.getText().isEmpty() || closeTimeTextField.getText().isEmpty() || openTimeTextField.getText().isEmpty() || addressTextField.getText().isEmpty()) {
             noDataProvidedLabel.setText("Enter value");
+            return;
+        }
+        try{
+        if(!isNumeric(percentageTextField.getText())){  //check if the percentage is numeric
+            noDataProvidedLabel.setText("percentage value need to be numeric");
+            return;
+        }else if(!isNumeric(closeTimeTextField.getText())) {  //check if the percentage is numeric
+            noDataProvidedLabel.setText("close time value need to be numeric");
+            return;
+        }else if(!isNumeric(openTimeTextField.getText())) {  //check if the percentage is numeric
+            noDataProvidedLabel.setText("open time value need to be numeric");
+            return;
+        }else if(!isNumeric(phoneTextField.getText())) {  //check if the percentage is numeric
+            noDataProvidedLabel.setText("phone value need to be numeric");
+            return;
+        } else if(Double.valueOf(openTimeTextField.getText()) > Double.valueOf(closeTimeTextField.getText())) {  //check if the percentage is numeric
+            noDataProvidedLabel.setText("open time can't be set after close time value need to be numeric");
             return;
         }else {
             noDataProvidedLabel.setText("");
@@ -66,9 +97,13 @@ public class SettingsChangeCompanyInfoController extends MongoRequests implement
                     titleTextField.getText(),
                     closeTimeTextField.getText(),
                     openTimeTextField.getText(),
-                    addressTextField.getText());
-
+                    addressTextField.getText(),
+                    percentageTextField.getText()
+            );
             setTextFields();
+        }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
     }
 
@@ -83,6 +118,7 @@ public class SettingsChangeCompanyInfoController extends MongoRequests implement
         closeTimeTextField.setText(document.get("close").toString());
         openTimeTextField.setText(document.get("open").toString());
         addressTextField.setText(document.get("address").toString());
+        percentageTextField.setText(document.get("percentage").toString());
     }
 
     @Override

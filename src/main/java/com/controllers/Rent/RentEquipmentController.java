@@ -1,10 +1,7 @@
 package com.controllers.Rent;
 
 import com.Main;
-import com.api.Client;
-import com.api.FullTableView;
-import com.api.GoBack;
-import com.api.Rental;
+import com.api.*;
 import com.requests.MongoRequests;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -53,6 +50,22 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
 
     }
 
+    public RentEquipmentController(Client client, Equipment equipment, Reservation reservation){
+        //System.out.println("konstruktor");
+        this.client=client;
+        this.equipment=equipment;
+        this.reservation=reservation;
+        this.clientId = this.client.get_id();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/scenesFXML/rentEquipment.fxml"));
+            loader.setController(this);
+            Main.STAGE.setScene(new Scene(loader.<Parent>load()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private Reservation reservation;
+    private Equipment equipment;
     private Client client;
     private String clientId;
     private String clientName = new String();
@@ -81,7 +94,6 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
     @FXML
     private TableColumn<Rental, String> startDateTableColumn;
 
-    // TODO: 02.01.2022 check why I can not use client in this method 
     @Override
     public void fullTableView() {
         ArrayList<Document> tempRentalList = new ArrayList<>();
@@ -162,20 +174,19 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
 
     }
 
-    // TODO: 02.01.2022 when done with client problem, make add new rental
     @Override
     public void back() {
         new RentChooseClientController();
     }
 
-    private void rent(){
+    private boolean rent(){
         Instant instant = Instant.now();    //getting timeStamp, time since 01.01.1970 till 19.01.2038
         long timeStampMillis = instant.toEpochMilli();
         String timeInMillis = Long.toString(timeStampMillis);
 
         if(productIdTextField.getText().isEmpty()){
             noDataProvidedLabel.setText("enter product Id");
-            return;
+            return false;
         }
 
         if(MongoRequests.checkObjectFileterExists("items", "productId", productIdTextField.getText())) { //if product exists
@@ -185,21 +196,75 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
                 noDataProvidedLabel.setText("");
                 MongoRequests.addRental(productIdTextField.getText(), client.get_id(), timeInMillis, "true");
                 fullTableView();
+                return true;
             }else {
                 noDataProvidedLabel.setText("this product has been already rented");
+                return false;
             }
         }else{
             noDataProvidedLabel.setText("no product detected");
-            return;
+            return false;
         }
     }
 
+    private void showSimilar(){
+        ArrayList<Document> tempEquipmentList = MongoRequests.getCollectionFilter("items", "type", equipment.getType());
+        ArrayList<Document> tempSimilarEquipmentList = new ArrayList<>();
+        ArrayList<Document> tempRentalList = MongoRequests.getCollectionFilter("rentals", "status", "true");
+
+        boolean flag = true; //flag to store value if there is rented product or not.
+
+        for(int i = 0; i<tempEquipmentList.size(); i++){    //check collection if there is similar product, search by model and size.
+            if(tempEquipmentList.get(i).get("model").equals(equipment.getModel()) && tempEquipmentList.get(i).get("size").equals(equipment.getSize())){
+                for(int h = 0; h<tempRentalList.size(); h++){
+                    if(tempRentalList.get(h).get("productId").equals(tempEquipmentList.get(i).get("productId"))) {   //check rental list with rental status = true, when
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag) {  //check flag if previous for found rental with status true and product id we checking. If true not found.
+                    tempSimilarEquipmentList.add(tempEquipmentList.get(i));
+                }else{
+                    flag = true;
+                }
+            }
+        }
+
+        if(tempSimilarEquipmentList.isEmpty()){
+            System.out.println("there's no similar product");
+        }else{
+            for(int i = 0; i<tempSimilarEquipmentList.size(); i++){
+            System.out.println("found similar free to rent product " + tempSimilarEquipmentList.get(i));
+            }
+        }
+
+
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        if(!(equipment == null)){   //check which controller we are using. This with equipment in it or not.
+            productIdTextField.setText(equipment.getProductId());
+        }
+
         System.out.println("initialize");
         clientLabel.setText(client.getName() + " " + client.getSurname() + " " + client.getIdCard());
         fullTableView();
         backButton.setOnAction(event -> back());
-        rentButton.setOnAction(event -> rent());
+
+        rentButton.setOnAction(event -> {   //rent button
+            if(!(equipment == null)){   //check if rent from reservation
+                if(rent()) {    //check if you can rent
+                    MongoRequests.updateReservationById(reservation.getReservationId(), "status",  "done"); //change status in reservation as done
+                }else if(productIdTextField.getText().isEmpty()){  //otherwise return
+                    return;
+                }else{
+                    showSimilar();  //looking for similar if is textfield not empty and equipment is currently rented or product id does not exists
+                }
+            }else{  //if rented not from reservation
+                rent();
+            }
+
+
+        });
     }
 }

@@ -4,6 +4,7 @@ import com.Main;
 import com.api.Client;
 import com.api.Equipment;
 import com.api.GoBack;
+import com.api.Reservation;
 import com.controllers.Rent.RentEquipmentController;
 import com.controllers.Reservation.ReservationController;
 import com.requests.MongoRequests;
@@ -21,9 +22,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ReservationEditClientController extends MongoRequests implements GoBack, Initializable {
-    public ReservationEditClientController(Client client, Equipment equipment){
+    public ReservationEditClientController(Client client, Equipment equipment, Reservation reservation){
         this.client = client;
         this.equipment = equipment;
+        this.reservation = reservation;
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/scenesFXML/reservationEditClient.fxml"));
             loader.setController(this);
@@ -35,6 +37,7 @@ public class ReservationEditClientController extends MongoRequests implements Go
     }
     private Client client;
     private Equipment equipment;
+    private Reservation reservation;
 
     @FXML
     private Button backButton;
@@ -79,7 +82,7 @@ public class ReservationEditClientController extends MongoRequests implements Go
                     noDataProvidedLabel.setText("same id Card detected");
                     return;
                 }
-                new ReservationRentReservatedController(client, equipment);
+                new RentEquipmentController(client, equipment, reservation);
             }
     }
 

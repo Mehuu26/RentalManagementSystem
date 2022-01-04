@@ -57,6 +57,8 @@ public class ReservationController extends MongoRequests implements Initializabl
     @FXML
     private TableColumn<Reservation, String> productIdTableColumn;
     @FXML
+    private TableColumn<Reservation, String> modelTableColumn;
+    @FXML
     private TableColumn<Reservation, String> startTableColumn;
     @FXML
     private TableColumn<Reservation, String> endTableColumn;
@@ -89,9 +91,11 @@ public class ReservationController extends MongoRequests implements Initializabl
         Calendar finishCalendar = Calendar.getInstance();
         String finishStringDate;
 
-
         try {
             for (int i = 0; i < reservationArrayList.size(); i++) {
+                if(reservationArrayList.get(i).get("status").equals("done") || reservationArrayList.get(i).get("status").equals("cancelled")) {
+                    continue;
+                }
 //                System.out.println("jestem w loopie reservation");
                 for (int h = 0; h < equipmentArrayList.size(); h++) {
 //                    System.out.println("jestem w loopie equipment");
@@ -101,6 +105,7 @@ public class ReservationController extends MongoRequests implements Initializabl
                         break;
                     }
                 }
+
                 for (int k = 0; k < clientArrayList.size(); k++) {
 //                    System.out.println("jestem w loopie client");
 //                    System.out.println("id klienta badanego: " + clientArrayList.get(k).get("_id"));
@@ -128,9 +133,11 @@ public class ReservationController extends MongoRequests implements Initializabl
                         tempClient.get("_id").toString(),
                         tempEquipment.get("type").toString(),
                         tempEquipment.get("productId").toString(),
+                        tempEquipment.get("model").toString(),
                         startStringDate,
                         finishStringDate,
-                        reservationArrayList.get(i).get("status").toString()
+                        reservationArrayList.get(i).get("status").toString(),
+                        reservationArrayList.get(i).get("_id").toString()
                 ));
             }
         }catch (Exception e){}
@@ -139,6 +146,7 @@ public class ReservationController extends MongoRequests implements Initializabl
         surnameTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("surname"));
         productTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("product"));
         productIdTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("productId"));
+        modelTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("model"));
         startTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("start"));
         endTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("end"));
         statusTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("status"));
@@ -148,6 +156,7 @@ public class ReservationController extends MongoRequests implements Initializabl
         surnameTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         productTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         productIdTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        modelTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         startTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         endTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         statusTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -161,6 +170,38 @@ public class ReservationController extends MongoRequests implements Initializabl
             noDataProvidedLabel.setText("select reservation or double click on it");
         }else{
             Reservation reservation = reservationTableView.getSelectionModel().getSelectedItem();
+            Document tempDocumentClient = MongoRequests.getObjectFilterById("users", "_id", reservation.getUserId().toString());
+            Document tempDocumentEquipment = MongoRequests.getObjectFilter("items", "productId", reservation.getProductId());
+
+            System.out.println(tempDocumentClient);
+            System.out.println(tempDocumentEquipment);
+
+            Client client = new Client(tempDocumentClient.get("name").toString(),
+                    tempDocumentClient.get("surname").toString(),
+                    tempDocumentClient.get("phone").toString(),
+                    tempDocumentClient.get("idCard").toString(),
+                    tempDocumentClient.get("_id").toString()
+                    );
+
+            Equipment equipment = new Equipment(tempDocumentEquipment.get("type").toString(),
+                    tempDocumentEquipment.get("producer").toString(),
+                    tempDocumentEquipment.get("model").toString(),
+                    tempDocumentEquipment.get("size").toString(),
+                    tempDocumentEquipment.get("productId").toString()
+                    );
+
+            //checking if every value in client is filled up
+            if(client.getPhone().isEmpty()){
+                new ReservationEditClientController(client, equipment, reservation); //if not go to edit client controller
+            }else if(client.getIdCard().isEmpty()){
+                new ReservationEditClientController(client, equipment, reservation);
+            }else if(client.getName().isEmpty()){
+                new ReservationEditClientController(client, equipment, reservation);
+            }else if(client.getSurname().isEmpty()){
+                new ReservationEditClientController(client, equipment, reservation);
+            }else{
+                new ReservationRentReservatedController(client, equipment); //if yes go to rent reservated controller
+            }
         }
 
     }
@@ -168,7 +209,42 @@ public class ReservationController extends MongoRequests implements Initializabl
     // TODO: 02.01.2022 searching for client and equipment and sending it as a constructor to another class
     @Override
     public void tableViewDoubleClicked() {
-        Reservation reservation = reservationTableView.getSelectionModel().getSelectedItem();
+        if (reservationTableView.getSelectionModel().isEmpty()){
+            noDataProvidedLabel.setText("select reservation or double click on it");
+        }else{
+            Reservation reservation = reservationTableView.getSelectionModel().getSelectedItem();
+            System.out.println(reservation.getUserId());
+            Document tempDocumentClient = MongoRequests.getObjectFilterById("users", "_id", reservation.getUserId().toString());
+            Document tempDocumentEquipment = MongoRequests.getObjectFilter("items", "productId", reservation.getProductId());
+
+            Client client = new Client(tempDocumentClient.get("name").toString(),
+                    tempDocumentClient.get("surname").toString(),
+                    tempDocumentClient.get("phone").toString(),
+                    tempDocumentClient.get("idCard").toString(),
+                    tempDocumentClient.get("_id").toString()
+            );
+
+            Equipment equipment = new Equipment(tempDocumentEquipment.get("type").toString(),
+                    tempDocumentEquipment.get("producer").toString(),
+                    tempDocumentEquipment.get("model").toString(),
+                    tempDocumentEquipment.get("size").toString(),
+                    tempDocumentEquipment.get("productId").toString()
+            );
+
+            //checking if every value in client is filled up
+            if(client.getPhone().isEmpty()){
+                new ReservationEditClientController(client, equipment, reservation); //if not go to edit client controller
+            }else if(client.getIdCard().isEmpty()){
+                new ReservationEditClientController(client, equipment, reservation);
+            }else if(client.getName().isEmpty()){
+                new ReservationEditClientController(client, equipment, reservation);
+            }else if(client.getSurname().isEmpty()){
+                new ReservationEditClientController(client, equipment, reservation);
+            }else{
+                new RentEquipmentController(client, equipment, reservation); //if yes go to rent equipment controller
+            }
+        }
+
     }
 
     @Override
@@ -197,5 +273,23 @@ public class ReservationController extends MongoRequests implements Initializabl
     public void initialize(URL url, ResourceBundle resourceBundle) {
         fullTableView();
         backButton.setOnAction(event -> back());
+
+
+
+        rentReservatedButton.setOnAction(event -> {
+            if (reservationTableView.getSelectionModel().isEmpty()){
+                noDataProvidedLabel.setText("Choose reservation from table");
+            } else{
+                rentReservated();
+            }
+        });
+
+
+
+        reservationTableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && (!reservationTableView.getSelectionModel().isEmpty()))
+                tableViewDoubleClicked();
+        });
+
     }
 }

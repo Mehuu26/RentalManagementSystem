@@ -11,10 +11,11 @@
           <TableColumn fx:id="nameTableColumn" prefWidth="52.200016021728516" text="Name" />
           <TableColumn fx:id="surnameTableColumn" prefWidth="67.4000244140625" text="Surname" />
             <TableColumn fx:id="productTableColumn" prefWidth="70.4000244140625" text="Product" />
+            <TableColumn fx:id="modelTableColumn" prefWidth="50.800018310546875" text="Model" />
             <TableColumn fx:id="productIdTableColumn" prefWidth="87.59996032714844" text="Product ID" />
             <TableColumn fx:id="startTableColumn" prefWidth="66.0" text="Start" />
             <TableColumn fx:id="endTableColumn" prefWidth="84.39996337890625" text="End" />
-            <TableColumn fx:id="statusTableColumn" prefWidth="112.800048828125" text="Status" />
+            <TableColumn fx:id="statusTableColumn" prefWidth="44.600067138671875" text="Status" />
         </columns>
       </TableView>
       <Button fx:id="rentReservatedButton" layoutX="483.0" layoutY="360.0" mnemonicParsing="false" text="Rent Reservated" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />

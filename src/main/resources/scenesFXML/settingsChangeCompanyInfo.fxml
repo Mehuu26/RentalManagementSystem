@@ -9,16 +9,18 @@
       <Label layoutX="42.0" layoutY="44.0" text="Phone" AnchorPane.leftAnchor="42.0" AnchorPane.topAnchor="44.0" />
       <TextField fx:id="phoneTextField" layoutX="42.0" layoutY="62.0" AnchorPane.leftAnchor="42.0" AnchorPane.topAnchor="62.0" />
       <Label layoutX="42.0" layoutY="120.0" text="Email" AnchorPane.leftAnchor="42.0" AnchorPane.topAnchor="120.0" />
-      <TextField fx:id="emailTextField" layoutX="42.0" layoutY="138.0" />
+      <TextField fx:id="emailTextField" layoutX="42.0" layoutY="138.0" AnchorPane.leftAnchor="42.0" AnchorPane.topAnchor="138.0" />
       <Label layoutX="45.0" layoutY="191.0" text="Title" AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="191.0" />
-      <TextField fx:id="titleTextField" layoutX="45.0" layoutY="209.0" />
-      <Label layoutX="331.0" layoutY="44.0" text="Close Time" />
-      <TextField fx:id="closeTimeTextField" layoutX="331.0" layoutY="62.0" />
-      <Label layoutX="331.0" layoutY="120.0" text="Open Time" AnchorPane.leftAnchor="331.0" AnchorPane.topAnchor="120.0" />
-      <TextField fx:id="openTimeTextField" layoutX="331.0" layoutY="138.0" AnchorPane.leftAnchor="331.0" AnchorPane.topAnchor="138.0" />
-      <Label layoutX="331.0" layoutY="191.0" text="Adress" />
-      <TextField fx:id="addressTextField" layoutX="331.0" layoutY="209.0" AnchorPane.leftAnchor="331.0" AnchorPane.topAnchor="209.0" />
+      <TextField fx:id="titleTextField" layoutX="45.0" layoutY="209.0" AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="209.0" />
+      <Label layoutX="47.0" layoutY="264.0" text="Close Time" AnchorPane.leftAnchor="47.0" AnchorPane.topAnchor="264.0" />
+      <TextField fx:id="closeTimeTextField" layoutX="47.0" layoutY="282.0" AnchorPane.leftAnchor="47.0" AnchorPane.topAnchor="282.0" />
+      <Label layoutX="331.0" layoutY="44.0" text="Open Time" AnchorPane.leftAnchor="331.0" AnchorPane.topAnchor="44.0" />
+      <TextField fx:id="openTimeTextField" layoutX="331.0" layoutY="62.0" AnchorPane.leftAnchor="331.0" AnchorPane.topAnchor="62.0" />
+      <Label layoutX="331.0" layoutY="120.0" text="Adress" AnchorPane.leftAnchor="331.0" AnchorPane.topAnchor="120.0" />
+      <TextField fx:id="addressTextField" layoutX="331.0" layoutY="138.0" AnchorPane.leftAnchor="331.0" AnchorPane.topAnchor="138.0" />
       <Button fx:id="updateButton" layoutX="534.0" layoutY="360.0" mnemonicParsing="false" text="Update" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
       <Label fx:id="noDataProvidedLabel" layoutX="43.0" layoutY="20.0" prefHeight="18.0" prefWidth="278.0" textFill="RED" AnchorPane.leftAnchor="43.0" AnchorPane.topAnchor="20.0" />
+      <Label layoutX="331.0" layoutY="191.0" text="Percentage" AnchorPane.leftAnchor="331.0" AnchorPane.topAnchor="191.0" />
+      <TextField fx:id="percentageTextField" layoutX="331.0" layoutY="209.0" AnchorPane.leftAnchor="331.0" AnchorPane.topAnchor="209.0" />
    </children>
 </AnchorPane>
