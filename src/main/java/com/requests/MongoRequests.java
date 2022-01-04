@@ -37,6 +37,19 @@ public class MongoRequests {
         }
     }
 
+    protected static void deleteObject(String collectionName, String _id){
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
+
+        try {
+            collection.deleteOne(tempDocument);
+        } catch (MongoException e) {
+            System.out.println("unable to delete object due to " + e + "error");
+        }
+
+
+    }
+
     protected static boolean checkObjectFileterExists(String collectionName, String fieldname, String filter){  //true if object exists
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Document filterDocument = collection.find(eq(fieldname, filter)).first();

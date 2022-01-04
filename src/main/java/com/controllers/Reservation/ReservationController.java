@@ -164,7 +164,6 @@ public class ReservationController extends MongoRequests implements Initializabl
         reservationTableView.setItems(observableList);
     }
 
-    // TODO: 02.01.2022 searching for client and equipment and sending it as a constructor to another class
     private void rentReservated(){
         if (reservationTableView.getSelectionModel().isEmpty()){
             noDataProvidedLabel.setText("select reservation or double click on it");
@@ -200,13 +199,12 @@ public class ReservationController extends MongoRequests implements Initializabl
             }else if(client.getSurname().isEmpty()){
                 new ReservationEditClientController(client, equipment, reservation);
             }else{
-                new ReservationRentReservatedController(client, equipment); //if yes go to rent reservated controller
+                new RentEquipmentController(client, equipment, reservation); //if yes go to rent reservated controller
             }
         }
 
     }
-    
-    // TODO: 02.01.2022 searching for client and equipment and sending it as a constructor to another class
+
     @Override
     public void tableViewDoubleClicked() {
         if (reservationTableView.getSelectionModel().isEmpty()){
@@ -267,8 +265,6 @@ public class ReservationController extends MongoRequests implements Initializabl
         new MainPanelController();
     }
 
-
-    // TODO: 02.01.2022 add disable true and false for the rent button while tableView row is not clicked 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         fullTableView();

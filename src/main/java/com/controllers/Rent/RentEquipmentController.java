@@ -15,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import org.bson.Document;
 
+import javax.print.Doc;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
@@ -132,7 +133,8 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
                                 tempEquipmentList.get(h).get("productId").toString(),
                                 tempRentalList.get(i).get("userId").toString(),
                                 stringTime,
-                                tempRentalList.get(i).get("status").toString()
+                                tempRentalList.get(i).get("status").toString(),
+                                tempRentalList.get(i).get("_id").toString()
                                 ));
                     }
                 }
@@ -156,7 +158,9 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
 
     @Override
     public void tableViewDoubleClicked() {
-
+        Rental rental = rentalTableView.getSelectionModel().getSelectedItem();
+        MongoRequests.deleteObject("rentals", rental.getRentalId());
+        fullTableView();
     }
 
     @Override
@@ -207,7 +211,18 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
         }
     }
 
-    private void showSimilar(){
+    private ArrayList showSimilar(){
+        if(!equipment.getProductId().equals(productIdTextField.getText())){ //if there's no same product id in text field change the product
+            Document newEquipment = MongoRequests.getObjectFilter("items", "productId", productIdTextField.getText());
+
+            //change equipment we are looking for
+            this.equipment.setType(newEquipment.get("type").toString());
+            this.equipment.setProducer(newEquipment.get("producer").toString());
+            this.equipment.setModel(newEquipment.get("model").toString());
+            this.equipment.setSize(newEquipment.get("size").toString());
+            this.equipment.setProductId(newEquipment.get("productId").toString());
+        }
+
         ArrayList<Document> tempEquipmentList = MongoRequests.getCollectionFilter("items", "type", equipment.getType());
         ArrayList<Document> tempSimilarEquipmentList = new ArrayList<>();
         ArrayList<Document> tempRentalList = MongoRequests.getCollectionFilter("rentals", "status", "true");
@@ -232,14 +247,15 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
 
         if(tempSimilarEquipmentList.isEmpty()){
             System.out.println("there's no similar product");
+            return null;
         }else{
             for(int i = 0; i<tempSimilarEquipmentList.size(); i++){
             System.out.println("found similar free to rent product " + tempSimilarEquipmentList.get(i));
             }
+            return tempSimilarEquipmentList;
         }
-
-
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if(!(equipment == null)){   //check which controller we are using. This with equipment in it or not.
@@ -251,6 +267,11 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
         fullTableView();
         backButton.setOnAction(event -> back());
 
+        rentalTableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && (!rentalTableView.getSelectionModel().isEmpty()))
+                tableViewDoubleClicked();
+        });
+
         rentButton.setOnAction(event -> {   //rent button
             if(!(equipment == null)){   //check if rent from reservation
                 if(rent()) {    //check if you can rent
@@ -258,13 +279,31 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
                 }else if(productIdTextField.getText().isEmpty()){  //otherwise return
                     return;
                 }else{
-                    showSimilar();  //looking for similar if is textfield not empty and equipment is currently rented or product id does not exists
+                    ArrayList <Document> similarProductList = showSimilar();
+                    System.out.println(equipment);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Reservated product has been alread rented");
+                    if (similarProductList == null){
+                        alert.setHeaderText("No similar product found");
+                        String s ="There's no left similar product";
+                        alert.setContentText(s);
+                        alert.show();
+                    }else{
+                    alert.setHeaderText("Product with these ID's are available to rent.");
+                    String s = new String();
+
+                    for(int i = 0; i<similarProductList.size(); i++){
+                        s += similarProductList.get(i).get("productId");
+                        s += ", ";
+                    }
+
+                    alert.setContentText(s);
+                    alert.show();
+                }
                 }
             }else{  //if rented not from reservation
                 rent();
             }
-
-
         });
     }
 }

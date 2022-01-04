@@ -10,8 +10,9 @@ public class Rental {
     private SimpleStringProperty userId;
     private SimpleStringProperty startDate;
     private SimpleStringProperty status;
+    private SimpleStringProperty rentalId;
 
-    public Rental(String type, String model, String size, String productId, String userId, String startDate, String status){
+    public Rental(String type, String model, String size, String productId, String userId, String startDate, String status, String rentalId){
         this.type = new SimpleStringProperty(type);
         this.model = new SimpleStringProperty(model);
         this.size = new SimpleStringProperty(size);
@@ -19,6 +20,7 @@ public class Rental {
         this.userId = new SimpleStringProperty(userId);
         this.startDate = new SimpleStringProperty(startDate);
         this.status = new SimpleStringProperty(status);
+        this.rentalId = new SimpleStringProperty(rentalId);
     }
 
     public String getType() {
@@ -106,8 +108,16 @@ public class Rental {
         this.status.set(status);
     }
 
+    public String getRentalId() {
+        return rentalId.get();
+    }
 
+    public SimpleStringProperty rentalIdProperty() {
+        return rentalId;
+    }
 
-
+    public void setRentalId(String rentalId) {
+        this.rentalId.set(rentalId);
+    }
 
 }
