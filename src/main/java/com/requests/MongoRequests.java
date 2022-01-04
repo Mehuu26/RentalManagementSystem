@@ -131,6 +131,7 @@ public class MongoRequests {
                 return null;
             } else {
                 tempDocument = collection.find(eq(fieldName, new ObjectId(filter))).first();
+                System.out.println(tempDocument);
             }
         }catch(NullPointerException e){
             System.out.println(e);
