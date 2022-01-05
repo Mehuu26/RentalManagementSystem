@@ -241,6 +241,12 @@ public class ReturnController extends MongoRequests implements Initializable, Go
         Document tempDocument = MongoRequests.getObjectFilter("rentals", "productId", productIdTextField.getText());
         Document tempEquipment = MongoRequests.getObjectFilter("items", "productId", productIdTextField.getText());
 
+        Document tempRentalDocument = new Document();
+
+        tempRentalDocument = MongoRequests.getObjectDoubleFilter("rentals", "productId", productIdTextField.getText(), "status", "true");
+        System.out.println("document collecion name rentals without second filter: " + tempDocument);
+        System.out.println("document collecion name rentals with second filter: " + tempRentalDocument);
+
         if (productIdTextField.getText().isEmpty()) {
             noDataProvidedLabel.setText("enter product Id");
             return;

@@ -122,6 +122,17 @@ public class MongoRequests {
         return tempDocument;
     }
 
+    protected static Document getObjectDoubleFilter(String collectionName, String fieldName, String filter, String secondFieldName, String secondFilter) { //put "" value in fieldname and filter to get first document in collection
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        Document tempDocument = new Document();
+        if(fieldName.isEmpty() && filter.isEmpty()){
+            tempDocument = collection.find().first();
+        }else {
+            tempDocument = collection.find(and(eq(fieldName, filter), eq(secondFieldName, secondFilter))).first();
+        }
+        return tempDocument;
+    }
+
     protected static Document getObjectFilterById(String collectionName, String fieldName, String filter){
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Document tempDocument = new Document();
