@@ -15,21 +15,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import org.bson.Document;
 
-import javax.print.Doc;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.ResourceBundle;
-import java.util.function.ToDoubleBiFunction;
 
 public class RentEquipmentController extends MongoRequests implements GoBack, Initializable, FullTableView {
     public RentEquipmentController(Client client) {
@@ -133,6 +126,7 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
                                 tempEquipmentList.get(h).get("productId").toString(),
                                 tempRentalList.get(i).get("userId").toString(),
                                 stringTime,
+                                "",
                                 tempRentalList.get(i).get("status").toString(),
                                 tempRentalList.get(i).get("_id").toString()
                                 ));
@@ -159,7 +153,7 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
     @Override
     public void tableViewDoubleClicked() {
         Rental rental = rentalTableView.getSelectionModel().getSelectedItem();
-        MongoRequests.deleteObject("rentals", rental.getRentalId());
+        MongoRequests.deleteObject("rentals", rental.get_id());
         fullTableView();
     }
 

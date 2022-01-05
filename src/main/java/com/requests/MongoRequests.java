@@ -497,5 +497,28 @@ public class MongoRequests {
             return;
     };
 
+    protected static void updateRental(String _id, String finishDate, String status, String price){
+        MongoCollection<Document> collection = database.getCollection("rentals");
+
+        if(_id.isEmpty() || finishDate.isEmpty() || status.isEmpty() || price.isEmpty()){
+            return;
+        }else {
+            Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
+
+            Bson updates = Updates.combine(
+                    Updates.set("finishDate", finishDate),
+                    Updates.set("price", price),
+                    Updates.set("status", status)
+            );
+
+            UpdateOptions options = new UpdateOptions().upsert(true);
+
+            try {
+                UpdateResult result = collection.updateOne(tempDocument, updates, options);
+            } catch (MongoException me) {
+                System.err.println("Unable to update due to an error: " + me);
+            }
+        }
+    }
 }
 

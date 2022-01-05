@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -31,5 +32,11 @@
             <TableColumn fx:id="returnFinishDateTableColumn" prefWidth="75.0" text="Finish date" />
         </columns>
       </TableView>
+      <Button fx:id="finishButton" layoutX="535.0" layoutY="360.0" mnemonicParsing="false" text="Finish" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+      <Label fx:id="sumUpLabel" layoutX="433.0" layoutY="364.0" prefHeight="18.0" prefWidth="78.0" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="90.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

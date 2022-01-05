@@ -21,10 +21,14 @@ import org.bson.Document;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class ReturnController extends MongoRequests implements Initializable, GoBack, FullTableView {
@@ -53,18 +57,23 @@ public class ReturnController extends MongoRequests implements Initializable, Go
     }
 
     private Client client;
-    private ArrayList<Document> returnArrayList = new ArrayList<>();
+    private ArrayList<Document> returnArrayList = new ArrayList<>();    //returnArrayList stores rentals, which we get in second, return table view.
+    private Double Sum;
 
     @FXML
     private Button backButton;
     @FXML
     private Button returnButton;
     @FXML
+    private Button finishButton;
+    @FXML
     private TextField productIdTextField;
     @FXML
     private Label noDataProvidedLabel;
     @FXML
     private Label currentClientLabel;
+    @FXML
+    private Label sumUpLabel;
     @FXML
     private TableView<Rental> rentalTableView;
     @FXML
@@ -94,7 +103,7 @@ public class ReturnController extends MongoRequests implements Initializable, Go
     private TableColumn<Rental, String> returnFinishDateTableColumn;
 
     @Override
-    public void fullTableView() {
+    public void fullTableView() {   //full first, rental table view
         ArrayList<Document> tempRentalList = new ArrayList<>();
         ArrayList<Document> tempEquipmentList = new ArrayList<>();
 
@@ -127,6 +136,7 @@ public class ReturnController extends MongoRequests implements Initializable, Go
                                 tempEquipmentList.get(h).get("productId").toString(),
                                 tempRentalList.get(i).get("userId").toString(),
                                 stringTime,
+                                "",
                                 tempRentalList.get(i).get("status").toString(),
                                 tempRentalList.get(i).get("_id").toString()
                         ));
@@ -152,16 +162,29 @@ public class ReturnController extends MongoRequests implements Initializable, Go
         rentalTableView.setItems(observableList);
     }
 
-    private void fullReturnTableView(Document tempRental) {  //value from text field. Store equipment we are getting
+    private void fullReturnTableView(Document tempRental) {  //value from text field. Store equipment we are getting. Full second, rental table view
         ArrayList<Document> tempEquipmentList = getCollection("items");
 
         ObservableList<Rental> observableList = FXCollections.observableArrayList();
-        returnArrayList.add(tempRental);
 
+
+        sumUp();    //method which calculate amount of money, and show it in label
+
+        //inicialize values
         Long milliSeconds;
-        Calendar calendar = Calendar.getInstance();
-        String stringTime;
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Calendar calendarStartDate = Calendar.getInstance();
+        Calendar calendarFinishDate = Calendar.getInstance();
+        String stringStartTime;  //string
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); //format
+
+        //get current time as a time stamp
+        Instant instant = Instant.now();    //getting timeStamp, time since 01.01.1970 till 19.01.2038
+        long finishTimeStampMillis = instant.toEpochMilli();    //this is converted to date format, for user to see
+        //string value to database
+        String stringFinishTime;  //string
+        String finishTimeInMillis = Long.toString(finishTimeStampMillis);
+
+        returnArrayList.add(tempRental);
 
         System.out.println("wielkosc return array list to: " + returnArrayList.size());
         System.out.println(returnArrayList.get(0));
@@ -170,15 +193,19 @@ public class ReturnController extends MongoRequests implements Initializable, Go
                     if(tempEquipmentList.get(h).get("productId").equals(returnArrayList.get(i).get("productId"))){
                         //parsing milliseconds into date format
                         milliSeconds = Long.parseLong(returnArrayList.get(i).get("startDate").toString());
-                        calendar.setTimeInMillis(milliSeconds);
-                        stringTime = formatter.format(calendar.getTime());
+                        calendarStartDate.setTimeInMillis(milliSeconds);
+                        stringStartTime = formatter.format(calendarStartDate.getTime());
+
+                        calendarStartDate.setTimeInMillis(finishTimeStampMillis);
+                        stringFinishTime = formatter.format(calendarStartDate.getTime());
 
                         observableList.add(new Rental(tempEquipmentList.get(h).get("type").toString(),
                                 tempEquipmentList.get(h).get("model").toString(),
                                 tempEquipmentList.get(h).get("size").toString(),
                                 tempEquipmentList.get(h).get("productId").toString(),
                                 returnArrayList.get(i).get("userId").toString(),    //user id from rental collection
-                                stringTime,
+                                stringStartTime,
+                                stringFinishTime,
                                 returnArrayList.get(i).get("status").toString(),    //from rental collection
                                 returnArrayList.get(i).get("_id").toString()    //from rental collection
                         ));
@@ -237,15 +264,8 @@ public class ReturnController extends MongoRequests implements Initializable, Go
     }
 
     private void returnEquipment() {
-        // TODO: 04.01.2022 check tempDocument is returning rental but not checking if it is rented or returned 
-        Document tempDocument = MongoRequests.getObjectFilter("rentals", "productId", productIdTextField.getText());
+        Document tempDocument = MongoRequests.getObjectDoubleFilter("rentals", "productId", productIdTextField.getText(), "status", "true");
         Document tempEquipment = MongoRequests.getObjectFilter("items", "productId", productIdTextField.getText());
-
-        Document tempRentalDocument = new Document();
-
-        tempRentalDocument = MongoRequests.getObjectDoubleFilter("rentals", "productId", productIdTextField.getText(), "status", "true");
-        System.out.println("document collecion name rentals without second filter: " + tempDocument);
-        System.out.println("document collecion name rentals with second filter: " + tempRentalDocument);
 
         if (productIdTextField.getText().isEmpty()) {
             noDataProvidedLabel.setText("enter product Id");
@@ -303,6 +323,31 @@ public class ReturnController extends MongoRequests implements Initializable, Go
         }
     }
 
+    // TODO: 05.01.2022 calculate time between two days and sum it up 
+    private void finish(){
+        for(int i = 0; i < returnTableView.getItems().size(); i++){    //for goes through the Table View which stores rental data which client want to return
+            String startDateString=returnTableView.getItems().get(i).getStartDate();
+            String finishDateString=returnTableView.getItems().get(i).getFinishDate();
+
+            try {
+                Date startDate=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(startDateString);
+                Date finishDate=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(finishDateString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            
+            //returnArrayList.get(i).append()
+            System.out.println(returnArrayList.get(i));
+            //MongoRequests.updateRental(returnTableView.getItems().get(i).get_id(), returnTableView.getItems().get(i).getFinishDate(), "false", "100");
+        }
+
+
+    }
+
+    private void sumUp(){   //
+
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         backButton.setOnAction(event -> back());
@@ -312,5 +357,9 @@ public class ReturnController extends MongoRequests implements Initializable, Go
             if (event.getClickCount() == 2 && (!rentalTableView.getSelectionModel().isEmpty()))
                 tableViewDoubleClicked();
         });
+
+        finishButton.setOnAction(event -> finish());
+
+
     }
 }

@@ -9,18 +9,20 @@ public class Rental {
     private SimpleStringProperty productId;
     private SimpleStringProperty userId;
     private SimpleStringProperty startDate;
+    private SimpleStringProperty finishDate;
     private SimpleStringProperty status;
-    private SimpleStringProperty rentalId;
+    private SimpleStringProperty _id;
 
-    public Rental(String type, String model, String size, String productId, String userId, String startDate, String status, String rentalId){
+    public Rental(String type, String model, String size, String productId, String userId, String startDate, String finishDate, String status, String _id){
         this.type = new SimpleStringProperty(type);
         this.model = new SimpleStringProperty(model);
         this.size = new SimpleStringProperty(size);
         this.productId = new SimpleStringProperty(productId);
         this.userId = new SimpleStringProperty(userId);
         this.startDate = new SimpleStringProperty(startDate);
+        this.finishDate = new SimpleStringProperty(finishDate);
         this.status = new SimpleStringProperty(status);
-        this.rentalId = new SimpleStringProperty(rentalId);
+        this._id = new SimpleStringProperty(_id);
     }
 
     public String getType() {
@@ -108,16 +110,28 @@ public class Rental {
         this.status.set(status);
     }
 
-    public String getRentalId() {
-        return rentalId.get();
+    public String get_id() {
+        return _id.get();
     }
 
-    public SimpleStringProperty rentalIdProperty() {
-        return rentalId;
+    public SimpleStringProperty _idProperty() {
+        return _id;
     }
 
-    public void setRentalId(String rentalId) {
-        this.rentalId.set(rentalId);
+    public void set_id(String _id) {
+        this._id.set(_id);
+    }
+
+    public String getFinishDate() {
+        return finishDate.get();
+    }
+
+    public SimpleStringProperty finishDateProperty() {
+        return finishDate;
+    }
+
+    public void setFinishDate(String finishDate) {
+        this.finishDate.set(finishDate);
     }
 
 }
