@@ -418,11 +418,10 @@ public class MongoRequests {
                     tempDocument.get("idCard").toString(),
                     tempDocument.get("_id").toString()
             );
+            return client;
         } else {
             return null;
         }
-
-        return null;
     }
 
     protected static void updateReservations(String productId, String userId, String startDate, String finishDate, String price, String status, String oldProductId) {

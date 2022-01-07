@@ -28,7 +28,7 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
     public RentEquipmentController(Client client) {
         //System.out.println("konstruktor");
         this.client=client;
-        this.clientId = this.client.get_id();
+        this.clientId = client.get_id();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/scenesFXML/rentEquipment.fxml"));
             loader.setController(this);

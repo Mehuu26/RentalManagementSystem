@@ -25,11 +25,13 @@ import java.security.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 public class ReturnController extends MongoRequests implements Initializable, GoBack, FullTableView {
     public ReturnController(){
@@ -58,7 +60,7 @@ public class ReturnController extends MongoRequests implements Initializable, Go
 
     private Client client;
     private ArrayList<Document> returnArrayList = new ArrayList<>();    //returnArrayList stores rentals, which we get in second, return table view.
-    private Double Sum;
+    private long sum;
 
     @FXML
     private Button backButton;
@@ -329,15 +331,46 @@ public class ReturnController extends MongoRequests implements Initializable, Go
             String startDateString=returnTableView.getItems().get(i).getStartDate();
             String finishDateString=returnTableView.getItems().get(i).getFinishDate();
 
+            //parsing string formats into date format
             try {
                 Date startDate=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(startDateString);
                 Date finishDate=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(finishDateString);
+
+                // TODO: 07.01.2022 somewhere there is problem 
+                //calculating duration time
+                long diff = finishDate.getTime() - startDate.getTime();
+                System.out.println ("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+                long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                System.out.println("days " + days);
+                System.out.println ("Hours: " + TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS));
+                long hours = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                System.out.println("Hours " + hours);
+                //float days = (diff / (1000*60*60*24));    //second converter
+                //System.out.println("second conferter: " + days);
+
+                if(TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) == 0){    //if days == 0;
+                    Document tempPrice = MongoRequests.getObjectFilter("prices", "type", returnTableView.getItems().get(i).getType());
+                    long hoursPrice = Long.parseLong(tempPrice.get("hour").toString());
+                    long daysPrice = Long.parseLong(tempPrice.get("day").toString());
+                    if(hours*hoursPrice > daysPrice) {
+                        System.out.println("hours price is bigger then days price");
+                        sum += daysPrice;
+                        System.out.println(sum);
+                    }else{
+                        System.out.println("hours price is lower then days price");
+                        sum += hours*hoursPrice;
+                        System.out.println(sum);
+                    }
+                }
+
+                sumUpLabel.setText(Long.toString(sum));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            
+
+
             //returnArrayList.get(i).append()
-            System.out.println(returnArrayList.get(i));
+            //System.out.println(returnArrayList.get(i));
             //MongoRequests.updateRental(returnTableView.getItems().get(i).get_id(), returnTableView.getItems().get(i).getFinishDate(), "false", "100");
         }
 
