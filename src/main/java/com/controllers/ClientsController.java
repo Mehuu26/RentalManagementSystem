@@ -266,10 +266,20 @@ public class ClientsController extends MongoRequests implements Initializable, G
             return;
         } else noDataProvidedLabel.setText("");
 
+
         Client client = clientsTableView.getSelectionModel().getSelectedItem();
 
-        MongoRequests.deleteClient(client.get_id());
-        MongoRequests.deleteReservations("userId", client.get_id());  //deleting all clients reservation
+        //check if client does have active rental if yes you can not delete him
+        if(MongoRequests.checkObjectDoubleFilterExists("rentals", "userId", client.get_id(), "status", "true")){
+            noDataProvidedLabel.setText("user with active rental can not be delete");
+            return;
+        }
+
+
+        MongoRequests.deleteClient(client.get_id());//deleting client
+        MongoRequests.deleteReservations("userId", client.get_id());//delete all clients reservations
+        //if there are old rentals delete them, higher in this code there is "if" checking if the rental is active
+        MongoRequests.deleteRentals("userId", client.get_id());
 
         fullTableView();    //to refresh table view
         clearTextFields();

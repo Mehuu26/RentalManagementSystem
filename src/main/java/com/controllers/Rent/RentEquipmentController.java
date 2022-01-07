@@ -108,28 +108,30 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
 
         for (int i = 0; i < tempRentalList.size(); i++) {   //first looking for match between rental object and user id, which we get from constructor
             if (clientId.equals(tempRentalList.get(i).get("userId"))) {//if match found
-                System.out.println("znalazlem pare z user id");
-                //tempRental = tempRentalList.get(i);//saving temporary file
-                for(int h = 0; h<tempEquipmentList.size(); h++){    //looking for product id match between rental and equipment list
-                    if(tempRentalList.get(i).get("productId").equals(tempEquipmentList.get(h).get("productId"))){   //if match found
-                        System.out.println("znalazlem pare z product id");
+                if (tempRentalList.get(i).get("status").equals("true")) {//check if status is true or false. True = rented
+                    System.out.println("znalazlem pare z user id");
+                    //tempRental = tempRentalList.get(i);//saving temporary file
+                    for (int h = 0; h < tempEquipmentList.size(); h++) {    //looking for product id match between rental and equipment list
+                        if (tempRentalList.get(i).get("productId").equals(tempEquipmentList.get(h).get("productId"))) {   //if match found
+                            System.out.println("znalazlem pare z product id");
 
-                        //parsing milliseconds into date format
-                        milliSeconds = Long.parseLong(tempRentalList.get(i).get("startDate").toString());
-                        calendar.setTimeInMillis(milliSeconds);
-                        stringTime = formatter.format(calendar.getTime());
+                            //parsing milliseconds into date format
+                            milliSeconds = Long.parseLong(tempRentalList.get(i).get("startDate").toString());
+                            calendar.setTimeInMillis(milliSeconds);
+                            stringTime = formatter.format(calendar.getTime());
 
-                        //adding new objects into observable list
-                        observableList.add(new Rental(tempEquipmentList.get(h).get("type").toString(),
-                                tempEquipmentList.get(h).get("model").toString(),
-                                tempEquipmentList.get(h).get("size").toString(),
-                                tempEquipmentList.get(h).get("productId").toString(),
-                                tempRentalList.get(i).get("userId").toString(),
-                                stringTime,
-                                "",
-                                tempRentalList.get(i).get("status").toString(),
-                                tempRentalList.get(i).get("_id").toString()
-                                ));
+                            //adding new objects into observable list
+                            observableList.add(new Rental(tempEquipmentList.get(h).get("type").toString(),
+                                    tempEquipmentList.get(h).get("model").toString(),
+                                    tempEquipmentList.get(h).get("size").toString(),
+                                    tempEquipmentList.get(h).get("productId").toString(),
+                                    tempRentalList.get(i).get("userId").toString(),
+                                    stringTime,
+                                    "",
+                                    tempRentalList.get(i).get("status").toString(),
+                                    tempRentalList.get(i).get("_id").toString()
+                            ));
+                        }
                     }
                 }
             }
@@ -189,7 +191,7 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
 
         if(MongoRequests.checkObjectFileterExists("items", "productId", productIdTextField.getText())) { //if product exists
             System.out.println("znalazlem equipment o podanym product id");
-            if (!MongoRequests.checkObjectFileterExists("rentals", "productId", productIdTextField.getText())){    //check if there's no product id already rented
+            if (!MongoRequests.checkObjectDoubleFilterExists("rentals", "productId", productIdTextField.getText(), "status", "true")){    //check if there's no product id already rented
                 System.out.println("produkt nie jest wypozyczony");
                 noDataProvidedLabel.setText("");
                 MongoRequests.addRental(productIdTextField.getText(), client.get_id(), timeInMillis, "true");

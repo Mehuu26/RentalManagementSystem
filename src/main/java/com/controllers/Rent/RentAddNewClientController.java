@@ -66,9 +66,11 @@ public class RentAddNewClientController extends MongoRequests implements Initial
             if(!MongoRequests.addClient(nameTextField.getText(), surnameTextField.getText(), phoneTextField.getText(), idCardTextField.getText())){
                 noDataProvidedLabel.setText("same ID Card detected");
                 return;
+            }else{
+                Client client = MongoRequests.getClient(idCardTextField.getText());
+                new RentEquipmentController(client);
             }
-            Client client = MongoRequests.getClient(idCardTextField.getText());
-            new RentEquipmentController(client);
+
         }
     }
 

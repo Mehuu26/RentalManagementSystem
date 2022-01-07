@@ -59,6 +59,14 @@ public class MongoRequests {
         }else return true;
     }
 
+    protected static boolean checkObjectDoubleFilterExists(String collectionName, String fieldname, String filter, String secondFieldName, String secondFilter){
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        Document filterDocument = collection.find(and(eq(fieldname, filter), eq(secondFieldName, secondFilter))).first();
+        if(filterDocument == null){
+            return false;
+        }else return true;
+    }
+
     protected static boolean checkObjectFilter(String collectionName, String fieldname, String filter, String oldFilter) {   //true if there is no similar object
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Document filterDocument = collection.find(eq(fieldname, filter)).first();
@@ -497,6 +505,28 @@ public class MongoRequests {
             return;
     };
 
+    protected static void updateRentalProductId(String _id, String oldProductId, String newProductId){
+        MongoCollection<Document> collection = database.getCollection("rentals");
+
+        if(_id.isEmpty() || oldProductId.isEmpty() || newProductId.isEmpty()){
+            return;
+        }else {
+            Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
+
+            Bson updates = Updates.combine(
+                    Updates.set("productId", newProductId)
+            );
+
+            UpdateOptions options = new UpdateOptions().upsert(true);
+
+            try {
+                UpdateResult result = collection.updateOne(tempDocument, updates, options);
+            } catch (MongoException me) {
+                System.err.println("Unable to update due to an error: " + me);
+            }
+        }
+    }
+
     protected static void updateRental(String _id, String finishDate, String status, String price){
         MongoCollection<Document> collection = database.getCollection("rentals");
 
@@ -518,6 +548,18 @@ public class MongoRequests {
             } catch (MongoException me) {
                 System.err.println("Unable to update due to an error: " + me);
             }
+        }
+    }
+
+    protected static void deleteRentals(String fieldName, String filter){
+        MongoCollection<Document> collection = database.getCollection("rentals");
+
+        Bson tempDocument = eq(fieldName, filter);
+
+        try {
+            collection.deleteMany(tempDocument);
+        } catch (MongoException e) {
+            System.out.println("unable to delete object due to " + e + "error");
         }
     }
 }

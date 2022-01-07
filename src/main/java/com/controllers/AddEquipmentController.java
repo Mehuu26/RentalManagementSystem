@@ -232,6 +232,7 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         }else if(checkObjectFilter("items", "productId", productIdTextField.getText(), productIdDoubleClicked)){    //check if there is product with same product Id
             updateEquipment(typeComboBox.getSelectionModel().getSelectedItem().toString(), producerTextField.getText(), modelTextField.getText(), sizeTextField.getText(), productIdDoubleClicked, productIdTextField.getText());
             updateIdProductInReservation(productIdTextField.getText()); //updating product id in reservation collection
+            updateIdProductInRentals(productIdTextField.getText()); //change product id in rentals
             noDataProvidedLabel.setText("");
         }else{
             noDataProvidedLabel.setText("Same productId found");
@@ -282,7 +283,6 @@ public class AddEquipmentController extends MongoRequests implements Initializab
         updateButton.setDisable(false);
     }
 
-    // TODO: 29.12.2021 check if the equipment isn't already rented 
     private void deleteExistingEquipment() {
         if (equipmentTableView.getSelectionModel().isEmpty()) {
             noDataProvidedLabel.setText("select row which you want to delete");
@@ -291,8 +291,22 @@ public class AddEquipmentController extends MongoRequests implements Initializab
 
         Equipment equipment = equipmentTableView.getSelectionModel().getSelectedItem();
 
+        //check if product with this id is rented. If yes then return.
+        if(MongoRequests.checkObjectDoubleFilterExists("rentals", "productId", equipment.getProductId(), "status", "true")){
+            noDataProvidedLabel.setText("can not delete product which is rented");
+            return;
+        }
+        //deleting product from items collections
         MongoRequests.deleteEquipment(equipment.getProductId());
-        MongoRequests.deleteReservations("productId", equipment.getProductId());
+        //changing reservations status to cancelled
+        ArrayList<Document> tempReservationsList= MongoRequests.getCollectionFilter("reservations", "productId", equipment.getProductId());
+        for(int i = 0; i<tempReservationsList.size(); i++){
+            if(tempReservationsList.get(i).get("status").equals("confirmed")){
+                MongoRequests.updateReservationById(tempReservationsList.get(i).get("_id").toString(), "status", "cancelled");
+            }
+        }
+
+        MongoRequests.deleteRentals("productId", equipment.getProductId());
 
         fullTableView();    //to refresh table view
         clearTextFields();
@@ -326,8 +340,17 @@ public class AddEquipmentController extends MongoRequests implements Initializab
                         productIdDoubleClicked
                         );
             }
+    }
+
+    private void updateIdProductInRentals(String productId){
+        ArrayList<Document> rentalsArrayList= new ArrayList<>();
+        rentalsArrayList = getCollectionFilter("rentals", "productId", productIdDoubleClicked);
+
+        for(int i = 0; i<rentalsArrayList.size(); i++){
+            MongoRequests.updateRentalProductId(rentalsArrayList.get(i).get("_id").toString(), productIdDoubleClicked, productId);
         }
     }
+}
 
 
 

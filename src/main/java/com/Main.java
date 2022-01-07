@@ -31,6 +31,10 @@ public class Main extends Application {
     }
 
 
+
+
+
+
     public static void main(String[] args) throws Exception{
 //        System.out.println("wyswietla");
 //        String uri = "mongodb+srv://tester:test@rental-system.yjcmg.mongodb.net/rental-system?retryWrites=true&w=majority";
@@ -48,6 +52,7 @@ public class Main extends Application {
 //
 //            System.out.println(doc.toJson());
 //        }
+
         launch(args);
     }
 }
