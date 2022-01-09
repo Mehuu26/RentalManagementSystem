@@ -343,15 +343,16 @@ public class ReturnController extends MongoRequests implements Initializable, Go
                 long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
                 System.out.println("days " + days);
                 System.out.println ("Hours: " + TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS));
-                long hours = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                long hours = TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS);
                 System.out.println("Hours " + hours);
                 //float days = (diff / (1000*60*60*24));    //second converter
                 //System.out.println("second conferter: " + days);
 
+                Document tempPrice = MongoRequests.getObjectFilter("prices", "type", returnTableView.getItems().get(i).getType());
+                long hoursPrice = Long.parseLong(tempPrice.get("hour").toString());
+                long daysPrice = Long.parseLong(tempPrice.get("day").toString());
+
                 if(TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) == 0){    //if days == 0;
-                    Document tempPrice = MongoRequests.getObjectFilter("prices", "type", returnTableView.getItems().get(i).getType());
-                    long hoursPrice = Long.parseLong(tempPrice.get("hour").toString());
-                    long daysPrice = Long.parseLong(tempPrice.get("day").toString());
                     if(hours*hoursPrice > daysPrice) {
                         System.out.println("hours price is bigger then days price");
                         sum += daysPrice;
@@ -361,8 +362,11 @@ public class ReturnController extends MongoRequests implements Initializable, Go
                         sum += hours*hoursPrice;
                         System.out.println(sum);
                     }
+                }else{
+                    System.out.println("there is more than 0 days");
+                    sum += days*daysPrice;
+                    System.out.println(sum);
                 }
-
                 sumUpLabel.setText(Long.toString(sum));
             } catch (ParseException e) {
                 e.printStackTrace();

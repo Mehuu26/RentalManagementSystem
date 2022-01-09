@@ -18,11 +18,14 @@ import org.bson.Document;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 public class RentEquipmentController extends MongoRequests implements GoBack, Initializable, FullTableView {
     public RentEquipmentController(Client client) {
@@ -155,7 +158,46 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
     @Override
     public void tableViewDoubleClicked() {
         Rental rental = rentalTableView.getSelectionModel().getSelectedItem();
-        MongoRequests.deleteObject("rentals", rental.get_id());
+
+        try {
+            //get current time as a time stamp
+            Instant instant = Instant.now();    //getting timeStamp, time since 01.01.1970 till 19.01.2038
+
+            String stringFinishTime;  //string
+
+            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); //format
+
+            Calendar calendar = Calendar.getInstance();
+            long finishTimeStampMillis = instant.toEpochMilli();
+            calendar.setTimeInMillis(finishTimeStampMillis);
+            stringFinishTime = formatter.format(calendar.getTime());
+            System.out.println("string finish time "+ stringFinishTime);
+
+            Date startDate=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(rental.getStartDate());
+            System.out.println("startDate =" + startDate);
+            Date finishDate=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(stringFinishTime);
+
+            // TODO: 07.01.2022 somewhere there is problem
+            //calculating duration time
+            long diff = finishDate.getTime() - startDate.getTime();
+            System.out.println ("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+            long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            System.out.println("days " + days);
+            System.out.println ("Hours: " + TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS));
+            long hours = TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS);
+            System.out.println("Hours " + hours);
+            //float days = (diff / (1000*60*60*24));    //second converter
+            //System.out.println("second conferter: " + days);
+
+            if(TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) == 0 && TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS) == 0){    //if days == 0 and hours == 0;
+                MongoRequests.deleteObject("rentals", rental.get_id()); //delete rental
+            }else{
+                noDataProvidedLabel.setText("can not delete rental, more than 1 hours");
+                return;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         fullTableView();
     }
 
