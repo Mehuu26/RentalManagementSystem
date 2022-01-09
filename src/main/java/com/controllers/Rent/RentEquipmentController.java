@@ -177,7 +177,6 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
             System.out.println("startDate =" + startDate);
             Date finishDate=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(stringFinishTime);
 
-            // TODO: 07.01.2022 somewhere there is problem
             //calculating duration time
             long diff = finishDate.getTime() - startDate.getTime();
             System.out.println ("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));

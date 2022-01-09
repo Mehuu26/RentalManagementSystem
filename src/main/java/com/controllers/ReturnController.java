@@ -61,6 +61,7 @@ public class ReturnController extends MongoRequests implements Initializable, Go
     private Client client;
     private ArrayList<Document> returnArrayList = new ArrayList<>();    //returnArrayList stores rentals, which we get in second, return table view.
     private long sum;
+    private ArrayList<Long> priceArray = new ArrayList<Long>();
 
     @FXML
     private Button backButton;
@@ -243,6 +244,7 @@ public class ReturnController extends MongoRequests implements Initializable, Go
 
         rentalTableView.getItems().remove(rental);
         fullReturnTableView(tempDocument);  //add it to return table view
+        sumUp();
     }
 
     @Override
@@ -320,29 +322,42 @@ public class ReturnController extends MongoRequests implements Initializable, Go
 
             fullReturnTableView(tempDocument);  //delete value from rental table view and add same to return table view
             noDataProvidedLabel.setText("");
+
         }else{
             new ReturnController(productIdTextField.getText());
         }
+        sumUp();
     }
 
-    // TODO: 05.01.2022 calculate time between two days and sum it up 
-    private void finish(){
-        for(int i = 0; i < returnTableView.getItems().size(); i++){    //for goes through the Table View which stores rental data which client want to return
-            String startDateString=returnTableView.getItems().get(i).getStartDate();
-            String finishDateString=returnTableView.getItems().get(i).getFinishDate();
+    private void finish() {
+        for (int i = 0; i < returnTableView.getItems().size(); i++) {   //for goes through the Table View which stores rental data which client want to return
+            System.out.println("finish for");
+            System.out.println(returnTableView.getItems().get(i).get_id());
+            MongoRequests.updateRental(returnTableView.getItems().get(i).get_id(), returnTableView.getItems().get(i).getFinishDate(), "false", priceArray.get(i).toString());
+        }
+        new MainPanelController();
+    }
+
+
+
+    private void sumUp() {   //
+        sum = 0;
+        priceArray.clear();
+        for (int i = 0; i < returnTableView.getItems().size(); i++) {    //for goes through the Table View which stores rental data which client want to return
+            String startDateString = returnTableView.getItems().get(i).getStartDate();
+            String finishDateString = returnTableView.getItems().get(i).getFinishDate();
 
             //parsing string formats into date format
             try {
-                Date startDate=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(startDateString);
-                Date finishDate=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(finishDateString);
+                Date startDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(startDateString);
+                Date finishDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(finishDateString);
 
-                // TODO: 07.01.2022 somewhere there is problem 
                 //calculating duration time
                 long diff = finishDate.getTime() - startDate.getTime();
-                System.out.println ("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+                System.out.println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
                 long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
                 System.out.println("days " + days);
-                System.out.println ("Hours: " + TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS));
+                System.out.println("Hours: " + TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS));
                 long hours = TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS);
                 System.out.println("Hours " + hours);
                 //float days = (diff / (1000*60*60*24));    //second converter
@@ -352,37 +367,34 @@ public class ReturnController extends MongoRequests implements Initializable, Go
                 long hoursPrice = Long.parseLong(tempPrice.get("hour").toString());
                 long daysPrice = Long.parseLong(tempPrice.get("day").toString());
 
-                if(TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) == 0){    //if days == 0;
-                    if(hours*hoursPrice > daysPrice) {
+                if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) == 0) {    //if days == 0;
+                    if (hours * hoursPrice > daysPrice) {
                         System.out.println("hours price is bigger then days price");
                         sum += daysPrice;
                         System.out.println(sum);
-                    }else{
-                        System.out.println("hours price is lower then days price");
-                        sum += hours*hoursPrice;
+                        priceArray.add(daysPrice);
+                    } else if(TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS) == 0){
+                        System.out.println("hours = 0 days = 0");
+                        sum += 1 * hoursPrice;
                         System.out.println(sum);
+                        priceArray.add(1 * hoursPrice);
+                    } else {
+                        System.out.println("hours price is lower then days price");
+                        sum += hours * hoursPrice;
+                        System.out.println(sum);
+                        priceArray.add(hours * hoursPrice);
                     }
-                }else{
+                } else {
                     System.out.println("there is more than 0 days");
-                    sum += days*daysPrice;
+                    sum += days * daysPrice;
                     System.out.println(sum);
+                    priceArray.add(days * daysPrice);
                 }
                 sumUpLabel.setText(Long.toString(sum));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
-
-            //returnArrayList.get(i).append()
-            //System.out.println(returnArrayList.get(i));
-            //MongoRequests.updateRental(returnTableView.getItems().get(i).get_id(), returnTableView.getItems().get(i).getFinishDate(), "false", "100");
         }
-
-
-    }
-
-    private void sumUp(){   //
-
     }
 
     @Override
