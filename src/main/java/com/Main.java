@@ -1,5 +1,6 @@
 package com;
 
+import com.api.Crypt;
 import com.controllers.LogInController;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -29,11 +30,6 @@ public class Main extends Application {
         //primaryStage.setScene(new Scene(root, 600, 400));
         //primaryStage.show();
     }
-
-
-
-
-
 
     public static void main(String[] args) throws Exception{
 //        System.out.println("wyswietla");
