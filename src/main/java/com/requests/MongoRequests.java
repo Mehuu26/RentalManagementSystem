@@ -220,6 +220,9 @@ public class MongoRequests {
         Document tempDocument = collection.find(eq("productId", productId)).first();
 
         //System.out.println(tempDocument); //just to check
+        if(type == "" || producer == "" || model == "" || size == "" || productId == ""){
+            return false;
+        }
 
         if (tempDocument == null) {
             Document doc = new Document();
