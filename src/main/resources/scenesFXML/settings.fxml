@@ -17,12 +17,12 @@
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
-            <Label layoutX="111.0" layoutY="6.0" prefHeight="22.0" prefWidth="75.0" text="Equipment" AnchorPane.leftAnchor="112.0" AnchorPane.rightAnchor="112.0" AnchorPane.topAnchor="5.0">
+            <Label layoutX="103.0" layoutY="14.0" prefHeight="26.0" prefWidth="95.0" text="Equipment" AnchorPane.leftAnchor="103.0" AnchorPane.rightAnchor="102.0" AnchorPane.topAnchor="14.0">
                <font>
-                  <Font size="15.0" />
+                  <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Button fx:id="addTypeButton" layoutX="67.0" layoutY="40.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="167.0" text="Add type and price list" AnchorPane.leftAnchor="67.0" AnchorPane.rightAnchor="66.0" AnchorPane.topAnchor="40.0" />
+            <Button fx:id="addTypeButton" layoutX="64.0" layoutY="49.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="172.0" text="Add type and price list" AnchorPane.leftAnchor="64.0" AnchorPane.rightAnchor="64.0" AnchorPane.topAnchor="49.0" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
@@ -32,33 +32,33 @@
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
          <children>
-            <Label layoutX="136.0" layoutY="6.0" text="Workers" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="5.0">
+            <Label layoutX="114.0" layoutY="14.0" prefHeight="27.0" prefWidth="73.0" text="Workers" AnchorPane.leftAnchor="114.0" AnchorPane.rightAnchor="113.0" AnchorPane.topAnchor="14.0">
                <font>
-                  <Font size="15.0" />
+                  <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Button fx:id="addNewWorkerButton" layoutX="90.0" layoutY="41.0" mnemonicParsing="false" text="Add new worker" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="41.0" />
+            <Button fx:id="addNewWorkerButton" layoutX="84.0" layoutY="49.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="132.0" text="Add new worker" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="84.0" AnchorPane.topAnchor="49.0" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
          <children>
-            <Label layoutX="129.0" layoutY="3.0" prefHeight="22.0" prefWidth="60.0" text="Delete" AnchorPane.leftAnchor="129.0" AnchorPane.rightAnchor="111.0" AnchorPane.topAnchor="3.0">
+            <Label layoutX="117.0" prefHeight="27.0" prefWidth="66.0" text="Delete" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="117.0" AnchorPane.topAnchor="0.0">
                <font>
-                  <Font size="15.0" />
+                  <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Button fx:id="deleteUsersButton" layoutX="81.0" layoutY="25.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="139.0" text="Delete Users" AnchorPane.leftAnchor="81.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="25.0" />
-            <Button fx:id="deleteEquipmentButton" layoutX="81.0" layoutY="60.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="139.0" text="Delete Equipment" AnchorPane.leftAnchor="81.0" AnchorPane.rightAnchor="79.80000000000001" AnchorPane.topAnchor="60.0" />
+            <Button fx:id="deleteUsersButton" layoutX="75.0" layoutY="49.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" text="Delete Users" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="49.0" />
+            <Button fx:id="deleteEquipmentButton" layoutX="75.0" layoutY="91.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" text="Delete Equipment" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="91.0" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-            <Label layoutX="90.0" layoutY="3.0" prefHeight="22.0" prefWidth="95.0" text="Company info" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="3.0">
+            <Label layoutX="90.0" prefHeight="26.0" prefWidth="120.0" text="Company info" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="0.0">
                <font>
-                  <Font size="15.0" />
+                  <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Button fx:id="changeCompanyInfoButton" layoutX="124.0" layoutY="25.0" mnemonicParsing="false" text="Change company info" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="25.0" />
+            <Button fx:id="changeCompanyInfoButton" layoutX="58.0" layoutY="49.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="184.0" text="Change company info" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="58.0" AnchorPane.topAnchor="49.0" />
          </children>
       </AnchorPane>
    </children>

@@ -7,11 +7,11 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="backButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" text="Back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" />
-      <Label layoutX="20.0" layoutY="18.0" text="Return by Product ID" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="18.0" />
+      <Label layoutX="14.0" layoutY="17.0" text="Return by Product ID" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="17.0" />
       <TextField fx:id="productIdTextField" layoutX="244.0" layoutY="13.0" prefHeight="26.0" prefWidth="178.0" promptText="product ID" AnchorPane.leftAnchor="244.0" AnchorPane.topAnchor="13.0" />
-      <Label layoutX="17.0" layoutY="52.0" text="Currenct client" AnchorPane.leftAnchor="17.0" AnchorPane.topAnchor="52.0" />
+      <Label layoutX="14.0" layoutY="51.0" text="Currenct client" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="51.0" />
       <Button fx:id="returnButton" layoutX="439.0" layoutY="14.0" mnemonicParsing="false" text="Return" AnchorPane.leftAnchor="439.0" AnchorPane.topAnchor="14.0" />
-      <Label fx:id="noDataProvidedLabel" layoutX="408.0" layoutY="32.0" prefHeight="18.0" prefWidth="178.0" textFill="RED" AnchorPane.leftAnchor="408.0" AnchorPane.topAnchor="32.0" />
+      <Label fx:id="noDataProvidedLabel" layoutX="343.0" layoutY="51.0" prefHeight="18.0" prefWidth="251.0" textFill="RED" AnchorPane.leftAnchor="343.0" AnchorPane.rightAnchor="5.800000000000011" AnchorPane.topAnchor="51.0" />
       <TableView fx:id="rentalTableView" layoutX="20.0" layoutY="100.0" prefHeight="122.0" prefWidth="558.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="80.0">
         <columns>
           <TableColumn fx:id="rentalTypeTableColumn" prefWidth="75.0" text="Type" />
@@ -21,7 +21,7 @@
             <TableColumn fx:id="rentalStartDateTableColumn" prefWidth="130.60003662109375" text="Start date" />
         </columns>
       </TableView>
-      <Label fx:id="currentClientLabel" layoutX="154.0" layoutY="51.0" prefHeight="18.0" prefWidth="357.0" AnchorPane.leftAnchor="154.0" AnchorPane.topAnchor="51.0" />
+      <Label fx:id="currentClientLabel" layoutX="134.0" layoutY="51.0" prefHeight="18.0" prefWidth="208.0" AnchorPane.leftAnchor="134.0" AnchorPane.topAnchor="51.0" />
       <TableView fx:id="returnTableView" layoutX="20.0" layoutY="239.0" prefHeight="112.0" prefWidth="558.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="220.0">
         <columns>
           <TableColumn fx:id="returnTypeTableColumn" prefWidth="75.0" text="Type" />

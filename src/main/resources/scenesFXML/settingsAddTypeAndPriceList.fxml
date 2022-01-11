@@ -6,23 +6,23 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="backButton" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" text="Back" AnchorPane.bottomAnchor="13.399999999999999" AnchorPane.leftAnchor="14.0" />
-      <TableView fx:id="typeAndPriceListTableView" layoutX="34.0" layoutY="32.0" prefHeight="236.0" prefWidth="325.0" AnchorPane.bottomAnchor="132.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="240.39999999999998" AnchorPane.topAnchor="32.0">
+      <TableView fx:id="typeAndPriceListTableView" layoutX="34.0" layoutY="32.0" prefHeight="260.0" prefWidth="353.0" AnchorPane.bottomAnchor="108.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="213.0" AnchorPane.topAnchor="32.0">
         <columns>
           <TableColumn fx:id="typeTableColumn" prefWidth="113.0" text="type" />
           <TableColumn fx:id="hourTableColumn" prefWidth="93.0" text="hour" />
             <TableColumn fx:id="dayTableColumn" prefWidth="118.0" text="day" />
         </columns>
       </TableView>
-      <TextField fx:id="typeTextField" layoutX="401.0" layoutY="125.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="100.0" />
+      <TextField fx:id="typeTextField" layoutX="400.0" layoutY="98.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="98.0" />
       <Label layoutX="401.0" layoutY="108.0" prefHeight="18.0" prefWidth="70.0" text="Type" AnchorPane.rightAnchor="127.0" AnchorPane.topAnchor="80.0" />
       <Label layoutX="403.0" layoutY="183.0" prefHeight="18.0" prefWidth="82.0" text="Hour" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="150.0" />
-      <TextField fx:id="hourTextField" layoutX="401.0" layoutY="198.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="170.0" />
+      <TextField fx:id="hourTextField" layoutX="401.0" layoutY="198.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.rightAnchor="79.0" AnchorPane.topAnchor="170.0" />
       <Label layoutX="402.0" layoutY="239.0" prefHeight="18.0" prefWidth="82.0" text="Day" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="220.0" />
-      <TextField fx:id="dayTextField" layoutX="401.0" layoutY="256.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="240.0" />
+      <TextField fx:id="dayTextField" layoutX="401.0" layoutY="256.0" prefHeight="26.0" prefWidth="120.0" AnchorPane.rightAnchor="79.0" AnchorPane.topAnchor="240.0" />
       <Label fx:id="noDataProvidedLabel" layoutX="402.0" layoutY="32.0" textFill="RED" />
-      <Button fx:id="addButton" layoutX="498.0" layoutY="298.0" mnemonicParsing="false" text="Add" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="300.0" />
-      <Button fx:id="updateButton" disable="true" layoutX="401.0" layoutY="300.0" mnemonicParsing="false" text="Update" AnchorPane.rightAnchor="140.0" AnchorPane.topAnchor="300.0" />
-      <Label fx:id="questionMarkLabel" layoutX="456.0" layoutY="296.0" prefHeight="34.0" prefWidth="20.0" text="?" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="295.0" />
-      <Button fx:id="deleteButton" disable="true" layoutX="307.0" layoutY="300.0" mnemonicParsing="false" text="Delete" AnchorPane.rightAnchor="240.0" AnchorPane.topAnchor="300.0" />
+      <Button fx:id="addButton" layoutX="512.0" layoutY="328.0" mnemonicParsing="false" text="Add" AnchorPane.rightAnchor="49.60000000000002" AnchorPane.topAnchor="328.0" />
+      <Button fx:id="updateButton" disable="true" layoutX="402.0" layoutY="329.0" mnemonicParsing="false" text="Update" AnchorPane.rightAnchor="142.8" AnchorPane.topAnchor="329.0" />
+      <Label fx:id="questionMarkLabel" layoutX="463.0" layoutY="324.0" prefHeight="34.0" prefWidth="20.0" text="?" AnchorPane.rightAnchor="117.0" AnchorPane.topAnchor="324.0" />
+      <Button fx:id="deleteButton" disable="true" layoutX="312.0" layoutY="329.0" mnemonicParsing="false" text="Delete" AnchorPane.rightAnchor="237.60000000000002" AnchorPane.topAnchor="329.0" />
    </children>
 </AnchorPane>

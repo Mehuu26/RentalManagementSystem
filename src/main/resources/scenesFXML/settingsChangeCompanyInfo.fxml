@@ -19,7 +19,7 @@
       <Label layoutX="331.0" layoutY="120.0" text="Adress" AnchorPane.leftAnchor="331.0" AnchorPane.topAnchor="120.0" />
       <TextField fx:id="addressTextField" layoutX="331.0" layoutY="138.0" AnchorPane.leftAnchor="331.0" AnchorPane.topAnchor="138.0" />
       <Button fx:id="updateButton" layoutX="534.0" layoutY="360.0" mnemonicParsing="false" text="Update" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
-      <Label fx:id="noDataProvidedLabel" layoutX="43.0" layoutY="20.0" prefHeight="18.0" prefWidth="278.0" textFill="RED" AnchorPane.leftAnchor="43.0" AnchorPane.topAnchor="20.0" />
+      <Label fx:id="noDataProvidedLabel" layoutX="43.0" layoutY="20.0" prefHeight="18.0" prefWidth="467.0" textFill="RED" AnchorPane.leftAnchor="43.0" AnchorPane.rightAnchor="89.80000000000001" AnchorPane.topAnchor="20.0" />
       <Label layoutX="331.0" layoutY="191.0" text="Percentage" AnchorPane.leftAnchor="331.0" AnchorPane.topAnchor="191.0" />
       <TextField fx:id="percentageTextField" layoutX="331.0" layoutY="209.0" AnchorPane.leftAnchor="331.0" AnchorPane.topAnchor="209.0" />
    </children>

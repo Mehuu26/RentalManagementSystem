@@ -6,25 +6,25 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="backButton" layoutX="14.0" layoutY="360.0" mnemonicParsing="false" text="Back" AnchorPane.bottomAnchor="14.399999999999999" AnchorPane.leftAnchor="14.0" />
-      <TableView fx:id="workersTableView" layoutX="27.0" layoutY="28.0" prefHeight="306.0" prefWidth="405.0" AnchorPane.bottomAnchor="65.60000000000002" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="28.0">
+      <TableView fx:id="workersTableView" layoutX="27.0" layoutY="28.0" prefHeight="306.0" prefWidth="405.0" AnchorPane.bottomAnchor="65.60000000000002" AnchorPane.leftAnchor="27.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="50.0">
         <columns>
           <TableColumn fx:id="userTableColumn" prefWidth="124.80000305175781" text="User" />
             <TableColumn fx:id="nameTableColumn" prefWidth="118.39999389648438" text="Name" />
             <TableColumn fx:id="surnameTableColumn" prefWidth="162.60003662109375" text="Surname" />
         </columns>
       </TableView>
-      <Label layoutX="449.0" layoutY="47.0" text="Name" AnchorPane.rightAnchor="119.0" AnchorPane.topAnchor="47.0" />
+      <Label layoutX="449.0" layoutY="47.0" text="Name" AnchorPane.rightAnchor="125.0" AnchorPane.topAnchor="47.0" />
       <TextField fx:id="nameTextField" layoutX="449.0" layoutY="65.0" prefHeight="26.0" prefWidth="129.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="65.0" />
       <TextField fx:id="surnameTextField" layoutX="450.0" layoutY="132.0" prefHeight="26.0" prefWidth="129.0" AnchorPane.rightAnchor="20.399999999999977" AnchorPane.topAnchor="132.0" />
       <TextField fx:id="userTextField" layoutX="450.0" layoutY="200.0" prefHeight="26.0" prefWidth="129.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="200.0" />
       <Label layoutX="449.0" layoutY="114.0" text="Surname" AnchorPane.rightAnchor="103.8" AnchorPane.topAnchor="114.0" />
       <Label layoutX="449.0" layoutY="181.0" text="User name" AnchorPane.rightAnchor="94.2" AnchorPane.topAnchor="181.0" />
       <PasswordField fx:id="passwordPasswordField" layoutX="449.0" layoutY="253.0" prefHeight="26.0" prefWidth="130.0" AnchorPane.rightAnchor="20.600000000000023" AnchorPane.topAnchor="253.0" />
-      <Label layoutX="456.0" layoutY="235.0" text="Password" AnchorPane.rightAnchor="93.60000000000002" AnchorPane.topAnchor="235.0" />
+      <Label layoutX="456.0" layoutY="235.0" text="Password" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="235.0" />
       <Button fx:id="addButton" layoutX="534.0" layoutY="360.0" mnemonicParsing="false" text="Add" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
-      <Label fx:id="noDataProvidedLabel" layoutX="450.0" layoutY="20.0" prefHeight="18.0" prefWidth="162.0" textFill="RED" AnchorPane.bottomAnchor="361.6" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="20.0" />
+      <Label fx:id="noDataProvidedLabel" layoutX="450.0" layoutY="20.0" prefHeight="18.0" prefWidth="572.0" textFill="RED" AnchorPane.leftAnchor="23.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="20.0" />
       <PasswordField fx:id="confirmPasswordPasswordField" layoutX="449.0" layoutY="307.0" prefHeight="26.0" prefWidth="130.0" AnchorPane.rightAnchor="20.599999999999994" AnchorPane.topAnchor="307.0" />
-      <Label layoutX="451.0" layoutY="290.0" text="Confirm Password" AnchorPane.rightAnchor="53.0" AnchorPane.topAnchor="290.0" />
+      <Label layoutX="451.0" layoutY="290.0" text="Confirm Password" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="290.0" />
       <Button fx:id="updateButton" disable="true" layoutX="470.0" layoutY="360.0" mnemonicParsing="false" text="Update" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="75.0" />
       <Button fx:id="deleteButton" layoutX="397.0" layoutY="360.0" mnemonicParsing="false" text="Delete" AnchorPane.bottomAnchor="15.000000000000021" AnchorPane.rightAnchor="150.0" />
    </children>
