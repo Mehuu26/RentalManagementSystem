@@ -17,6 +17,7 @@ public class Crypt {
 
     private static final char[] HEX = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'b', 'c', 'D', 'e', 'F'};
     private static Cipher cipher;
+    protected static final String password = "password";
 
     public static void init() {
 
@@ -31,7 +32,8 @@ public class Crypt {
 
         try {
 
-            String salt = random(16);
+            //String salt = random(16);
+            String salt = "506c709e6c2ee32b02b56f6419bb505a";
             String iv = random(16);
             SecretKey key = generateKey(salt, password);
             byte[] encrypted = doFinal(Cipher.ENCRYPT_MODE, key, iv, message.getBytes("UTF-8"));
@@ -46,9 +48,16 @@ public class Crypt {
 
     public static String decrypt(String password, String message) {
 
+        System.out.println(message);
+
+        if(message == "" || message.isEmpty() || message.equals(null)){
+            System.out.println("message is empty");
+            return "";
+        }
         try {
 
-            String salt = message.substring(0, 32);
+            //String salt = message.substring(0, 32);
+            String salt = "506c709e6c2ee32b02b56f6419bb505a";
             String iv = message.substring(message.length() - 32, message.length());
             String base = message = message.substring(32, message.length() - 32) + "==";
             SecretKey key = generateKey(salt, password);
@@ -81,6 +90,7 @@ public class Crypt {
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             KeySpec spec = new PBEKeySpec(passphrase.toCharArray(), hex(salt), 1000, 128);
             SecretKey key = new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
+            //System.out.println("klucz to: " + key);
             return key;
 
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {

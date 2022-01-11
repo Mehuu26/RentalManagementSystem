@@ -129,8 +129,8 @@ public class ReservationController extends MongoRequests implements Initializabl
 
                 //adding new reservation object
                 observableList.add(new Reservation(
-                        tempClient.get("name").toString(),
-                        tempClient.get("surname").toString(),
+                        Crypt.decrypt(Crypt.password, tempClient.get("name").toString()),
+                        Crypt.decrypt(Crypt.password, tempClient.get("surname").toString()),
                         tempClient.get("_id").toString(),
                         tempEquipment.get("type").toString(),
                         tempEquipment.get("productId").toString(),
@@ -176,10 +176,11 @@ public class ReservationController extends MongoRequests implements Initializabl
             System.out.println(tempDocumentClient);
             System.out.println(tempDocumentEquipment);
 
-            Client client = new Client(tempDocumentClient.get("name").toString(),
-                    tempDocumentClient.get("surname").toString(),
-                    tempDocumentClient.get("phone").toString(),
-                    tempDocumentClient.get("idCard").toString(),
+            Client client = new Client(
+                    Crypt.decrypt(Crypt.password, tempDocumentClient.get("name").toString()),
+                    Crypt.decrypt(Crypt.password, tempDocumentClient.get("surname").toString()),
+                    Crypt.decrypt(Crypt.password, tempDocumentClient.get("phone").toString()),
+                    Crypt.decrypt(Crypt.password, tempDocumentClient.get("idCard").toString()),
                     tempDocumentClient.get("_id").toString()
                     );
 
@@ -216,10 +217,11 @@ public class ReservationController extends MongoRequests implements Initializabl
             Document tempDocumentClient = MongoRequests.getObjectFilterById("users", "_id", reservation.getUserId().toString());
             Document tempDocumentEquipment = MongoRequests.getObjectFilter("items", "productId", reservation.getProductId());
 
-            Client client = new Client(tempDocumentClient.get("name").toString(),
-                    tempDocumentClient.get("surname").toString(),
-                    tempDocumentClient.get("phone").toString(),
-                    tempDocumentClient.get("idCard").toString(),
+            Client client = new Client(
+                    Crypt.decrypt(Crypt.password, tempDocumentClient.get("name").toString()),
+                    Crypt.decrypt(Crypt.password, tempDocumentClient.get("surname").toString()),
+                    Crypt.decrypt(Crypt.password, tempDocumentClient.get("phone").toString()),
+                    Crypt.decrypt(Crypt.password, tempDocumentClient.get("idCard").toString()),
                     tempDocumentClient.get("_id").toString()
             );
 

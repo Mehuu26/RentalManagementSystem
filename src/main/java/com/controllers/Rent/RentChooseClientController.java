@@ -1,10 +1,7 @@
 package com.controllers.Rent;
 
 import com.Main;
-import com.api.Client;
-import com.api.Equipment;
-import com.api.FullTableView;
-import com.api.GoBack;
+import com.api.*;
 import com.controllers.MainPanelController;
 import com.mongodb.Mongo;
 import com.requests.MongoRequests;
@@ -76,10 +73,10 @@ public class RentChooseClientController extends MongoRequests implements Initial
 
         for (int i = 0; i < tempClientArrayList.size(); i++) {
             observableList.add(new Client(
-                    tempClientArrayList.get(i).get("name").toString(),
-                    tempClientArrayList.get(i).get("surname").toString(),
-                    tempClientArrayList.get(i).get("phone").toString(),
-                    tempClientArrayList.get(i).get("idCard").toString(),
+                    Crypt.decrypt(Crypt.password, tempClientArrayList.get(i).get("name").toString()),
+                    Crypt.decrypt(Crypt.password, tempClientArrayList.get(i).get("surname").toString()),
+                    Crypt.decrypt(Crypt.password, tempClientArrayList.get(i).get("phone").toString()),
+                    Crypt.decrypt(Crypt.password, tempClientArrayList.get(i).get("idCard").toString()),
                     tempClientArrayList.get(i).get("_id").toString()
                     )
             );

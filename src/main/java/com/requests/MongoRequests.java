@@ -1,6 +1,7 @@
 package com.requests;
 
 import com.api.Client;
+import com.api.Crypt;
 import com.mongodb.MongoException;
 import com.mongodb.client.*;
 import com.mongodb.client.model.UpdateOptions;
@@ -15,12 +16,13 @@ import java.util.ArrayList;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
-public class MongoRequests {
+public class MongoRequests extends Crypt {
     static String uri = "mongodb+srv://tester:test@rental-system.yjcmg.mongodb.net/rental-system?retryWrites=true&w=majority";
     static MongoClient mongoClient = MongoClients.create(uri);
     static MongoDatabase database = mongoClient.getDatabase("rental-data");
 
-    protected static void deleteEveryObject(String collectionName){
+
+    protected static void deleteEveryObject(String collectionName) {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         //Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
 
@@ -32,12 +34,12 @@ public class MongoRequests {
             while (cursor.hasNext()) {
                 collection.deleteOne(cursor.next());
             }
-        }catch (MongoException e) {
+        } catch (MongoException e) {
             System.out.println("unable to delete object due to " + e + "error");
         }
     }
 
-    protected static void deleteObject(String collectionName, String _id){
+    protected static void deleteObject(String collectionName, String _id) {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
 
@@ -50,30 +52,68 @@ public class MongoRequests {
 
     }
 
-    protected static boolean checkObjectFileterExists(String collectionName, String fieldname, String filter){  //true if object exists
+    protected static boolean checkObjectFileterExists(String collectionName, String fieldname, String filter) {  //true if object exists
         MongoCollection<Document> collection = database.getCollection(collectionName);
-        Document filterDocument = collection.find(eq(fieldname, filter)).first();
+        if (collectionName.equals("employee")) {
+            System.out.println("collection name equals employee");
+            ArrayList<Document> employeeList = getCollection("employee");
+            System.out.println(employeeList);
 
-        if(filterDocument == null){
+            for (int i = 0; i < employeeList.size(); i++) {
+                if (Crypt.decrypt(Crypt.password, employeeList.get(i).get(fieldname).toString()).equals(filter)) {
+                    return true;
+                }
+            }
             return false;
-        }else return true;
+        } else {
+            Document filterDocument = collection.find(eq(fieldname, filter)).first();
+            if (filterDocument == null) {
+                return false;
+            } else return true;
+        }
     }
 
-    protected static boolean checkObjectDoubleFilterExists(String collectionName, String fieldname, String filter, String secondFieldName, String secondFilter){
+    protected static boolean checkObjectDoubleFilterExists(String collectionName, String fieldname, String filter, String secondFieldName, String secondFilter) {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Document filterDocument = collection.find(and(eq(fieldname, filter), eq(secondFieldName, secondFilter))).first();
-        if(filterDocument == null){
+        if (filterDocument == null) {
             return false;
-        }else return true;
+        } else return true;
     }
 
     protected static boolean checkObjectFilter(String collectionName, String fieldname, String filter, String oldFilter) {   //true if there is no similar object
         MongoCollection<Document> collection = database.getCollection(collectionName);
-        Document filterDocument = collection.find(eq(fieldname, filter)).first();
-        Document oldFilterDocument = collection.find(eq(fieldname, oldFilter)).first();
 
+        Document filterDocument = new Document();
+        Document oldFilterDocument = new Document();
+
+        System.out.println(collectionName + "-------------------------------------------------------------------------");
+        if (collectionName.equals("employee")) { //decrypting employees
+            System.out.println("collection name equals employee");
+            ArrayList<Document> employeeList = getCollection("employee");
+            System.out.println(employeeList);
+
+            for (int i = 0; i < employeeList.size(); i++) {
+                if (Crypt.decrypt(Crypt.password, employeeList.get(i).get(fieldname).toString()).equals(filter)) {
+                    System.out.println("found same fieldname and filter");
+                    filterDocument = employeeList.get(i);
+                }
+                if (Crypt.decrypt(Crypt.password, employeeList.get(i).get(fieldname).toString()).equals(oldFilter)) {
+                    System.out.println("found same fieldname and oldFilter");
+                    oldFilterDocument = employeeList.get(i);
+                }
+            }
+        } else {
+            filterDocument = collection.find(eq(fieldname, filter)).first();
+            oldFilterDocument = collection.find(eq(fieldname, oldFilter)).first();
+        }
+
+        System.out.println("7777777777777777777777777777777777777777777777777");
+        System.out.println("filter document" + filterDocument.isEmpty());
+        System.out.println("check if filter document is true " + filterDocument.equals("{}"));
+        System.out.println("old filter document " + oldFilterDocument);
         try {
-            if (filterDocument == null) return true;    //when theres no new object with id
+            if (filterDocument == null || filterDocument.isEmpty()) return true;    //when theres no new object with id
             else if (filterDocument.get("_id").equals(oldFilterDocument.get("_id")))
                 return true; //when the found product is same we are editing
             else if (filterDocument.get(fieldname).equals(filter))
@@ -122,9 +162,9 @@ public class MongoRequests {
     protected static Document getObjectFilter(String collectionName, String fieldName, String filter) { //put "" value in fieldname and filter to get first document in collection
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Document tempDocument = new Document();
-        if(fieldName.isEmpty() && filter.isEmpty()){
+        if (fieldName.isEmpty() && filter.isEmpty()) {
             tempDocument = collection.find().first();
-        }else {
+        } else {
             tempDocument = collection.find(eq(fieldName, filter)).first();
         }
         return tempDocument;
@@ -133,15 +173,15 @@ public class MongoRequests {
     protected static Document getObjectDoubleFilter(String collectionName, String fieldName, String filter, String secondFieldName, String secondFilter) { //put "" value in fieldname and filter to get first document in collection
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Document tempDocument = new Document();
-        if(fieldName.isEmpty() && filter.isEmpty()){
+        if (fieldName.isEmpty() && filter.isEmpty()) {
             tempDocument = collection.find().first();
-        }else {
+        } else {
             tempDocument = collection.find(and(eq(fieldName, filter), eq(secondFieldName, secondFilter))).first();
         }
         return tempDocument;
     }
 
-    protected static Document getObjectFilterById(String collectionName, String fieldName, String filter){
+    protected static Document getObjectFilterById(String collectionName, String fieldName, String filter) {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Document tempDocument = new Document();
 
@@ -152,45 +192,106 @@ public class MongoRequests {
                 tempDocument = collection.find(eq(fieldName, new ObjectId(filter))).first();
                 System.out.println(tempDocument);
             }
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println(e);
         }
         return tempDocument;
     }
 
     protected static boolean getEmployee(String login, String password) {
-        MongoCollection<Document> collection = database.getCollection("employee");
+        ArrayList<Document> employeeList = getCollection("employee");
+        System.out.println(employeeList);
 
-        Document test = collection.find(and(eq("user", login), eq("password", password))).first();
-
-        if (test != null) {
-            return true;
-        } else {
-            return false;
+        for (int i = 0; i < employeeList.size(); i++) {
+            System.out.println(Crypt.decrypt(Crypt.password, employeeList.get(i).get("user").toString()));
+            System.out.println(Crypt.decrypt(Crypt.password, employeeList.get(i).get("password").toString()));
+            if (Crypt.decrypt(Crypt.password, employeeList.get(i).get("user").toString()).equals(login) && Crypt.decrypt(Crypt.password, employeeList.get(i).get("password").toString()).equals(password)) {
+                return true;
+            }
         }
+        return false;
+
     }
 
     protected static boolean addEmployee(String user, String password, String name, String surname) {
         MongoCollection<Document> collection = database.getCollection("employee");
-        Document test = collection.find(and(eq("user", user))).first();
+
         Document insertEmployee = new Document();
 
-        if (test == null) {
-            insertEmployee.append("user", user);
-            insertEmployee.append("password", password);
-            insertEmployee.append("name", name);
-            insertEmployee.append("surname", surname);
+        //get whole emplyee collection then decrypt every user and check if there is no similar one
+        ArrayList<Document> employeeList = getCollection("employee");
+        for (int i = 0; i < employeeList.size(); i++) {
+            if (Crypt.decrypt(Crypt.password, employeeList.get(i).get("user").toString()).equals(user)) {
+                System.out.println("found same fieldname and filter");
+                return false;
+            }
+        }
 
-            collection.insertOne(insertEmployee);
-            return true;
-        } else
-            return false;
+        if (!user.isEmpty()) {
+            user = Crypt.encrypt(Crypt.password, user);
+            System.out.println("user:");
+            System.out.println(user);
+        }
+        if (!password.isEmpty()) {
+            password = Crypt.encrypt(Crypt.password, password);
+            System.out.println("password:");
+            System.out.println(password);
+        }
+        if (!name.isEmpty()) {
+            name = Crypt.encrypt(Crypt.password, name);
+            System.out.println("name:");
+            System.out.println(name);
+        }
+        if (!surname.isEmpty()) {
+            surname = Crypt.encrypt(Crypt.password, surname);
+            System.out.println("surname:");
+            System.out.println(surname);
+        }
+
+        insertEmployee.append("user", user);
+        insertEmployee.append("password", password);
+        insertEmployee.append("name", name);
+        insertEmployee.append("surname", surname);
+
+        collection.insertOne(insertEmployee);
+
+        return true;
 
     }
 
     protected static void updateEmployee(String user, String password, String name, String surname, String oldUser) {
         MongoCollection<Document> collection = database.getCollection("employee");
-        Document tempDocument = collection.find(eq("user", oldUser)).first();
+        Document tempDocument = new Document();
+        //Document tempDocument = collection.find(eq("user", oldUser)).first();
+
+        //get whole emplyee collection then decrypt every user and check if there is similar one
+        ArrayList<Document> employeeList = getCollection("employee");
+        for (int i = 0; i < employeeList.size(); i++) {
+            if (Crypt.decrypt(Crypt.password, employeeList.get(i).get("user").toString()).equals(oldUser)) {
+                System.out.println("found same fieldname and filter");
+                tempDocument = employeeList.get(i);
+            }
+        }
+        if (!user.isEmpty()) {
+            user = Crypt.encrypt(Crypt.password, user);
+            System.out.println("user:");
+            System.out.println(user);
+        }
+        if (!password.isEmpty()) {
+            password = Crypt.encrypt(Crypt.password, password);
+            System.out.println("password:");
+            System.out.println(password);
+        }
+        if (!name.isEmpty()) {
+            name = Crypt.encrypt(Crypt.password, name);
+            System.out.println("name:");
+            System.out.println(name);
+        }
+        if (!surname.isEmpty()) {
+            surname = Crypt.encrypt(Crypt.password, surname);
+            System.out.println("surname:");
+            System.out.println(surname);
+        }
 
         Document updatedDocument = new Document();
         updatedDocument.append("user", user);
@@ -198,8 +299,12 @@ public class MongoRequests {
         updatedDocument.append("name", name);
         updatedDocument.append("surname", surname);
 
-        UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
-        return;
+        if (tempDocument.equals(null)) {
+            return;
+        } else {
+            UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
+            return;
+        }
     }
 
     protected static void deleteEmployee(String user) {
@@ -220,7 +325,7 @@ public class MongoRequests {
         Document tempDocument = collection.find(eq("productId", productId)).first();
 
         //System.out.println(tempDocument); //just to check
-        if(type == "" || producer == "" || model == "" || size == "" || productId == ""){
+        if (type == "" || producer == "" || model == "" || size == "" || productId == "") {
             return false;
         }
 
@@ -315,6 +420,12 @@ public class MongoRequests {
     protected static boolean updateClient(String name, String surname, String phone, String idCard, String _id) {
         MongoCollection<Document> collection = database.getCollection("users");
 
+        Crypt.init();
+        name = encrypt(Crypt.password, name);
+        surname = encrypt(Crypt.password, surname);
+        phone = encrypt(Crypt.password, phone);
+        idCard = encrypt(Crypt.password, idCard);
+
         Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first(); //looking for client with object id
         System.out.println("I found client");
 
@@ -335,11 +446,11 @@ public class MongoRequests {
             Document checkDocumentIdCard = collection.find(eq("idCard", idCard)).first();
             System.out.println("test check id card" + checkDocumentIdCard);
             //System.out.println("test object id " + checkDocumentIdCard.get("_id").equals(new ObjectId(_id)) + "id object= " + _id + " found object id= " + checkDocumentIdCard.get("_id"));
-            if(checkDocumentIdCard == null) {
+            if (checkDocumentIdCard == null) {
                 System.out.println("check document ID Card is null");
-            }else if (checkDocumentIdCard.get("_id").equals(new ObjectId(_id))){//check if found phone number is the same object we are updating
+            } else if (checkDocumentIdCard.get("_id").equals(new ObjectId(_id))) {//check if found phone number is the same object we are updating
                 System.out.println("same id detected");
-            } else{
+            } else {
                 System.out.println("id Card number exists");
                 return false;
             }
@@ -379,6 +490,29 @@ public class MongoRequests {
         MongoCollection<Document> collection = database.getCollection("users");
 
         Document tempDocument = collection.find(eq("idCard", idCard)).first();  //check if there's no same type
+        System.out.println("add client mongo db ---------------------------------------");
+        Crypt.init();
+        if (!name.isEmpty()) {
+            name = Crypt.encrypt(Crypt.password, name);
+            System.out.println("name:");
+            System.out.println(name);
+        }
+        if (!surname.isEmpty()) {
+            surname = Crypt.encrypt(Crypt.password, surname);
+            System.out.println("surname:");
+            System.out.println(surname);
+        }
+        if (!phone.isEmpty()) {
+            phone = Crypt.encrypt(Crypt.password, phone);
+            System.out.println("phone:");
+            System.out.println(phone);
+        }
+        if (!idCard.isEmpty()) {
+            idCard = Crypt.encrypt(Crypt.password, idCard);
+            System.out.println("idCard:");
+            System.out.println(idCard);
+        }
+
 
         if (tempDocument == null) {
             Document doc = new Document();
@@ -410,16 +544,18 @@ public class MongoRequests {
         }
     }
 
-    protected static Client getClient(String idCard){
+    protected static Client getClient(String idCard) {
         MongoCollection<Document> collection = database.getCollection("users");
         Document tempDocument = collection.find(eq("idCard", idCard)).first();
 
+        Crypt.init();
+
         if (tempDocument != null) {
-            Client client = new Client(tempDocument.get("name").toString(),
-                    tempDocument.get("surname").toString(),
-                    tempDocument.get("phone").toString(),
-                    tempDocument.get("idCard").toString(),
-                    tempDocument.get("_id").toString()
+            Client client = new Client(Crypt.decrypt(Crypt.password, tempDocument.get("name").toString()),
+                    Crypt.decrypt(Crypt.password, tempDocument.get("surname").toString()),
+                    Crypt.decrypt(Crypt.password, tempDocument.get("phone").toString()),
+                    Crypt.decrypt(Crypt.password, tempDocument.get("idCard").toString()),
+                    Crypt.decrypt(Crypt.password, tempDocument.get("_id").toString())
             );
             return client;
         } else {
@@ -442,12 +578,12 @@ public class MongoRequests {
         return;
     }
 
-    protected static void updateReservationById(String _id, String fieldname, String updatedValue){
+    protected static void updateReservationById(String _id, String fieldname, String updatedValue) {
         MongoCollection<Document> collection = database.getCollection("reservations");
 
-        if(_id.isEmpty() || fieldname.isEmpty() || updatedValue.isEmpty()){
+        if (_id.isEmpty() || fieldname.isEmpty() || updatedValue.isEmpty()) {
             return;
-        }else {
+        } else {
             Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
 
             Bson updates = Updates.combine(
@@ -464,7 +600,7 @@ public class MongoRequests {
         }
     }
 
-    protected static void deleteReservations(String fieldName, String filter){
+    protected static void deleteReservations(String fieldName, String filter) {
         MongoCollection<Document> collection = database.getCollection("reservations");
 
         Bson tempDocument = eq(fieldName, filter);
@@ -476,7 +612,7 @@ public class MongoRequests {
         }
     }
 
-    protected static void updateCompanyInfo(String _id, String phone, String email, String title, String close, String open, String address, String percentage){
+    protected static void updateCompanyInfo(String _id, String phone, String email, String title, String close, String open, String address, String percentage) {
         MongoCollection<Document> collection = database.getCollection("company");
 
         Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
@@ -493,26 +629,28 @@ public class MongoRequests {
         UpdateResult updateResult = collection.replaceOne(tempDocument, updatedDocument);
     }
 
-    protected static void addRental(String productId, String userId, String startDate, String status){
+    protected static void addRental(String productId, String userId, String startDate, String status) {
         MongoCollection<Document> collection = database.getCollection("rentals");
 
-            Document doc = new Document();
-            doc.append("productId", productId);
-            doc.append("userId", userId);
-            doc.append("startDate", startDate);
-            doc.append("finishDate", "");
-            doc.append("price", "");
-            doc.append("status", status);
-            collection.insertOne(doc);
-            return;
-    };
+        Document doc = new Document();
+        doc.append("productId", productId);
+        doc.append("userId", userId);
+        doc.append("startDate", startDate);
+        doc.append("finishDate", "");
+        doc.append("price", "");
+        doc.append("status", status);
+        collection.insertOne(doc);
+        return;
+    }
 
-    protected static void updateRentalProductId(String _id, String oldProductId, String newProductId){
+    ;
+
+    protected static void updateRentalProductId(String _id, String oldProductId, String newProductId) {
         MongoCollection<Document> collection = database.getCollection("rentals");
 
-        if(_id.isEmpty() || oldProductId.isEmpty() || newProductId.isEmpty()){
+        if (_id.isEmpty() || oldProductId.isEmpty() || newProductId.isEmpty()) {
             return;
-        }else {
+        } else {
             Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
 
             Bson updates = Updates.combine(
@@ -529,12 +667,12 @@ public class MongoRequests {
         }
     }
 
-    protected static void updateRental(String _id, String finishDate, String status, String price){
+    protected static void updateRental(String _id, String finishDate, String status, String price) {
         MongoCollection<Document> collection = database.getCollection("rentals");
 
-        if(_id.isEmpty() || finishDate.isEmpty() || status.isEmpty() || price.isEmpty()){
+        if (_id.isEmpty() || finishDate.isEmpty() || status.isEmpty() || price.isEmpty()) {
             return;
-        }else {
+        } else {
             Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first();
 
             Bson updates = Updates.combine(
@@ -553,7 +691,7 @@ public class MongoRequests {
         }
     }
 
-    protected static void deleteRentals(String fieldName, String filter){
+    protected static void deleteRentals(String fieldName, String filter) {
         MongoCollection<Document> collection = database.getCollection("rentals");
 
         Bson tempDocument = eq(fieldName, filter);
@@ -565,4 +703,5 @@ public class MongoRequests {
         }
     }
 }
+
 

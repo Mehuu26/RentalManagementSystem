@@ -1,10 +1,7 @@
 package com.controllers;
 
 import com.Main;
-import com.api.Client;
-import com.api.Equipment;
-import com.api.FullTableView;
-import com.api.GoBack;
+import com.api.*;
 import com.mongodb.Mongo;
 import com.requests.MongoRequests;
 import javafx.collections.FXCollections;
@@ -82,18 +79,22 @@ public class ClientsController extends MongoRequests implements Initializable, G
     @Override
     public void fullTableView() {
         ArrayList<Document> clientsList = new ArrayList<>();
-        clientsList = getCollection("users");
+        clientsList = MongoRequests.getCollection("users");
 
         //System.out.println(clientsList.get(1).get("_id").toString()); //string to show in terminal
 
         ObservableList<Client> observableList = FXCollections.observableArrayList();
 
-        for (int i = 0; i < clientsList.size(); i++) {
+        for (int i = 0; i < clientsList.size(); i++) {  //set observable list with decrypted values
+            System.out.println("name :" + clientsList.get(i).get("name").toString());
+            System.out.println("surname :" + clientsList.get(i).get("surname").toString());
+            System.out.println("phone :" + clientsList.get(i).get("phone").toString());
+            System.out.println("idCard :" + clientsList.get(i).get("idCard").toString());
             observableList.add(new Client(
-                    clientsList.get(i).get("name").toString(),
-                    clientsList.get(i).get("surname").toString(),
-                    clientsList.get(i).get("phone").toString(),
-                    clientsList.get(i).get("idCard").toString(),
+                    Crypt.decrypt(Crypt.password, clientsList.get(i).get("name").toString()),
+                    Crypt.decrypt(Crypt.password, clientsList.get(i).get("surname").toString()),
+                    Crypt.decrypt(Crypt.password, clientsList.get(i).get("phone").toString()),
+                    Crypt.decrypt(Crypt.password, clientsList.get(i).get("idCard").toString()),
                     clientsList.get(i).get("_id").toString()
                     )
             );
@@ -109,7 +110,6 @@ public class ClientsController extends MongoRequests implements Initializable, G
         phoneTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         idCardTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         _idTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-
 
         clientsTableView.setItems(observableList);
     }
@@ -217,11 +217,12 @@ public class ClientsController extends MongoRequests implements Initializable, G
         if (nameTextField.getText().isEmpty() || surnameTextField.getText().isEmpty() || phoneTextField.getText().isEmpty() || idCardTextField.getText().isEmpty()) {
             noDataProvidedLabel.setText("No data provided");
             return;
-        }else
+        }else{
             if(!addClient(nameTextField.getText(), surnameTextField.getText(), phoneTextField.getText(), idCardTextField.getText())){
                 noDataProvidedLabel.setText("Same ID Card detected");
                 return;
             }
+        }
             noDataProvidedLabel.setText("");
             fullTableView();
             clearTextFields();

@@ -48,6 +48,17 @@ public class Main extends Application {
 //
 //            System.out.println(doc.toJson());
 //        }
+        Crypt.init();
+
+        String test = "hello world!";
+
+        String result = Crypt.encrypt("password", test);
+
+        String decrypted = Crypt.decrypt("password", result);
+
+        System.out.println(result);
+
+        String encryptedValue= "D3c8cA29FF93Ab51A70651bDcA516F49E8RCvhihGLInGFv4JNEXQg2Aee684eD2F60F8523e2ecF87F8A832A";
 
         launch(args);
     }

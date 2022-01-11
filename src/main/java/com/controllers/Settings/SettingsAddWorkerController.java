@@ -1,10 +1,7 @@
 package com.controllers.Settings;
 
 import com.Main;
-import com.api.Equipment;
-import com.api.FullTableView;
-import com.api.GoBack;
-import com.api.Worker;
+import com.api.*;
 import com.requests.MongoRequests;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -104,9 +101,9 @@ public class SettingsAddWorkerController extends MongoRequests implements Initia
         for (int i = 0; i < tempEmployee.size(); i++) {
 
             observableList.add(new Worker(
-                    tempEmployee.get(i).get("user").toString(),
-                    tempEmployee.get(i).get("name").toString(),
-                    tempEmployee.get(i).get("surname").toString()
+                    Crypt.decrypt(Crypt.password, tempEmployee.get(i).get("user").toString()),
+                    Crypt.decrypt(Crypt.password, tempEmployee.get(i).get("name").toString()),
+                    Crypt.decrypt(Crypt.password, tempEmployee.get(i).get("surname").toString())
                     )
             );
         }
@@ -192,6 +189,7 @@ public class SettingsAddWorkerController extends MongoRequests implements Initia
                 if (MongoRequests.getEmployee(userDoubleClicked, passwordPasswordField.getText())) {  //check if the password is correct in data base
                     if(userDoubleClicked.equals("admin")){  //if the editing worker is admin if not, update worker
                         if(userDoubleClicked.equals(userTextField.getText())){  //check if someone is editing user name of admin
+                            System.out.println("im editing user name of admin");
                             MongoRequests.updateEmployee(userTextField.getText(), passwordPasswordField.getText(), nameTextField.getText(), surnameTextField.getText(), userDoubleClicked);
                             noDataProvidedLabel.setText("");
                             fullTableView();
@@ -202,7 +200,8 @@ public class SettingsAddWorkerController extends MongoRequests implements Initia
                             noDataProvidedLabel.setText("user name admin, can not be changed");
                             return;
                         }
-                    }else{
+                    }else if(!userTextField.getText().equals("admin")){ //changed user name can not be admin
+                        System.out.println("im not editing user name of admin ");
                         MongoRequests.updateEmployee(userTextField.getText(), passwordPasswordField.getText(), nameTextField.getText(), surnameTextField.getText(), userDoubleClicked);
                         noDataProvidedLabel.setText("");
                         fullTableView();

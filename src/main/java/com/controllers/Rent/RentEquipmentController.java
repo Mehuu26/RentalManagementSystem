@@ -299,7 +299,9 @@ public class RentEquipmentController extends MongoRequests implements GoBack, In
             productIdTextField.setText(equipment.getProductId());
         }
 
-        System.out.println("initialize");
+        //System.out.println("initialize");
+
+        //setting name surname and id card into label
         clientLabel.setText(client.getName() + " " + client.getSurname() + " " + client.getIdCard());
         fullTableView();
         backButton.setOnAction(event -> back());

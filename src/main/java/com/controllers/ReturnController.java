@@ -1,10 +1,7 @@
 package com.controllers;
 
 import com.Main;
-import com.api.Client;
-import com.api.FullTableView;
-import com.api.GoBack;
-import com.api.Rental;
+import com.api.*;
 import com.mongodb.Mongo;
 import com.requests.MongoRequests;
 import javafx.collections.FXCollections;
@@ -285,10 +282,10 @@ public class ReturnController extends MongoRequests implements Initializable, Go
 
             System.out.println("temp clinet get name: " + tempClient.get("name"));
 
-            client = new Client(tempClient.get("name").toString(),
-                    tempClient.get("surname").toString(),
-                    tempClient.get("phone").toString(),
-                    tempClient.get("idCard").toString(),
+            client = new Client(Crypt.decrypt(Crypt.password, tempClient.get("name").toString()),
+                    Crypt.decrypt(Crypt.password, tempClient.get("surname").toString()),
+                    Crypt.decrypt(Crypt.password, tempClient.get("phone").toString()),
+                    Crypt.decrypt(Crypt.password, tempClient.get("idCard").toString()),
                     tempClient.get("_id").toString());
 
             currentClientLabel.setText(client.getName() + " " + client.getSurname() + " " + client.getIdCard());

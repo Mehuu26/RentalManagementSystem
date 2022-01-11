@@ -1,10 +1,7 @@
 package com.controllers.Reservation;
 
 import com.Main;
-import com.api.Client;
-import com.api.Equipment;
-import com.api.GoBack;
-import com.api.Reservation;
+import com.api.*;
 import com.controllers.Rent.RentEquipmentController;
 import com.controllers.Reservation.ReservationController;
 import com.requests.MongoRequests;
@@ -90,5 +87,18 @@ public class ReservationEditClientController extends MongoRequests implements Go
     public void initialize(URL url, ResourceBundle resourceBundle) {
         backButton.setOnAction(event -> back());
         nextButton.setOnAction(event -> next());
+
+        if(!client.getName().isEmpty()){
+            nameTextField.setText(Crypt.decrypt(Crypt.password, client.getName()));
+        }
+        if(!client.getSurname().isEmpty()){
+            surnameTextField.setText(Crypt.decrypt(Crypt.password, client.getSurname()));
+        }
+        if(!client.getPhone().isEmpty()){
+            phoneTextField.setText(Crypt.decrypt(Crypt.password, client.getPhone()));
+        }
+        if(!client.getIdCard().isEmpty()){
+            idCardTextField.setText(Crypt.decrypt(Crypt.password, client.getIdCard()));
+        }
     }
 }
