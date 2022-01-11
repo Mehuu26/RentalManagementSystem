@@ -89,16 +89,16 @@ public class ReservationEditClientController extends MongoRequests implements Go
         nextButton.setOnAction(event -> next());
 
         if(!client.getName().isEmpty()){
-            nameTextField.setText(Crypt.decrypt(Crypt.password, client.getName()));
+            nameTextField.setText(client.getName());
         }
         if(!client.getSurname().isEmpty()){
-            surnameTextField.setText(Crypt.decrypt(Crypt.password, client.getSurname()));
+            surnameTextField.setText(client.getSurname());
         }
         if(!client.getPhone().isEmpty()){
-            phoneTextField.setText(Crypt.decrypt(Crypt.password, client.getPhone()));
+            phoneTextField.setText(client.getPhone());
         }
         if(!client.getIdCard().isEmpty()){
-            idCardTextField.setText(Crypt.decrypt(Crypt.password, client.getIdCard()));
+            idCardTextField.setText(client.getIdCard());
         }
     }
 }
