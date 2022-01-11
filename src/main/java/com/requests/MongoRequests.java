@@ -309,7 +309,16 @@ public class MongoRequests extends Crypt {
 
     protected static void deleteEmployee(String user) {
         MongoCollection<Document> collection = database.getCollection("employee");
-        Document tempDocument = collection.find(eq("user", user)).first();
+
+        Document tempDocument = new Document();
+
+        ArrayList<Document> employeeList = getCollection("employee");
+        for (int i = 0; i < employeeList.size(); i++) {
+            if (Crypt.decrypt(Crypt.password, employeeList.get(i).get("user").toString()).equals(user)) {
+                System.out.println("found user");
+                tempDocument = employeeList.get(i);
+            }
+        }
 
         try {
             collection.deleteOne(tempDocument);
