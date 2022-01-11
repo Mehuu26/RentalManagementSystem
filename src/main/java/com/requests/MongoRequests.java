@@ -429,33 +429,23 @@ public class MongoRequests extends Crypt {
     protected static boolean updateClient(String name, String surname, String phone, String idCard, String _id) {
         MongoCollection<Document> collection = database.getCollection("users");
 
-        Crypt.init();
-        name = encrypt(Crypt.password, name);
-        surname = encrypt(Crypt.password, surname);
-        phone = encrypt(Crypt.password, phone);
-        idCard = encrypt(Crypt.password, idCard);
-
         Document tempDocument = collection.find(eq("_id", new ObjectId(_id))).first(); //looking for client with object id
         System.out.println("I found client");
 
-//        if (!phone.isEmpty()) { //when phone value is not null, then looking for object with same phone number if there is no with same number going next
-//            Document checkDocumentPhone = collection.find(eq("phone", phone)).first();
-//            System.out.println("test check phone" + checkDocumentPhone);
-//            if(checkDocumentPhone == null){
-//                System.out.println("check document phone is null");
-//            }else if (checkDocumentPhone.get("_id").equals(new ObjectId(_id))){//check if found phone number is the same object we are updating
-//                System.out.println("same id detected");
-//            }else{//if checkDocumentPhone is not empty, return. Phone number need to be uniqe
-//                System.out.println("phone number exists");
-//                return;
-//            }
-//        }
-
         if (!idCard.isEmpty()) {
-            Document checkDocumentIdCard = collection.find(eq("idCard", idCard)).first();
+            Document checkDocumentIdCard = new Document();
+
+            ArrayList<Document> clientsList = MongoRequests.getCollection("users");
+            for(int i = 0; i<clientsList.size(); i++){
+                if(Crypt.decrypt(Crypt.password, clientsList.get(i).get("idCard").toString()).equals(idCard)){
+                    checkDocumentIdCard = clientsList.get(i);
+                    break;
+                }
+            }
+
             System.out.println("test check id card" + checkDocumentIdCard);
             //System.out.println("test object id " + checkDocumentIdCard.get("_id").equals(new ObjectId(_id)) + "id object= " + _id + " found object id= " + checkDocumentIdCard.get("_id"));
-            if (checkDocumentIdCard == null) {
+            if (checkDocumentIdCard == null || checkDocumentIdCard.isEmpty()) {
                 System.out.println("check document ID Card is null");
             } else if (checkDocumentIdCard.get("_id").equals(new ObjectId(_id))) {//check if found phone number is the same object we are updating
                 System.out.println("same id detected");
@@ -470,6 +460,12 @@ public class MongoRequests extends Crypt {
             System.out.println("there's no id value object");
             return false;
         }
+
+        Crypt.init();
+        name = encrypt(Crypt.password, name);
+        surname = encrypt(Crypt.password, surname);
+        phone = encrypt(Crypt.password, phone);
+        idCard = encrypt(Crypt.password, idCard);
 
         Document updatedDocument = new Document();
         updatedDocument.append("name", name);
@@ -498,7 +494,18 @@ public class MongoRequests extends Crypt {
     protected static boolean addClient(String name, String surname, String phone, String idCard) {
         MongoCollection<Document> collection = database.getCollection("users");
 
-        Document tempDocument = collection.find(eq("idCard", idCard)).first();  //check if there's no same type
+        Document tempDocument = new Document();
+
+        ArrayList<Document> clientsList = MongoRequests.getCollection("users");
+        for(int i = 0; i<clientsList.size(); i++){
+            if(Crypt.decrypt(Crypt.password, clientsList.get(i).get("idCard").toString()).equals(idCard)){
+                tempDocument = clientsList.get(i);
+                break;
+            }
+        }
+
+
+
         System.out.println("add client mongo db ---------------------------------------");
         Crypt.init();
         if (!name.isEmpty()) {
@@ -523,7 +530,7 @@ public class MongoRequests extends Crypt {
         }
 
 
-        if (tempDocument == null) {
+        if (tempDocument == null || tempDocument.isEmpty()) {
             Document doc = new Document();
             doc.append("name", name);
             doc.append("surname", surname);
@@ -651,8 +658,6 @@ public class MongoRequests extends Crypt {
         collection.insertOne(doc);
         return;
     }
-
-    ;
 
     protected static void updateRentalProductId(String _id, String oldProductId, String newProductId) {
         MongoCollection<Document> collection = database.getCollection("rentals");
